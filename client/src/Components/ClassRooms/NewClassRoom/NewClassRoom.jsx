@@ -98,7 +98,6 @@ useEffect(() => {
     dispatch(createListClassRooms());
 },[])
 
-
   return (
     <Container className = "container-fluid py-2">      
          <Row  className = "text-center">
