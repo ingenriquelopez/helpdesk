@@ -58,8 +58,8 @@ export default function NewClassRoom() {
             dispatch(addNewClassRoom(classRoom_tmp));
           }
 
-          navigate('/dashboard/viewerclassrooms',{ replace:true});  
-          //window.location.replace('/dashboard/viewerClassRooms');
+          //navigate('/dashboard/viewerclassrooms',{ replace:true});  
+          window.location.replace('/dashboard/viewerclassrooms');
         } catch (error) {
           console.log(error);
         }  
