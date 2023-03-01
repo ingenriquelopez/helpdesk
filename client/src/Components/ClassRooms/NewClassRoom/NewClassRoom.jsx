@@ -12,9 +12,13 @@ import Container from 'react-bootstrap/Container';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 
+import { tostada_S } from '../../../utils/Tostadas';
+import { ToastContainer } from 'react-toastify';
+
 import axios from 'axios';
 import moment from 'moment';
 import { useEffect } from 'react';
+
 const {REACT_APP_API} = process.env;
 
 
@@ -57,14 +61,23 @@ export default function NewClassRoom() {
            if (add_New_ClassRoom(classRoom_tmp) ) { 
             dispatch(addNewClassRoom(classRoom_tmp));
           }
-
-          //navigate('/dashboard/viewerclassrooms',{ replace:true});  
-          window.location.replace('/dashboard/viewerclassrooms');
+          tostada_S('New ClassRoom DONE!',"top-center",1500,'light');
+          navigate('/dashboard/viewerclassrooms',{ replace:true});  
+          //window.location.replace('/dashboard/viewerclassrooms');
         } catch (error) {
           console.log(error);
         }  
       }
-      
+    
+      function handleSubmitForm(e) {
+        e.preventDefault();
+        sendFormClassRoom();
+    }
+
+    const handleExit= ()=> {
+        navigate('/dashboard/viewerclassrooms', { replace: true});
+    }
+
       function handleClassRoom(e) {       
         setTxtClassRoom(e.target.value)            
       }
@@ -85,14 +98,7 @@ export default function NewClassRoom() {
         setTxtFloor(e.target.value);
       }
 
-    function handleSubmitForm(e) {
-        e.preventDefault();
-        sendFormClassRoom();
-    }
-
-    const handleExit= ()=> {
-        navigate('/dashboard/viewerclassrooms', { replace: true});
-    }
+    
 useEffect(() => {
     dispatch(createListClassRooms());
 },[])
