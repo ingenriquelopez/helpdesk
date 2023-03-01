@@ -58,9 +58,8 @@ export default function NewClassRoom() {
             dispatch(addNewClassRoom(classRoom_tmp));
           }
 
-          //navigate('/dashboard/viewerclassrooms',{ replace:true});  
-
-          window.location.replace('/dashboard/viewerclassrooms');
+          navigate('/dashboard/viewerClassRooms',{ replace:true});  
+          //window.location.replace('/dashboard/viewerClassRooms');
         } catch (error) {
           console.log(error);
         }  
@@ -92,7 +91,7 @@ export default function NewClassRoom() {
     }
 
     const handleExit= ()=> {
-        navigate('/dashboard/viewerclassrooms')
+        navigate('/dashboard/viewerClassRooms')
     }
 useEffect(() => {
     dispatch(createListClassRooms());
