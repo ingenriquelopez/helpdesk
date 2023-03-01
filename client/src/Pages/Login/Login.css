@@ -1,0 +1,24 @@
+
+
+.Login {
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+  min-height      : 100vh;
+
+  font-family : sans-serif;
+  text-align  : center;
+  color       :green;
+  background-color: black;
+}
+
+#idface {
+  width   : 150px;
+  height  : 150px;
+}
+
+#loginform {
+  width: 350px;
+  height: 400px;
+}
+.customButton{ width: 100px !important; }

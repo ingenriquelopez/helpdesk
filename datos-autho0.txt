@@ -1,0 +1,8 @@
+Domain: 
+dev-mi9fpzv0.us.auth0.com
+
+Client ID
+hEbmMiK56pL6VZRqnkHr1b5SyXfxppRo
+
+Client Secret:
+mETPrevTrwV0In5c7s3M_XvIKCD-uG9AfakoC_MYFZyoJXyGmkTaRMefOhE0l6fN

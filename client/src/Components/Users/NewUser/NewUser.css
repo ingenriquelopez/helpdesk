@@ -1,0 +1,16 @@
+#image {
+    width: 100px;
+    height: 100px;
+    background-image: url('./adduser.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+
+}
+
+
+#form {
+    box-shadow:
+    inset 
+          0 0  0 2px rgb(255,255,255),
+          0.3em 0.3em 1em rgba(0,0,0,0.3);
+}

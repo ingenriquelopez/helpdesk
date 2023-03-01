@@ -1,0 +1,24 @@
+.d-flex {
+  display: flex!important;
+  height: 100vh;
+}
+
+.center {
+  margin: 0 auto;
+  align-self: center;
+}
+
+.customButton{ width: 100px !important; }
+
+#containerTask {
+  display:flex;
+  flex-direction: column;
+  position: relative;
+  height: 70%;
+  min-height: 70vh;
+
+  margin-top: 5rem;
+  padding-bottom: 3rem;
+  overflow:"auto";
+  
+}

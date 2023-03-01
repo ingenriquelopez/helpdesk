@@ -1,0 +1,20 @@
+.gradientNavBar {
+   background-image: linear-gradient(59deg, #0275d8, #1622FF );
+   color: white;
+  }
+
+#styleLinks {
+  color: white;
+
+}
+
+.classUserLogged {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#userIcon {
+  width: 30px;
+  height: 30px;
+}
