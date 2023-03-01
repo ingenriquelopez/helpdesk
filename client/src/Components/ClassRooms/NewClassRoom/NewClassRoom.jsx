@@ -59,7 +59,7 @@ export default function NewClassRoom() {
         
         try { 
            if (add_New_ClassRoom(classRoom_tmp) ) { 
-            dispatch(addNewClassRoom(classRoom_tmp));
+           /*  dispatch(addNewClassRoom(classRoom_tmp)); */
           }
           tostada_S('New ClassRoom DONE!',"top-center",1500,'light');
           navigate('/dashboard/viewerclassrooms',{ replace:true});  
