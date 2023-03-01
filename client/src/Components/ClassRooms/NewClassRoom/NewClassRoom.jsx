@@ -92,7 +92,7 @@ export default function NewClassRoom() {
     }
 
     const handleExit= ()=> {
-        navigate('/dashboard')
+        navigate('/dashboard/viewerclassrooms')
     }
 useEffect(() => {
     dispatch(createListClassRooms());

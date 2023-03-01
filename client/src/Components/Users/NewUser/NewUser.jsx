@@ -68,7 +68,7 @@ function NewUser() {
         
       }
     const handleCloseNewUser =()=> {
-        navigate('/viewerusers', { replace: true});
+        navigate('/dashboard/viewerusers', { replace: true});
     }
 
   return (
