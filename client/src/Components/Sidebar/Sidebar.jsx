@@ -35,7 +35,7 @@ const Sidebar = () => {
               <CDBSidebarMenuItem icon="table">Devices</CDBSidebarMenuItem>
             </NavLink>
 
-            <NavLink to="viewerClassRooms" activeclassname="activeClicked">
+            <NavLink to="viewerclassrooms" activeclassname="activeClicked">
               <CDBSidebarMenuItem icon="table">ClassRooms</CDBSidebarMenuItem>
             </NavLink>
 
