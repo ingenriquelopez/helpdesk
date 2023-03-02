@@ -1,5 +1,6 @@
-import React, {useState}  from 'react';
+import React, {useState, useEffect}  from 'react';
 import { useDispatch, useSelector }     from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 import { addTask  } from '../../../redux/tasks/tasksReducer';
 import { createListClassRooms } from '../../../redux/classRooms/classRoomsReducer';
@@ -18,7 +19,8 @@ import Footer    from '../../Footer/Footer';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import { useEffect } from 'react';
+
+
 const {REACT_APP_API} = process.env;
 
 moment.locale('us');
@@ -29,6 +31,7 @@ export default function NewTask() {
     const [valueDisabled, setvalueDisabled] = useState('disabled');
     
     const dispatch = useDispatch();
+    const navigate = useNavigate();
         
     //Defino un state Persistente para conservar informacion del form
     const [txtclassroom   , setTxtClassRoom] = useLocalStorage('txtclassroom'  , '');
@@ -38,22 +41,14 @@ export default function NewTask() {
     const [txtdevice      , setTxtDevice]    = useLocalStorage('txtdevice'     , '');
     const [txtproblem     , setTxtProblem]   = useLocalStorage('txtproblem'    , '');
     
-    const  add_New_Task = async(what)=> {
-        try 
-          {
-            const response = await axios.post(`${REACT_APP_API}/task`,what);
-            return response;
-            } catch (error) {
-                console.log(error.message);
-            }
-          }
     
     async function sendFormTask() {
         let today  = moment();
         let id_tmp = uuidv4();
-        const task_tmp = {
+
+        const newTask = {
             id         : id_tmp,
-            dateTask   : today,//.format("dd Do MM YYYY"),
+            dateTask   : today.format("dd Do MM YYYY"),
             classRoom  : txtclassroom ,
             level      : txtlevel,
             gyg        : txtgyg ,
@@ -63,20 +58,24 @@ export default function NewTask() {
             notes      : '',
             statusTask : 'Required',
         }
-        
-        try { 
-           if (add_New_Task(task_tmp) ) {  
-            dispatch(addTask(task_tmp));
-          }
+        try 
+          {
+            const response = await axios.post(`${REACT_APP_API}/task`,newTask);
+            if (response) {
+                dispatch(addTask(newTask));
+            }
+          } catch (error) {
+                console.log(error.message);
+            }    
+             
           localStorage.removeItem('txtgyg')
           localStorage.removeItem('txtlevel')
           localStorage.removeItem('txtteacher')
           localStorage.removeItem('txtdevice')
           localStorage.removeItem('txtproblem')
-          window.location.replace('/home');
-        } catch (error) {
-          console.log(error);
-        }  
+
+          //window.location.replace('/home');
+          navigate('/home', { replace: true});
       }
       
     const validateSubmitButton=()=> {
@@ -88,6 +87,19 @@ export default function NewTask() {
         (field1 && field2 && field3 && field4 ) ? setvalueDisabled(''): setvalueDisabled('disabled') 
     } 
 
+    function handleSubmitForm(e) {
+        e.preventDefault();
+        sendFormTask();
+    }
+    function handleCloseNewTask() {
+        localStorage.removeItem('txtgyg')
+        localStorage.removeItem('txtlevel')
+        localStorage.removeItem('txtteacher')
+        localStorage.removeItem('txtdevice')
+        localStorage.removeItem('txtproblem')
+
+        navigate('/home', { replace: true});
+    }
       function handleClassRoom(e) {  
         let ncr = e.target.value;
 
@@ -119,10 +131,7 @@ export default function NewTask() {
         validateSubmitButton();
       }
 
-    function handleSubmitForm(e) {
-        e.preventDefault();
-        sendFormTask();
-    }
+    
 useEffect(() => {
     dispatch(createListClassRooms(userLogged.levelUser));
 },[])
@@ -220,7 +229,7 @@ useEffect(() => {
             </Row>
             <Row className = "d-md-flex justify-content-center py-2 mb-4">
                  <Col className = "text-center d-md-flex justify-content-around">
-                    <Button className = "mx-2 customButton" variant = "danger">Cancel</Button>
+                    <Button className  = "mx-2 customButton" variant = "danger" onClick = {handleCloseNewTask}>Cancel</Button>
                     <Button  className = {"mx-2 customButton " + valueDisabled} type ="submit" variant = "success">Add</Button>
                   </Col>
             </Row>    
