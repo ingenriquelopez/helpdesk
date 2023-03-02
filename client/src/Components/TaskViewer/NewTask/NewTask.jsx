@@ -43,12 +43,11 @@ export default function NewTask() {
     
     
     async function sendFormTask() {
-        let today  = moment();
         let id_tmp = uuidv4();
 
         const newTask = {
             id         : id_tmp,
-            dateTask   : today.format("dd Do MM YYYY"),
+            dateTask   : new Date(),
             classRoom  : txtclassroom ,
             level      : txtlevel,
             gyg        : txtgyg ,
@@ -62,6 +61,7 @@ export default function NewTask() {
           {
             const response = await axios.post(`${REACT_APP_API}/task`,newTask);
             if (response) {
+                newTask.dateTask = newTask.dateTask.toJSON();
                 dispatch(addTask(newTask));
             }
           } catch (error) {
