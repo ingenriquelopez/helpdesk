@@ -10,6 +10,7 @@ import Col       from 'react-bootstrap/Col';
 
 import "./NewUser.css";
 import axios from 'axios';
+import { tostada_S } from '../../../utils/Tostadas';
 const {REACT_APP_API} = process.env;
 
 
@@ -60,6 +61,7 @@ function NewUser() {
             const response = await axios.post(`${REACT_APP_API}/user`,newUser);
             if (response) {
                 // aviso de la mision fu un exito
+                tostada_S('New User DONE!',"top-center",1500,'light');
             }
             navigate('/dashboard/viewerusers', { replace: true });    
         } catch (error) {

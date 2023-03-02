@@ -13,7 +13,6 @@ import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 
 import { tostada_S } from '../../../utils/Tostadas';
-import { ToastContainer } from 'react-toastify';
 
 import axios from 'axios';
 import moment from 'moment';
@@ -38,65 +37,58 @@ export default function NewClassRoom() {
     const [txtfloor       , setTxtFloor]     = useState('');
    
     
-    const  add_New_ClassRoom = async(what)=> {
-        try 
-          {
-            const response = await axios.post(`${REACT_APP_API}/classRoom`,what);
-            return response;
-            } catch (error) {
-                console.log(error.message);
-            }
-          }
     
-    async function sendFormClassRoom() {
-        const classRoom_tmp = {
+    
+    function handleClassRoom(e) {       
+      setTxtClassRoom(e.target.value)            
+    }
+
+    function handlegyg(e) {
+      setTxtGyg(e.target.value);
+    }
+
+    function handlelevel(e) {
+      setTxtLevel(e.target.value);
+    }
+
+    function handlecampus(e) {
+      setTxtCampus(e.target.value);
+    }
+
+    function handlefloor(e) {
+      setTxtFloor(e.target.value);
+    }
+    
+    
+    
+    
+    async function handleSubmitForm(e) {
+        e.preventDefault();
+        const newClassRoom = {
             classRoom  : txtclassRoom,
             gyg        : txtgyg,
             level      : txtlevel,
             campus     : txtcampus,
             floor      : txtfloor,
         }
-        
-        try { 
-           if (add_New_ClassRoom(classRoom_tmp) ) { 
-             dispatch(addNewClassRoom(classRoom_tmp)); 
-          }
-          tostada_S('New ClassRoom DONE!',"top-center",1500,'light');
-          //navigate('/dashboard/viewerclassrooms',{ replace:true});  
-          window.location.replace('/dashboard/viewerclassrooms');
+        try 
+        {
+            const response = await axios.post(`${REACT_APP_API}/classRoom`,newClassRoom);
+            if (response) {
+                // aviso de la mision fue un exito
+                dispatch(addNewClassRoom(newClassRoom)); 
+                tostada_S('New ClassRoom DONE!',"top-center",1500,'light');
+            }
+            navigate('/dashboard/viewerclassrooms', { replace: true });    
         } catch (error) {
-          console.log(error);
-        }  
-      }
-    
-      function handleSubmitForm(e) {
-        e.preventDefault();
-        sendFormClassRoom();
+            console.log(error.message);
+        }
     }
-
-    const handleExit= ()=> {
+    
+    const handleCloseNewClassRoom =()=> {
         navigate('/dashboard/viewerclassrooms', { replace: true});
     }
 
-      function handleClassRoom(e) {       
-        setTxtClassRoom(e.target.value)            
-      }
-
-      function handlegyg(e) {
-        setTxtGyg(e.target.value);
-      }
-
-      function handlelevel(e) {
-        setTxtLevel(e.target.value);
-      }
-
-      function handlecampus(e) {
-        setTxtCampus(e.target.value);
-      }
-
-      function handlefloor(e) {
-        setTxtFloor(e.target.value);
-      }
 
     
 useEffect(() => {
@@ -193,7 +185,7 @@ useEffect(() => {
                 <Row className = "d-grid">
                     <Form.Group className = "mt-3 mx-auto">
                         <Col className = "col d-md-flex justify-content-center gap-3" >
-                            <Button className = "customButton" variant = "danger" onClick={handleExit}>Cancel</Button>
+                            <Button className = "customButton" variant = "danger" onClick={handleCloseNewClassRoom}>Cancel</Button>
                             <Button className = "customButton" type ="submit" variant = "success">Add</Button>
                         </Col>
                         </Form.Group>            
