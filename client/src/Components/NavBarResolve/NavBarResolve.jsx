@@ -1,6 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
-import { Link, NavLink} from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import { useLocalStorage } from '../../js/useLocalStorage';
 import './NavBarResolve.css';
 import userIcon from '../../assets/userIcon.png';
@@ -8,7 +7,6 @@ import userIcon from '../../assets/userIcon.png';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 export default function NavBarResolve() {
-  const { listCR }  = useSelector ( (state) => state.classRooms);
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
 
   return (    

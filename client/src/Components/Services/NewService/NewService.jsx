@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
 import Form      from 'react-bootstrap/Form';
 import Button    from 'react-bootstrap/Button';
 import Row       from 'react-bootstrap/Row';
@@ -8,8 +7,6 @@ import Modal     from 'react-bootstrap/Modal'
 import { Container } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import setHours from "date-fns/setHours";
-import setMinutes from "date-fns/setMinutes";
 import { v4 as uuidv4 } from 'uuid';
 
 import axios from 'axios';
@@ -18,8 +15,6 @@ const {REACT_APP_API} = process.env;
 
 
 export default function NewService( props ) {
-  const dispatch = useDispatch();
-
   const [listDocuments   , setListDocuments]    = useState();
   const [docSelected     , setdocSelected]      = useState('');
   

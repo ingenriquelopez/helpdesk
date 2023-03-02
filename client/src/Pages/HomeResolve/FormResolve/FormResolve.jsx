@@ -27,8 +27,7 @@ function FormResolve( {propNumber}) {
    const [newDateSolution  , setnewDateSolution]    = useState('');
    const [newOrderService  , setnewOrderService]    = useState('');
    const [disabledOS       ,      setdisabledOS]    = useState(false);
-   const [disabledOM       ,      setdisabledOM]    = useState(false);
-
+   
    const [startDate        , setStartDate]          = useState('');
    const [isOpenDR         , setIsOpenDR]           = useState(false);
    const [isOpenDS         , setIsOpenDS]           = useState(false);
@@ -184,9 +183,6 @@ function FormResolve( {propNumber}) {
       if (newStatus === 'Process')   saveStatusProcess();
       if (newStatus === 'Completed') saveStatusCompleted();
       if (newStatus === 'Rejected')  saveStatusRejected();
-    }
-    const handleLgClose =()=> {
-      setModalShow(false);
     }
 
     

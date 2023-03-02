@@ -1,10 +1,8 @@
 import React, { useEffect, useState}     from 'react'
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Table     from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 import ServiceOrder      from './ServiceOrder';
-import { useLocalStorage } from '../../../js/useLocalStorage';
 import { ToastContainer } from 'react-toastify';
 
 //import { createListClassRooms } from '../../../redux/classRooms/classRoomsReducer';
@@ -13,10 +11,6 @@ const {REACT_APP_API} = process.env;
 
 function ServiceOrdersViewer() {
   const [listOS,setlistOS]  = useState();
-  const [userLogged, setUserLogged] = useLocalStorage('userLogged');
-
-  const dispatch = useDispatch();
-
   const getListOS = async()=> {
     try {
         const listServiceOrders = await axios.get(`${REACT_APP_API}/services/level/Absolute`)

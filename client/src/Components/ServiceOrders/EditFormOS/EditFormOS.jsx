@@ -1,23 +1,19 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import Form      from 'react-bootstrap/Form';
 import Button    from 'react-bootstrap/Button';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
 import { tostada_S } from '../../../utils/Tostadas';
-import { ToastContainer } from 'react-toastify';
 
 import axios from 'axios';
 const {REACT_APP_API} = process.env;
 
 export default function EditFormOS( {myTitle,myData,lgShow, handleLgClose, handleLgUpdate}) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   
-  const [newServiceReq,    setNewServiceReq]    = useState(myData.serviceReq);
-  const [newStatus,  setNewStatus]  = useState('');
+    const [newStatus,  setNewStatus]  = useState('');
   
   const saveNewStatus = async()=> {
        //creamos el registro que se enviara por body al endpoint de classRoom Router
@@ -27,7 +23,10 @@ export default function EditFormOS( {myTitle,myData,lgShow, handleLgClose, handl
        }
        try {
           const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState);
-          tostada_S('Service DONE!',"top-center",1500,'light');
+          if (response) {
+            tostada_S('Service DONE!',"top-center",1500,'light');
+          }
+          
           setTimeout( ()=> { navigate('/dashboard/', { replace: true })},1500)  
        } catch (error) {
           console.log(error.message);

@@ -52,9 +52,6 @@ export default function Task( {t}) {
     }
   }
 
-const handleClickResolve = ()=> {
-  
-}
 const handleClose = () => {
     setShow(false);
 }
@@ -75,7 +72,6 @@ const handleDelete = ()=> {
   const handleLgUpdate = ()=> {
     setLgShow(false);
   }
-{/* ------------------------*/}
 
   const handleShow           = () => setShow(true);
   const handleShowEdit       = () => setLgShow(true);   

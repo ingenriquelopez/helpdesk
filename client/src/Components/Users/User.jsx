@@ -6,7 +6,7 @@ import { FcCancel } from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
 import Confirmation from '../Alerts/Confirmation/Confirmation';
 import Annoument from '../Alerts/Annoument/Annoument';
-import { tostada_S, tostada_W } from '../../utils/Tostadas';
+import { tostada_S } from '../../utils/Tostadas';
 import EditFormUser from './EditFormUser/EditFormUser';
 import axios from 'axios';
 const {REACT_APP_API} = process.env;
@@ -15,8 +15,7 @@ export default function User( {u}) {
   const [show, setShow]     = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
-  const navigate = useNavigate();
-
+  
   let myData = {
     userName  : u.userName,
     email     : u.email,
@@ -65,7 +64,6 @@ export default function User( {u}) {
   }
 
   const handleShow           = () => setShow(true);
-  const handleShowAnnoument  = () => setSmShow(true);
   const handleShowEdit       = () => setLgShow(true);   
   
   return (    
