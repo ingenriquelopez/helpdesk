@@ -27,6 +27,7 @@ function FormResolve( {propNumber}) {
    const [newDateSolution  , setnewDateSolution]    = useState('');
    const [newOrderService  , setnewOrderService]    = useState('');
    const [disabledOS       ,      setdisabledOS]    = useState(false);
+   const [disableCOMPLETED , setdisableCOMPLETED]   = useState(true);
    
    const [startDate        , setStartDate]          = useState('');
    const [isOpenDR         , setIsOpenDR]           = useState(false);
@@ -45,26 +46,37 @@ function FormResolve( {propNumber}) {
             settaskState(statusTask.data);
             setnewNotes(statusTask.data.notes);
             setnewReason(statusTask.data.reasonRejected);
+            const orderService = statusTask.data.orderService;
             
+            orderService  ? setdisabledOS(true): setdisabledOS(false);
+            orderService  ? setnewOrderService(orderService)    : setnewOrderService('');
+            if (statusTask.data.statusTask === 'Process' && !orderService) setdisableCOMPLETED(false);
+            if (orderService) { // si hay una orden de servicio en la tabla de tareas de esta tarea encontrada en particular, busca el estado de esta orden
+               try {
+                  const statusService = await axios.get(`${REACT_APP_API}/services/number/${orderService}`);
+                  if (statusService) {
+                     console.log(statusService.data.serviceStatus)
+                     if (statusService.data.serviceStatus === 'Done') {
+                        setdisableCOMPLETED(false);
+                     }
+                  }
+               } catch(error) {
+                  console.log(error.message)
+               }
                
-            statusTask.data.orderService  ? setdisabledOS(true): setdisabledOS(false);
-            statusTask.data.orderService ? setnewOrderService(statusTask.data.orderService)    : setnewOrderService('');
+            }
 
             let dt = new Date(statusTask.data.dateTask);
             dt.setTime(Date.parse(statusTask.data.dateTask));
             statusTask.data.dateTask ? setdateTaskRequired(dt) : setdateTaskRequired('');
             
-            
             let dr = new Date(statusTask.data.dateReview);
             statusTask.data.dateReview ? setnewDateReview(dr) : setnewDateReview('');
             statusTask.data.dateReview ? setStartDate(dr): setStartDate(new Date());
-
                         
             let drej = new Date(statusTask.data.dateRejected);
             statusTask.data.dateRejected ? setnewDateRejected(drej) : setnewDateRejected('');
             
-
-
             let ds = new Date();
             ds.setTime(Date.parse(statusTask.data.dateSolution))
             statusTask.data.dateSolution ? setnewDateSolution(ds) : setnewDateSolution('');
@@ -355,6 +367,7 @@ function FormResolve( {propNumber}) {
                               className    = "text-center" 
                               type         = "text" 
                               defaultValue = {taskState.orderService} 
+                              value        = {newOrderService ? newOrderService:''}
                               onChange     = { (e)=> handleNewOrderService(e.target.value)}
                            />
                         </Col>
@@ -404,7 +417,7 @@ function FormResolve( {propNumber}) {
                               name         = "solution" 
                               defaultValue = {taskState.solution}
                               className    = "text-center mb-3 "
-                              disabled     = {disabledOS}
+                              disabled     = {disableCOMPLETED}
                               onChange     = { (e)=> handleNewSolution(e.target.value) }
                            />
                          </Col>
@@ -415,7 +428,7 @@ function FormResolve( {propNumber}) {
                            </Col>
                            <Col xl = {5} lg = {5} md = {5} sm className = "text-center">            
                                  <Row className = "d-md-flex justify-content-center py-1">
-                                    <button disabled = {disabledOS} className = {newDateSolution ? "btn-success" : "btn-light"}
+                                    <button disabled = {disableCOMPLETED} className = {newDateSolution ? "btn-success" : "btn-light"}
                                           onClick = { (e) => handleClickDateSolution(e) }
                                     >      
                                     {newDateSolution ? moment(newDateSolution).format("dddd DD/MMMM/YYYY"): 'Date...?' }

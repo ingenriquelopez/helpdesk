@@ -143,11 +143,10 @@ return (
                 <Form.Group className = "mx-auto">
                     <Row>
                         <Col>
-                            <Button className = "customButton" type ="submit" variant = "success">Login</Button>
+                          <Button className = "customButton" variant = "danger">Cancel</Button> 
                         </Col>
                         <Col>
-                          <Button className = "customButton" variant = "danger">Cancel</Button>
-                          
+                            <Button className = "customButton" type ="submit" variant = "success">Login</Button>
                         </Col>
                     </Row>
                  </Form.Group>      
