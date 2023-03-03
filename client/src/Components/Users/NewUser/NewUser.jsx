@@ -12,7 +12,6 @@ import axios from 'axios';
 import { tostada_S } from '../../../utils/Tostadas';
 const {REACT_APP_API} = process.env;
 
-
 // de momento no se esta utilizando
 //const arrayLevels = [ "PreSchool", "Elementary", "HighSchool", "College","Global","Absolute"];
 
@@ -24,53 +23,81 @@ function NewUser() {
     const [txtPassword , setTxtPassword]   = useState('');
     const [txtTypeUser , setTxtTypeUser]   = useState('');
     const [txtLevel    , setTxtLevel]      = useState('');
+    const [txtPasswordConfirm , setTxtPasswordConfirm]   = useState('');
+    const [disabledAdd, setdisabledAdd]    = useState(true);
+    const [validPassword, setvalidPassword] = useState(true);
     
+    function validatePassword() {
+      if (txtPassword === txtPasswordConfirm) setvalidPassword(true)
+      else setvalidPassword(false);
+    }
+
+    function validateForm() {
+      validatePassword();
+      if (validPassword) {
+         if (txtUserName && txtNewEmail && txtTypeUser && setTxtLevel) setdisabledAdd(false)
+         else setdisabledAdd(true)
+      }
+      alert(disabledAdd)
+    }
 
     function handleUserName(e) {
-        setTxtUserName(e.target.value);
+        setTxtUserName(e.target.value.toLowerCase());
     }
 
-      function handleNewEmail(e) {
-        setTxtNewEmail(e.target.value);
-      }
+   function handleNewEmail(e) {
+      setTxtNewEmail(e.target.value.toLowerCase());
+      let lastchar = e.target.value[e.target.value.length-1]
+      if (lastchar ==='@') {
+         if (txtNewEmail.includes(lastchar)) {
+            setTxtNewEmail('');
+         }
+      } 
+   }
 
-      function handlePassword(e) {
-        setTxtPassword(e.target.value);
-      }
+   const handlePassword = (e) => {
+      setTxtPassword(e);
+      validateForm();
+   }
+   const handlePasswordConfirm = (e) => {
+      setTxtPasswordConfirm(e);
+      validateForm();
+   }
 
-      function handleTypeUser(e) {
-        setTxtTypeUser(e.target.value);
-      }
+   function handleTypeUser(e) {
+      setTxtTypeUser(e.target.value);
+   }
+   
+   function handleLevel(e) {
+      setTxtLevel(e.target.value)
+   }
+
+   async function handleSubmitForm(e) {
+      e.preventDefault();
+      validateForm();
       
-      function handleLevel(e) {
-         setTxtLevel(e.target.value)
+      const newUser = {
+         userName  : txtUserName,
+         email     : txtNewEmail,
+         password  : txtPassword,
+         typeUser  : txtTypeUser,
+         level     : txtLevel,
       }
-
-      async function handleSubmitForm(e) {
-        e.preventDefault();
-        
-        const newUser = {
-            userName  : txtUserName,
-            email     : txtNewEmail,
-            password  : txtPassword,
-            typeUser  : txtTypeUser,
-            level     : txtLevel,
-        }
-        try {
-            const response = await axios.post(`${REACT_APP_API}/user`,newUser);
-            if (response) {
-                // aviso de la mision fu un exito
-                tostada_S('New User DONE!',"top-center",1500,'light');
-            }
-            navigate('/dashboard/viewerusers', { replace: true });    
-        } catch (error) {
-            console.log(error.message);
-          } 
-        
-      }
-    const handleCloseNewUser =()=> {
-        navigate('/dashboard/viewerusers', { replace: true});
-    }
+      try {
+         const response = await axios.post(`${REACT_APP_API}/user`,newUser);
+         if (response) {
+               // aviso de la mision fue un exito
+               tostada_S('New User DONE!',"top-center",1500,'light');
+         }
+         navigate('/dashboard/viewerusers', { replace: true });    
+      } catch (error) {
+         console.log(error.message);
+         } 
+      
+   }
+   const handleCloseNewUser =()=> {
+      navigate('/dashboard/viewerusers', { replace: true});
+   }
 
   return (
     <Container className = "container-fluid position-relative py-1">
@@ -95,10 +122,10 @@ function NewUser() {
             <Row>
                <Col className = "d-grid justify-content-center">
                   <Form.Control 
-                     type = "username" 
+                     type        = "username" 
                      placeholder = "Enter UserName" 
-                     value = {txtUserName}
-                     onChange = {(e)=> handleUserName(e)}       
+                     value       = {txtUserName}
+                     onChange    = {(e)=> handleUserName(e)}       
                   />
                </Col>
             </Row>
@@ -112,11 +139,11 @@ function NewUser() {
             <Row className = "d-md-flex justify-content-center py-2">
                <Col xl = {10} lg = {10} md = {10} sm className = "text-center" >            
                   <Form.Control 
-                     type = "email" 
-                     placeholder = "Enter email" 
-                     autoComplete="off"
-                     value = {txtNewEmail}
-                     onChange = { (e)=> handleNewEmail(e)}
+                     type         = "email" 
+                     placeholder  = "Enter email" 
+                     autoComplete = "off"
+                     value        = {txtNewEmail}
+                     onChange     = { (e)=> handleNewEmail(e)}
                   />
                </Col>
             </Row>    
@@ -130,11 +157,36 @@ function NewUser() {
             <Row>
                <Col className = "d-grid justify-content-center">
                   <Form.Control 
-                     type = "password"                     
+                     type        = "password"                     
                      placeholder = "Password" 
-                     value = {txtPassword}
-                     onChange = { (e) => handlePassword(e)}
+                     value       = {txtPassword}
+                     onKeyUp     = { (e)=> handlePassword(e.target.value) }
+                     onChange    = { (e) => handlePassword(e.target.value)}
                   />
+               </Col>
+            </Row>
+         </Form.Group>
+
+         <Form.Group controlId="formPasswordConfirm">
+            <Row className = "mt-4">
+               <Col className="text-center">
+                  <Form.Label>Confirm Password</Form.Label>
+               </Col>
+            </Row>
+            <Row>
+               <Col className = "d-grid justify-content-center">
+                  <Form.Control 
+                     type        = "password"                     
+                     placeholder = "Password" 
+                     value       = {txtPasswordConfirm}
+                     onKeyUp     = { (e)=> handlePasswordConfirm(e.target.value) }
+                     onChange    = { (e) => handlePasswordConfirm(e.target.value)}
+                  />
+               </Col>
+            </Row>
+            <Row>
+            <Col className = "d-grid justify-content-center mt-2 text-warning">
+               <Form.Label style = { validPassword ? {visibility:'hidden'}: {visibility:'visible'} }>Password does not match!</Form.Label>
                </Col>
             </Row>
          </Form.Group>
@@ -147,10 +199,10 @@ function NewUser() {
                      onChange ={ (e)=> handleTypeUser(e)}
                   >
                      <option>Choose type user</option>
-                     <option value="User">User</option>
-                     <option value="superUser">superUser</option>
-                     <option value="Admin">Admin</option>
-                     <option value="superAdmin">superAdmin</option>
+                     <option value = "User">User</option>
+                     <option value = "superUser">superUser</option>
+                     <option value = "Admin">Admin</option>
+                     <option value = "superAdmin">superAdmin</option>
                   </Form.Select>                    
                </Form.Group>
             </Col>
@@ -177,7 +229,7 @@ function NewUser() {
          <Row >
             <Form.Group className = "col mt-5 mb-3 d-md-flex justify-content-md-center gap-3">
                <Button className = "customButton" variant = "danger" onClick = {handleCloseNewUser}>Cancel</Button>
-               <Button className = "customButton" type ="submit" variant = "success">Submit</Button>
+               <Button className = "customButton" type    = "submit" variant = "success" disabled = {disabledAdd}>Add</Button>
                
             </Form.Group>    
          </Row>
