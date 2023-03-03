@@ -1,11 +1,11 @@
-import React  from 'react'
-import { useSelector } from 'react-redux';
-import { Link, NavLink} from 'react-router-dom';
+import React               from 'react'
+import { useSelector }     from 'react-redux';
+import { Link, NavLink}    from 'react-router-dom';
 import { useLocalStorage } from '../../js/useLocalStorage';
 
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import userIcon from '../../assets/userIcon.png';
-import ButtonBack from '../Buttons/ButtonBack/ButtonBack';
+import userIcon    from '../../assets/userIcon.png';
+import ButtonBack  from '../Buttons/ButtonBack/ButtonBack';
 import './NavBarHD.css';
 
 export default function NavBarHD( { buttonEnabled }) {

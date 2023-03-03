@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import Button from 'react-bootstrap/Button';
-import { useNavigate  }     from 'react-router-dom';
 
-import { FcCancel } from "react-icons/fc";
+import Button        from 'react-bootstrap/Button';
+import { FcCancel }  from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
-import Confirmation from '../Alerts/Confirmation/Confirmation';
-import Annoument from '../Alerts/Annoument/Annoument';
+import Confirmation  from '../Alerts/Confirmation/Confirmation';
+import Annoument     from '../Alerts/Annoument/Annoument';
 import { tostada_S } from '../../utils/Tostadas';
-import EditFormUser from './EditFormUser/EditFormUser';
-import axios from 'axios';
+import EditFormUser  from './EditFormUser/EditFormUser';
+import axios         from 'axios';
+
 const {REACT_APP_API} = process.env;
 
 export default function User( {u}) {
@@ -43,7 +43,6 @@ export default function User( {u}) {
     handleClickDelete();
     tostada_S('User Deleted!',"top-center",2000,'dark');
     setTimeout( ()=> { window.location.replace('/dashboard/viewerusers')},2000)   
-    
   }
 
   const handleClose = () => {

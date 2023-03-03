@@ -17,9 +17,12 @@ function TaskViewer() {
   const dispatch = useDispatch();  
 
   useEffect(() => {
-      dispatch(loadAllTasks(userLogged.levelUser));
       dispatch(createListClassRooms());
   },[])
+
+  useEffect(() => {
+    dispatch(loadAllTasks(userLogged.levelUser));
+},[listOfTasks])
 
 
   return (

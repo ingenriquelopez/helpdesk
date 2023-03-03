@@ -19,7 +19,6 @@ import Footer    from '../../Footer/Footer';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
-import { clear } from '@testing-library/user-event/dist/clear';
 
 
 const {REACT_APP_API} = process.env;

@@ -35,7 +35,6 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
     }
     
     try {
-     
       const response = await axios.put(`${REACT_APP_API}/task`,dataToChange);
       if (response) {
         try {
@@ -63,6 +62,21 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
      setNewGyg('');
     }
   }
+
+  function handleProblem(e) {
+    setNewProblem(e.target.value.toUpperCase());
+  }
+
+  const clearForm=()=> {
+    setNewClassRoom(myData.classRoom);
+    setNewTeacher(myData.teacher);
+    setNewDevice(myData.device);
+    setNewProblem(myData.problem);
+    setNewGyg(myData.gyg);
+    setNewLevel(myData.level);
+    handleLgClose();
+  }
+
   return (
     <Modal show = {lgShow} onHide = {handleLgClose} centered>
       <Modal.Header closeButton>
@@ -146,10 +160,10 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
             <Form.Group className="mb-3 mx-auto" >
               <Form.Label className="mb-3">Problem</Form.Label>
               <Form.Control 
-                    as           = "textarea"  
-                    name         = "problem" 
-                    value        = {newProblem}
-                    onChange     = {ev => setNewProblem(ev.target.value)} 
+                    as       = "textarea"  
+                    name     = "problem" 
+                    value    = {newProblem}
+                    onChange = {(e) => handleProblem(e)} 
               />
             </Form.Group>
           </Col>
@@ -158,7 +172,7 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
       </Container>
       </Modal.Body>
     <Modal.Footer>
-      <Button variant="secondary" onClick = {handleLgClose}>
+      <Button variant="secondary" onClick = {clearForm}>
         Close
       </Button>
       <Button variant="primary" onClick = {handleUpdate}>

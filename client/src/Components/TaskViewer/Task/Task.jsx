@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { deleteTask } from '../../../redux/tasks/tasksReducer';
-import Button from 'react-bootstrap/Button';
+import { useNavigate }     from 'react-router-dom';
+import { useDispatch }     from 'react-redux';
+import { deleteTask }      from '../../../redux/tasks/tasksReducer';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
-import { FcCancel } from "react-icons/fc";import { BiEditAlt } from "react-icons/bi";
-import Confirmation from '../../Alerts/Confirmation/Confirmation';
-import Annoument from '../../Alerts/Annoument/Annoument';
-import EditFormTask from '../EditFormTask/EditFormTask';
-import moment from 'moment';
-import axios from 'axios';
+import Button        from 'react-bootstrap/Button';
+import { FcCancel }  from "react-icons/fc";
+import { BiEditAlt } from "react-icons/bi";
+import Confirmation  from '../../Alerts/Confirmation/Confirmation';
+import Annoument     from '../../Alerts/Annoument/Annoument';
+import EditFormTask  from '../EditFormTask/EditFormTask';
+import moment        from 'moment';
+import axios         from 'axios';
+
 const {REACT_APP_API} = process.env;
 
 
@@ -17,6 +20,7 @@ export default function Task( {t}) {
   const [show, setShow]     = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
+  const [userLogged, setUserLogged] = useLocalStorage('userLogged');
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -74,7 +78,10 @@ const handleDelete = ()=> {
   }
 
   const handleShow           = () => setShow(true);
-  const handleShowEdit       = () => setLgShow(true);   
+  const handleShowEdit       = () => {
+    setLgShow(true);   
+  };
+  
     
   const handleResolve =()=> {
     navigate(`/homeresolve/${t.number}`);
@@ -90,7 +97,9 @@ const handleDelete = ()=> {
         <td className = "text-center fs-6"> {t.problem}</td>
         <td className = "text-center"> <Button className = 'btn-sm'
                      onClick = {handleResolve}
+                     disabled = {userLogged.typeUser==='User' ? true: false}
                      variant = {t.statusTask ==='Completed' 
+                     
                      ? 'success' 
                      : t.statusTask ==='Required' ? 'primary' 
                         : t.statusTask ==='Rejected' ? 'danger': 'warning' }
@@ -102,9 +111,10 @@ const handleDelete = ()=> {
         <td className = "text-center"> 
           <Button 
                 className = 'btn-sm'
-                style = {{backgroundColor:"transparent"}}
-                variant = "light" 
-                onClick = {handleShow}
+                disabled  = {userLogged.typeUser==='User' ? true: false}
+                style     = {{backgroundColor:"transparent"}}
+                variant   = "light" 
+                onClick   = {handleShow}
           >
                <FcCancel/> 
           </Button>
@@ -126,9 +136,9 @@ const handleDelete = ()=> {
         titulo       = "Warning!"     
         mensaje      = "Do you want Delete this Request?"   
         textBtn      = "Delete"
-        show         = {show}    
+        show         = { show }    
         handleClose  = { handleClose } 
-        handleDelete = {handleDelete}
+        handleDelete = { handleDelete }
     />
     <Annoument     titulo     = "Annoument"    mensaje = "Request deleted susscesfull ✅ " smShow = {smShow}  handleSmClose   = { handleSmClose }/> 
     <EditFormTask  myTitle    = "Edit Request" myData  = {myData}    lgShow = {lgShow}             handleLgClose       = { handleLgClose }     handleLgUpdate = {handleLgUpdate}/>

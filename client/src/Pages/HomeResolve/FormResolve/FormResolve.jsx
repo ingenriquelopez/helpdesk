@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect }        from 'react'
 import { Container, Form, Row, Col, Button } from 'react-bootstrap'
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import NewService from '../../../Components/Services/NewService/NewService';
+
+import { useNavigate }          from 'react-router-dom';
+import DatePicker               from "react-datepicker";
+import NewService               from '../../../Components/Services/NewService/NewService';
+import { ToastContainer }       from 'react-toastify';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
-import { ToastContainer } from 'react-toastify';
+
 import moment from 'moment';
 import axios from 'axios'
-
 
 
 function FormResolve( {propNumber}) {
@@ -101,10 +102,14 @@ function FormResolve( {propNumber}) {
             dateSolution: null,
             orderService  : newOrderService,
          }
+         
          try {
             const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState);
-            tostada_S('Changing Status to PROCESS',"top-right",2500,'colored');
-            setTimeout( ()=> { navigate('/home', { replace: true })},2500)              
+            if (response) {
+               tostada_S('Changing Status to PROCESS',"top-right",2500,'colored');
+               setTimeout( ()=> { navigate('/home', { replace: true })},2500)              
+            }
+            
             navigate('/home');
             return response;
 
@@ -171,7 +176,7 @@ function FormResolve( {propNumber}) {
       setnewStatus(e)
     }
     const handleNewNotes = (e)=> {
-      setnewNotes(e)
+      setnewNotes(e.toUpperCase());
     }
 
     const handleNewReason = (e)=> {
@@ -355,6 +360,7 @@ function FormResolve( {propNumber}) {
                               name         = "notes" 
                               defaultValue = {taskState.notes}
                               className    = "text-center mb-0 "
+                              value        = {newNotes}
                               onChange     = { (e)=> handleNewNotes(e.target.value)}
                            />
                         </Col>
