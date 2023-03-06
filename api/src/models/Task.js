@@ -45,13 +45,13 @@ module.exports = (sequelize) => {
             solution: {
                 type: DataTypes.STRING
             },
-            dateRejected: {
+            dateSolution: {
                 type: DataTypes.DATE
             },
             reasonRejected: {
                 type: DataTypes.TEXT
             },
-            dateSolution: {
+            dateRejected: {
                 type: DataTypes.DATE
             },
             orderService : {

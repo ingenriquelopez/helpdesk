@@ -99,7 +99,9 @@ function FormResolve( {propNumber}) {
             dateReview    : newDateReview,
             notes         : newNotes,
             solution      : '',
-            dateSolution: null,
+            dateSolution  : null,
+            reasonRejected: '',
+            dateRejected  : null,
             orderService  : newOrderService,
          }
          
@@ -131,9 +133,9 @@ function FormResolve( {propNumber}) {
          const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState);
          tostada_S('Changing Status to PROCESS',"top-right",2500,'colored');
          setTimeout( ()=> { navigate('/home', { replace: true })},2500)              
+
          navigate('/home');
          return response;
-
       } catch (error) {
          console.log(error.message);
       }

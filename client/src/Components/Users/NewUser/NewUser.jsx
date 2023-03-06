@@ -9,7 +9,7 @@ import Col       from 'react-bootstrap/Col';
 
 import "./NewUser.css";
 import axios from 'axios';
-import { tostada_S } from '../../../utils/Tostadas';
+import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 const {REACT_APP_API} = process.env;
 
 // de momento no se esta utilizando
@@ -23,26 +23,18 @@ function NewUser() {
     const [txtPassword , setTxtPassword]   = useState('');
     const [txtTypeUser , setTxtTypeUser]   = useState('');
     const [txtLevel    , setTxtLevel]      = useState('');
-    const [txtPasswordConfirm , setTxtPasswordConfirm]   = useState('');
     const [disabledAdd, setdisabledAdd]    = useState(true);
-    const [validPassword, setvalidPassword] = useState(true);
     
-    function validatePassword() {
-      if (txtPassword === txtPasswordConfirm) setvalidPassword(true)
-      else setvalidPassword(false);
-    }
 
     function validateForm() {
-      validatePassword();
-      if (validPassword) {
-         if (txtUserName && txtNewEmail && txtTypeUser && setTxtLevel) setdisabledAdd(false)
-         else setdisabledAdd(true)
-      }
-      alert(disabledAdd)
+      
+      if (txtPassword && txtUserName && txtNewEmail) setdisabledAdd(false)
+      else setdisabledAdd(true)
     }
 
     function handleUserName(e) {
         setTxtUserName(e.target.value.toLowerCase());
+        validateForm();
     }
 
    function handleNewEmail(e) {
@@ -53,48 +45,61 @@ function NewUser() {
             setTxtNewEmail('');
          }
       } 
+      validateForm();
    }
 
    const handlePassword = (e) => {
       setTxtPassword(e);
       validateForm();
    }
-   const handlePasswordConfirm = (e) => {
-      setTxtPasswordConfirm(e);
-      validateForm();
-   }
+ 
 
    function handleTypeUser(e) {
       setTxtTypeUser(e.target.value);
+      validateForm();
    }
    
    function handleLevel(e) {
-      setTxtLevel(e.target.value)
+      validateForm();
+      setTxtLevel(e.target.value);
+      validateForm();
+      
    }
 
    async function handleSubmitForm(e) {
       e.preventDefault();
-      validateForm();
-      
-      const newUser = {
-         userName  : txtUserName,
-         email     : txtNewEmail,
-         password  : txtPassword,
-         typeUser  : txtTypeUser,
-         level     : txtLevel,
-      }
-      try {
-         const response = await axios.post(`${REACT_APP_API}/user`,newUser);
-         if (response) {
-               // aviso de la mision fue un exito
-               tostada_S('New User DONE!',"top-center",1500,'light');
+      if (!disabledAdd) {
+         if (txtTypeUser && txtTypeUser !== 'Choose...') {
+            if (txtLevel && txtLevel !== 'Choose...') {
+               const newUser = {
+                  userName  : txtUserName,
+                  email     : txtNewEmail,
+                  password  : txtPassword,
+                  typeUser  : txtTypeUser,
+                  level     : txtLevel,
+               }
+               try {
+                  const response = await axios.post(`${REACT_APP_API}/user`,newUser);
+                  if (response) {
+                        // aviso de la mision fue un exito
+                        tostada_S('New User DONE!',"top-center",1500,'light');
+                  }
+                  navigate('/dashboard/viewerusers', { replace: true });    
+               } catch (error) {
+                  console.log(error.message);
+                  } 
+            } else {
+               //mensaje de que no se ha caoturado el level
+               tostada_W('missing Level!',"bottom-right",1500,'light');
+            }
+         } else {
+            // no se ha capturado el typeuser
+            tostada_W('missing TypeUser!',"bottom-right",1500,'light');
          }
-         navigate('/dashboard/viewerusers', { replace: true });    
-      } catch (error) {
-         console.log(error.message);
-         } 
-      
+      } 
    }
+         
+
    const handleCloseNewUser =()=> {
       navigate('/dashboard/viewerusers', { replace: true});
    }
@@ -167,61 +172,39 @@ function NewUser() {
             </Row>
          </Form.Group>
 
-         <Form.Group controlId="formPasswordConfirm">
-            <Row className = "mt-4">
-               <Col className="text-center">
-                  <Form.Label>Confirm Password</Form.Label>
-               </Col>
-            </Row>
-            <Row>
-               <Col className = "d-grid justify-content-center">
-                  <Form.Control 
-                     type        = "password"                     
-                     placeholder = "Password" 
-                     value       = {txtPasswordConfirm}
-                     onKeyUp     = { (e)=> handlePasswordConfirm(e.target.value) }
-                     onChange    = { (e) => handlePasswordConfirm(e.target.value)}
-                  />
-               </Col>
-            </Row>
-            <Row>
-            <Col className = "d-grid justify-content-center mt-2 text-warning">
-               <Form.Label style = { validPassword ? {visibility:'hidden'}: {visibility:'visible'} }>Password does not match!</Form.Label>
-               </Col>
-            </Row>
-         </Form.Group>
+         
          <Row className = "mt-4 d-md-flex justify-content-center">
             <Col className="text-center  col-5">
                <Form.Group controlId="formTypeUser">
                   <Form.Label>Type User</Form.Label>
-                  <Form.Select 
+                  <Form.Control as = "select"
                      aria-label="Type user"  
                      onChange ={ (e)=> handleTypeUser(e)}
                   >
-                     <option>Choose type user</option>
+                     <option>Choose...</option>
                      <option value = "User">User</option>
                      <option value = "superUser">superUser</option>
                      <option value = "Admin">Admin</option>
                      <option value = "superAdmin">superAdmin</option>
-                  </Form.Select>                    
+                  </Form.Control>                    
                </Form.Group>
             </Col>
             <Col className="text-center col-5 ">
                <Form.Group controlId = "formLevel">
                   <Form.Label>Level</Form.Label>
-                  <Form.Select 
+                  <Form.Control as = "select" 
                      aria-label="Level" 
                      
-                     onChange ={ (e) => handleLevel(e) }
+                     onChange ={handleLevel}
                   >
-                     <option>Choose level</option>
+                     <option>Choose...</option>
                      <option value = "PreSchool">PreSchool</option>
                      <option value = "Elementary">Elementary</option>
                      <option value = "HighSchool">HighSchool</option>
                      <option value = "College">College</option>
                      <option value = "Global">Global</option>
                      <option value = "Absolute">Absolute</option>
-                  </Form.Select>
+                  </Form.Control>
                </Form.Group>         
             </Col>
          </Row> 

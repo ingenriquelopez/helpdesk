@@ -5,6 +5,8 @@ import Container from 'react-bootstrap/Container';
 import User      from './User';
 
 import axios from 'axios';
+import './ViewerUsers.css';
+
 const {REACT_APP_API} = process.env;
 
 function ViewerUsers() {
@@ -36,7 +38,7 @@ function ViewerUsers() {
       </Link>
       
         <Table striped bordered hover size="sm" >    
-          <thead>
+          <thead className = "headerT">
             <tr>
               <th className = "col-sm-2 text-center">UserName</th>
               <th className = "col-sm-3 text-center">Email</th>

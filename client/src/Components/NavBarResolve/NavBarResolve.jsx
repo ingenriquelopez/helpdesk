@@ -12,10 +12,6 @@ export default function NavBarResolve() {
   return (    
     <nav className="navbar fixed-top navbar-light gradientNavBar">
         <div className="container-fluid">
-          <div className = "classUserLogged">
-            <img src = {userIcon} id = "userIcon" alt = "UserIcon"/>
-            <h6> {userLogged.userName } </h6>  
-          </div>
                   <NavDropdown
                     id="nav-dropdown"
                     title={userLogged.levelUser}
@@ -37,6 +33,11 @@ export default function NavBarResolve() {
               <NavDropdown.Item href="#action/3.1">EventsViewer</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Cancel</NavDropdown.Item>
           </NavDropdown>
+          
+          <div className = "classUserLogged">
+            <img src = {userIcon} id = "userIcon" alt = "UserIcon"/>
+            <h6> {userLogged.userName } </h6>  
+          </div>
          
         </div>
     </nav>    

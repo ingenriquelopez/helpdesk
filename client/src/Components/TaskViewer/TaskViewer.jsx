@@ -4,7 +4,9 @@ import { useLocalStorage } from '../../js/useLocalStorage';
 
 import Table     from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
+import Button        from 'react-bootstrap/Button';
 import Task      from './Task/Task';
+import './TaskViewer.css';
 
 import { loadAllTasks } from '../../redux/tasks/tasksReducer';
 import { createListClassRooms } from '../../redux/classRooms/classRoomsReducer';
@@ -28,9 +30,9 @@ function TaskViewer() {
   return (
     <Container className = "container-fluid py-5 mb-2" >
         <Table striped bordered hover size="sm" >
-          <thead>
+          <thead className = "headerT">
             <tr>
-              <th className = "col-sm-2 text-center">Date</th>
+              <th className = "col-sm-2 text-center">Date <Button size = "sm" variant = "secondary"> <i class='bx bx-sort-alt-2 bx-sm'></i></Button></th>
               <th className = "col-sm-1 text-center">Time</th>
               <th className = "col-sm-1 text-center">ClassRoom</th>
               <th className = "col-sm-1 text-center">Grade/Group</th>

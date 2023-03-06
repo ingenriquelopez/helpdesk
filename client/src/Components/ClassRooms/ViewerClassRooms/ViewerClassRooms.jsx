@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import Table     from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 import ClassRoom      from './ClassRoom';
+import './ViewerClassRooms.css';
 import { useLocalStorage } from '../../../js/useLocalStorage';
-
 import { createListClassRooms } from '../../../redux/classRooms/classRoomsReducer';
 
 
@@ -26,7 +26,7 @@ useEffect(() => {
       </Link>
       
         <Table striped bordered hover size="sm">
-          <thead>
+          <thead className = "headerT">
             <tr>
               <th className = "col-sm-2 text-center">ClassRoom</th>
               <th className = "col-sm-2 text-center">GyG</th>
