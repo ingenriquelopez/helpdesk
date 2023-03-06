@@ -4,6 +4,7 @@ import { useDispatch }     from 'react-redux';
 import { deleteTask }      from '../../../redux/tasks/tasksReducer';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
+import './Task.css';
 import Button        from 'react-bootstrap/Button';
 import { FcCancel }  from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
@@ -89,7 +90,7 @@ const handleDelete = ()=> {
 
   return (    
     <>
-    <tr>
+    <tr className = "rowData">
         <td className = "text-center fs-6"> {moment(t.dateTask).format('ddd DD/MMM/YYYY')}</td>
         <td className = "text-center fs-6"> {moment(t.dateTask).format('LT')}</td>
         <td className = "text-center fs-6"> {t.classRoom}</td>

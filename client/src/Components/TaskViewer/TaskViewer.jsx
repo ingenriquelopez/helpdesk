@@ -18,6 +18,27 @@ function TaskViewer() {
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
   const dispatch = useDispatch();  
 
+ const sortByDate = ()=> {
+  alert('Sort by Date')
+  let LT = [...listOfTasks];
+  LT.sort((o1,o2) => {
+    if (o1.dateTask < o2.dateTask) {
+      return -1;
+    } else if (o1.dateTask > o2.dateTask) {
+      return 1;
+    }else {
+      return 0;
+    }
+  });
+ }
+
+ const sortByGyg = ()=> {
+  alert('Sort by gyg')
+ }
+ const sortByStatus = ()=> {
+  alert('Sort by status')
+ }
+
   useEffect(() => {
       dispatch(createListClassRooms());
   },[])
@@ -29,17 +50,17 @@ function TaskViewer() {
 
   return (
     <Container className = "container-fluid py-5 mb-2" >
-        <Table striped bordered hover size="sm" >
+        <Table striped bordered hover size = "sm">
           <thead className = "headerT">
             <tr>
-              <th className = "col-sm-2 text-center">Date <Button size = "sm" variant = "secondary"> <i class='bx bx-sort-alt-2 bx-sm'></i></Button></th>
-              <th className = "col-sm-1 text-center">Time</th>
-              <th className = "col-sm-1 text-center">ClassRoom</th>
-              <th className = "col-sm-1 text-center">Grade/Group</th>
-              <th className = "col-sm-5 text-center">Problem</th>
-              <th className = "col-sm-1 text-center">Status</th>
-              <th className = "col-sm-1 text-center">Delete</th>
-              <th className = "col-sm-1 text-center">Edit</th>
+              <th className = "col-sm-2 text-center" >Date<Button variant="link" onClick = {sortByDate }><i class='bx bx-sort-alt-2 bx-xm'></i></Button></th>
+              <th className = "col-sm-1 text-center" >Time</th>
+              <th className = "col-sm-1 text-center" >ClassRoom</th>
+              <th className = "col-sm-1 text-center" >G & G<Button variant="link" onClick = { sortByGyg }><i class='bx bx-sort-alt-2 bx-xm'></i></Button></th>
+              <th className = "col-sm-3 text-center" >Problem</th>
+              <th className = "col-sm-2 text-center" >Status<Button variant="link" onClick = { sortByStatus }><i class='bx bx-sort-alt-2 bx-xm'></i></Button></th>
+              <th className = "col-sm-1 text-center" >Del</th>
+              <th className = "col-sm-1 text-center" >Edit</th>
             </tr> 
           </thead>
           <tbody>

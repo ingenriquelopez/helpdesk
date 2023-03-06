@@ -1,3 +1,7 @@
 .headerT {
     font-family: 'Kanit', sans-serif;
 }
+
+.headerT tr th {
+    vertical-align: middle;
+}
