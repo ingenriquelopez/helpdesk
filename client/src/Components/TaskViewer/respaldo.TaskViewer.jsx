@@ -10,74 +10,19 @@ import './TaskViewer.css';
 
 import { loadAllTasks, loadTasks } from '../../redux/tasks/tasksReducer';
 import { createListClassRooms } from '../../redux/classRooms/classRoomsReducer';
-import DataTable from 'react-data-table-component';
-import moment        from 'moment';
-
 
 
 function TaskViewer() {
   const { listOfTasks } = useSelector( state=> state.tasks);
+  
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
+
+  const [order, setOrder] = useState('ASC')
+
   const dispatch = useDispatch();  
 
-  const columns = [
-    {
-        name: 'DATE',
-        selector: row => moment(row.dateTask).format('DD/MMM/YYYY'),
-        sortable: true,
-    },
-    {
-        name: 'TIME',
-        selector: row => moment(row.dateTask).format('LT')
-    },
-    {
-      name: 'CLASSROOM',
-      selector: row => row.classRoom,
-      sortable: true,
-    },
-    {
-      name: 'G & G',
-      selector: row => row.gyg,
-      sortable: true,
-    },
-    {
-      name: 'PROBLEM',
-      selector: row => row.problem,
-    },
-    {
-      name: 'STATUS',
-      selector: row => <Button className = 'btn-sm'
-      /* onClick  = {handleResolve} */
-      disabled = {userLogged.typeUser==='User' ? true: false}
-      variant  = {row.statusTask ==='Completed' 
-      
-      ? 'success' 
-      : row.statusTask ==='Required' ? 'primary' 
-         : row.statusTask ==='Rejected' ? 'danger': 'warning' }
-> 
-    {row.statusTask}  
-</Button>  
-
-    },
-];
-
-const data = listOfTasks;
-/* const data = [
-    {
-        id: 1,
-        dateTask: 'Beetlejuice',
-        time: '1988',
-    },
-    {
-        id: 2,
-        dateTask: 'Ghostbusters',
-        time: '1984',
-    },
-]
- */
-
  const sortByDate = ()=> {
-  /* let listTmp = [...listOfTasks];
+  let listTmp = [...listOfTasks];
   if (order ==='ASC') {
     listTmp.sort((o1,o2) => {
       if (o1.dateTask < o2.dateTask) {
@@ -100,7 +45,7 @@ const data = listOfTasks;
       }
     });
     setOrder('ASC');
-  } */
+  }
  }
 
 
@@ -121,15 +66,32 @@ const data = listOfTasks;
 },[listOfTasks]);
 
 
+/* useEffect( ()=> { 
+  console.log(LT)
+} ,[order]) */
 
 
   return (
     <Container className = "container-fluid py-5 mb-2" >
-     <DataTable
-            columns={columns}
-            data={data}
-        />
-
+        <Table striped bordered hover size = "sm">
+          <thead className = "headerT">
+            <tr>
+              <th className = "col-sm-2 text-center" >Date<Button  variant = "link" onClick = {sortByDate }><i className='bx bx-sort-alt-2 bx-xm'></i></Button></th>
+              <th className = "col-sm-1 text-center" >Time</th>
+              <th className = "col-sm-1 text-center" >ClassRoom</th>
+              <th className = "col-sm-1 text-center" >G & G<Button variant = "link" onClick = { sortByGyg }><i className='bx bx-sort-alt-2 bx-xm'></i></Button></th>
+              <th className = "col-sm-3 text-center" >Problem</th>
+              <th className = "col-sm-2 text-center" >Status<Button variant = "link" onClick = { sortByStatus }><i className='bx bx-sort-alt-2 bx-xm'></i></Button></th>
+              <th className = "col-sm-1 text-center" >Del</th>
+              <th className = "col-sm-1 text-center" >Edit</th>
+            </tr> 
+          </thead>
+          <tbody>
+               { listOfTasks && listOfTasks.map( (t)=>
+                  <Task key = {t.id} t={t}/>
+              )}  
+          </tbody>
+        </Table>
     </Container>    
   );
 }
