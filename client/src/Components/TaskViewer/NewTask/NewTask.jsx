@@ -26,20 +26,20 @@ const {REACT_APP_API} = process.env;
 moment.locale('us');
 
 export default function NewTask() {
-    const { listCR:listOfClassRooms }  = useSelector ( (state) => state.classRooms);
-    const [userLogged, setUserLogged] = useLocalStorage('userLogged');
-    const [valueDisabled, setvalueDisabled] = useState('disabled');
+    const { listCR:listOfClassRooms }   = useSelector ( (state) => state.classRooms);
+    const [userLogged, setUserLogged]   = useLocalStorage('userLogged');
+    const [disabledAdd, setdisabledAdd] = useState(true);
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
         
     //Defino un state Persistente para conservar informacion del form
-    const [txtclassroom   , setTxtClassRoom] = useLocalStorage('txtclassroom'  , '');
-    const [txtlevel       , setTxtLevel]     = useLocalStorage('txtlevel'      , '');
-    const [txtgyg         , setTxtGyg]       = useLocalStorage('txtgyg'        , '');
-    const [txtteacher     , setTxtTeacher]   = useLocalStorage('txtteacher'    , '');
-    const [txtdevice      , setTxtDevice]    = useLocalStorage('txtdevice'     , '');
-    const [txtproblem     , setTxtProblem]   = useLocalStorage('txtproblem'    , '');
+    const [txtclassroom   , setTxtClassRoom] = useState('');
+    const [txtlevel       , setTxtLevel]     = useState('');
+    const [txtgyg         , setTxtGyg]       = useState('');
+    const [txtteacher     , setTxtTeacher]   = useState('');
+    const [txtdevice      , setTxtDevice]    = useState('');
+    const [txtproblem     , setTxtProblem]   = useState('');
     
     
     async function sendFormTask() {
@@ -67,40 +67,31 @@ export default function NewTask() {
           } catch (error) {
                 console.log(error.message);
             }    
-             
-          localStorage.removeItem('txtgyg')
-          localStorage.removeItem('txtlevel')
-          localStorage.removeItem('txtteacher')
-          localStorage.removeItem('txtdevice')
-          localStorage.removeItem('txtproblem')
-
-          //window.location.replace('/home');
           navigate('/home', { replace: true});
       }
       
     const validateSubmitButton=()=> {
-        let field1 = localStorage.getItem('txtclassroom');
-        let field2 = localStorage.getItem('txtdevice');
-        let field3 = localStorage.getItem('txtteacher');
-        let field4 = localStorage.getItem('txtproblem');
-        
-        (field1 && field2 && field3 && field4 ) ? setvalueDisabled(''): setvalueDisabled('disabled') 
+        (txtclassroom.length > 0 
+            && txtgyg.length > 0 
+                && txtlevel.length > 0  
+                    && txtproblem.length > 0 
+                        && txtdevice !=='Choose...' ) ? setdisabledAdd(false): setdisabledAdd(true) ;
     } 
 
     function handleSubmitForm(e) {
         e.preventDefault();
-        sendFormTask();
+        if (!disabledAdd) {
+            if (txtdevice !== 'Choose...') {
+                sendFormTask();
+            }
+        }
     }
-    function handleCloseNewTask() {
-        localStorage.removeItem('txtgyg')
-        localStorage.removeItem('txtlevel')
-        localStorage.removeItem('txtteacher')
-        localStorage.removeItem('txtdevice')
-        localStorage.removeItem('txtproblem')
 
+    function handleCloseNewTask() {
         navigate('/home', { replace: true});
     }
-      function handleClassRoom(e) {  
+
+    function handleClassRoom(e) {  
         let ncr = e.target.value;
 
         if (ncr!== 'none' && ncr) {
@@ -109,40 +100,41 @@ export default function NewTask() {
             setTxtGyg(listClassRooms.gyg);
             setTxtLevel(listClassRooms.level);
         } else {
-         setTxtLevel('');
-         setTxtGyg('');
+            setTxtLevel('');
+            setTxtGyg('');
         }
         validateSubmitButton();
-      }
+    }
 
     
-      function handleTeacher(e) {
-        setTxtTeacher(e.target.value.toUpperCase());
-        validateSubmitButton();
-      }
+    function handleTeacher(e) {
+    setTxtTeacher(e.target.value.toUpperCase());
+    validateSubmitButton();
+    }
 
-      function handleDevice(e) {
-        setTxtDevice(e.target.value);
-        validateSubmitButton();
-      }
+    function handleDevice(e) {
+    setTxtDevice(e.target.value);
+    validateSubmitButton();
+    }
       
-      function handleProblem(e) {
-        setTxtProblem(e.target.value.toUpperCase());
-        validateSubmitButton();
-      }
+    function handleProblem(e) {
+    setTxtProblem(e.target.value.toUpperCase());
+    validateSubmitButton();
+    }
 
 
-      const  clearForm = ()=> {
-        setTxtLevel('');
-        setTxtGyg('');
-        setTxtTeacher('');
-        setTxtDevice('');
-        setTxtProblem('');
-      }
-useEffect(() => {
-    clearForm();
-    dispatch(createListClassRooms(userLogged.levelUser));
-},[])
+    const  clearForm = ()=> {
+    setTxtLevel('');
+    setTxtGyg('');
+    setTxtTeacher('');
+    setTxtDevice('');
+    setTxtProblem('');
+    }
+
+    useEffect(() => {
+        clearForm();
+        dispatch(createListClassRooms(userLogged.levelUser));
+    },[])
 
 
   return (
@@ -227,10 +219,10 @@ useEffect(() => {
                     <Form.Group className="mb-3 mx-auto" >
                         <Form.Label className="mb-3">Problem</Form.Label>
                         <Form.Control 
-                            as = "textarea"  
-                            name = "problem" 
-                            value = {txtproblem}
-                            onChange = {(e) => handleProblem(e)} 
+                            as          = "textarea"  
+                            name        = "problem" 
+                            value       = {txtproblem}
+                            onChange    = { (e) => handleProblem(e) } 
                             placeholder = "write the problem..."/>
                     </Form.Group>
                 </Col>
@@ -238,7 +230,14 @@ useEffect(() => {
             <Row className = "d-md-flex justify-content-center py-2 mb-4">
                  <Col className = "text-center d-md-flex justify-content-around">
                     <Button className  = "mx-2 customButton" variant = "danger" onClick = {handleCloseNewTask}>Cancel</Button>
-                    <Button  className = {"mx-2 customButton " + valueDisabled} type ="submit" variant = "success">Add</Button>
+                    <Button className  = {"mx-2 customButton " } 
+                            type       = "submit" 
+                            variant    = "success"
+                            disabled   = {disabledAdd}
+                    >
+                        Add
+                    </Button>
+
                   </Col>
             </Row>    
         </Form>

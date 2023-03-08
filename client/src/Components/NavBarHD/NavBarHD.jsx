@@ -23,7 +23,7 @@ export default function NavBarHD( { buttonEnabled }) {
                 (listCR.length > 0) 
                 ? 
                   <NavDropdown
-                    id="nav-dropdown"
+                    id = "styleLinks"
                     title={userLogged.levelUser}
                     menuVariant="light"
                   >
@@ -40,7 +40,7 @@ export default function NavBarHD( { buttonEnabled }) {
             (userLogged.typeUser.includes('Admin') || userLogged.typeUser.includes('superAdmin'))
            ? 
           <NavDropdown
-              id="nav-dropdown-Events"
+              id = "styleLinks"
               title="Events"
               menuVariant="light"
             >
@@ -55,16 +55,14 @@ export default function NavBarHD( { buttonEnabled }) {
           {
               (userLogged.typeUser.includes('Admin') || userLogged.typeUser.includes('superAdmin'))
               ?
-                (<Link className = "navbar-brand fs-6" to = "/dashboard" id = "styleLinks">DashBoard</Link>)
-                : null
+                (<Link className = "navbar-brand fs-6" to = "/dashboard" id = "styleLinks">DashBoard <i className='bx bxs-right-arrow-alt bx-fade-right-hover'></i></Link>)
+                : null    
             }  
           <div className = "classUserLogged">
             <img src = {userIcon} id = "userIcon" alt = "UserIcon"/>
             <h6> {userLogged.userName } </h6>    
           </div>  
-           
-        </div>
-        
+        </div>    
     </nav>    
   )
 }

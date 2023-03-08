@@ -5,8 +5,13 @@
 
 #styleLinks {
   color: white;
-
+  padding: 5px;
 }
+#styleLinks:hover {
+  color: yellow; /*will change color of text within the element on hover */
+  font-weight: 500;
+}
+
 
 .classUserLogged {
   display:flex;

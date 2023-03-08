@@ -4,7 +4,7 @@ import { useNavigate }     from 'react-router-dom';
 import { useLocalStorage } from '../../js/useLocalStorage';
 import './TaskViewer.css';
 
-import DataTable from 'react-data-table-component';
+import DataTable, { createTheme } from 'react-data-table-component';
 import Container from 'react-bootstrap/Container';
 import Button        from 'react-bootstrap/Button';
 import { FcCancel }  from "react-icons/fc";
@@ -22,6 +22,7 @@ import axios         from 'axios';
 
 const {REACT_APP_API} = process.env;
 
+
 function TaskViewer() {
   const dispatch = useDispatch();  
   const navigate = useNavigate();
@@ -33,7 +34,45 @@ function TaskViewer() {
   const [lgShow, setLgShow] = useState(false);
   const [currentRecord, setcurrentRecord] = useState('');
 
-
+//styles of datatables
+const customStyles = {
+  rows: {
+      style: {
+          minHeight: '40px', // override the row height
+      },
+  },
+  headCells: {
+      style: {
+          paddingLeft: '8px', // override the cell padding for head cells
+          paddingRight: '8px',
+          backgroundColor: "#FFFDE7",
+          center:true,
+      },
+  },
+  cells: {
+      style: {
+          paddingLeft: '8px', // override the cell padding for data cells
+          paddingRight: '8px',
+      },
+  },
+};
+createTheme('solarized', {
+  text: {
+    primary: '#268bd2',
+    secondary: '#2aa198',
+  },
+  
+  context: {
+    text: '#FFFFFF',
+  },
+  divider: {
+/*     default: '#073642', */
+  },
+  action: {
+    hover: 'rgba(0,0,0,.08)',
+  },
+})
+//---------------------------------------------
   const columns = [
     {
         name: 'DATE',
@@ -57,11 +96,13 @@ function TaskViewer() {
     {
       name: 'PROBLEM',
       selector: row => row.problem,
+      width: "20rem",
+      //wrap: true,
     },
     {
       name: 'STATUS',
       selector: row => <Button className = 'btn-sm'
-                          onClick  = { handleResolve } 
+                          onClick  = { ()=>handleResolve(row) } 
                           disabled = { userLogged.typeUser === 'User' ? true: false}
                           variant  = {row.statusTask === 'Completed'       
                                         ? 'success' 
@@ -73,7 +114,8 @@ function TaskViewer() {
                         </Button>  
     },
     {
-      name: 'Delete',
+      name: 'DELETE',
+      width: "4rem",
       cell: (row) =>(
                       <Button className = 'btn-sm'
                         disabled  = { userLogged.typeUser === 'User' ? true: false }
@@ -86,7 +128,8 @@ function TaskViewer() {
                    )
     },
     {
-      name: 'Edit',
+      name: 'EDIT',
+      width: "4rem",
       cell: (row) => (
         <Button  className  = "btn-sm"
                                 style     = {{backgroundColor:"transparent"}}
@@ -164,8 +207,8 @@ const handleShowEdit  = (row) => {
 };
 
   
-const handleResolve =()=> {
-  //navigate(`/homeresolve/${t.number}`);
+const handleResolve =(row)=> {
+  navigate(`/homeresolve/${row.number}`);
 }
 
 let myData = {
@@ -183,10 +226,14 @@ let myData = {
 
   return (
     <Container className = "container-fluid py-5 mb-2" >
-      <DataTable columns = { columns }  data = { DATA }  
+      <DataTable columns      = { columns }  
+                 data         = { DATA }  
+                 customStyles = {customStyles} 
                   /*  selecttableRows  */
                    fixedHeader 
                    pagination 
+                   striped
+                   /* theme="solarized" */
       />
 
       <Confirmation  
