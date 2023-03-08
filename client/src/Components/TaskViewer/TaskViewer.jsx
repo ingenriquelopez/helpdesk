@@ -1,24 +1,38 @@
 import React, { useEffect, useState }     from 'react'
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate }     from 'react-router-dom';
 import { useLocalStorage } from '../../js/useLocalStorage';
+import './TaskViewer.css';
 
-import Table     from 'react-bootstrap/Table';
+import DataTable from 'react-data-table-component';
 import Container from 'react-bootstrap/Container';
 import Button        from 'react-bootstrap/Button';
-import Task      from './Task/Task';
-import './TaskViewer.css';
+import { FcCancel }  from "react-icons/fc";
+import { BiEditAlt } from "react-icons/bi";
+import Confirmation from '../Alerts/Confirmation/Confirmation';
+import Annoument     from '../Alerts/Annoument/Annoument';
+import EditFormTask  from './EditFormTask/EditFormTask';
+import moment        from 'moment';
 
 import { loadAllTasks, loadTasks } from '../../redux/tasks/tasksReducer';
 import { createListClassRooms } from '../../redux/classRooms/classRoomsReducer';
-import DataTable from 'react-data-table-component';
-import moment        from 'moment';
+import { deleteTask }      from '../../redux/tasks/tasksReducer';
+import axios         from 'axios';
 
 
+const {REACT_APP_API} = process.env;
 
 function TaskViewer() {
+  const dispatch = useDispatch();  
+  const navigate = useNavigate();
   const { listOfTasks } = useSelector( state=> state.tasks);
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
-  const dispatch = useDispatch();  
+  
+  const [show, setShow]     = useState(false);
+  const [smShow, setSmShow] = useState(false);
+  const [lgShow, setLgShow] = useState(false);
+  const [currentRecord, setcurrentRecord] = useState('');
+
 
   const columns = [
     {
@@ -47,70 +61,45 @@ function TaskViewer() {
     {
       name: 'STATUS',
       selector: row => <Button className = 'btn-sm'
-      /* onClick  = {handleResolve} */
-      disabled = {userLogged.typeUser==='User' ? true: false}
-      variant  = {row.statusTask ==='Completed' 
-      
-      ? 'success' 
-      : row.statusTask ==='Required' ? 'primary' 
-         : row.statusTask ==='Rejected' ? 'danger': 'warning' }
-> 
-    {row.statusTask}  
-</Button>  
-
+                          onClick  = { handleResolve } 
+                          disabled = { userLogged.typeUser === 'User' ? true: false}
+                          variant  = {row.statusTask === 'Completed'       
+                                        ? 'success' 
+                                        : row.statusTask ==='Required' ? 'primary' 
+                                        : row.statusTask ==='Rejected' ? 'danger': 'warning' 
+                                      }
+                        > 
+                          {row.statusTask}  
+                        </Button>  
     },
+    {
+      name: 'Delete',
+      cell: (row) =>(
+                      <Button className = 'btn-sm'
+                        disabled  = { userLogged.typeUser === 'User' ? true: false }
+                        style     = {{backgroundColor:"transparent"}}
+                        variant   = "light" 
+                        onClick   = { ()=>handleShowPreview(row) } 
+                      >
+                      <FcCancel/> 
+                      </Button>
+                   )
+    },
+    {
+      name: 'Edit',
+      cell: (row) => (
+        <Button  className  = "btn-sm"
+                                style     = {{backgroundColor:"transparent"}}
+                                variant   = "light" 
+                                 onClick  = { ()=>handleShowEdit(row) } 
+                       >
+                          <BiEditAlt/>
+                       </Button>
+      )  
+    }
 ];
 
-const data = listOfTasks;
-/* const data = [
-    {
-        id: 1,
-        dateTask: 'Beetlejuice',
-        time: '1988',
-    },
-    {
-        id: 2,
-        dateTask: 'Ghostbusters',
-        time: '1984',
-    },
-]
- */
-
- const sortByDate = ()=> {
-  /* let listTmp = [...listOfTasks];
-  if (order ==='ASC') {
-    listTmp.sort((o1,o2) => {
-      if (o1.dateTask < o2.dateTask) {
-        return -1;
-      } else if (o1.dateTask > o2.dateTask) {
-        return 1;
-      }else {
-        return 0;
-      }
-    });
-    setOrder('DES')
-  } else {
-    listTmp.sort((o1,o2) => {
-      if (o1.dateTask > o2.dateTask) {
-        return -1;
-      } else if (o1.dateTask < o2.dateTask) {
-        return 1;
-      }else {
-        return 0;
-      }
-    });
-    setOrder('ASC');
-  } */
- }
-
-
-
- const sortByGyg = ()=> {
-  alert('Sort by gyg')
- }
- const sortByStatus = ()=> {
-  alert('Sort by status')
- }
+const DATA = listOfTasks;
 
   useEffect(() => {
       dispatch(createListClassRooms());
@@ -119,17 +108,106 @@ const data = listOfTasks;
   useEffect(() => {
     dispatch(loadAllTasks(userLogged.levelUser));
 },[listOfTasks]);
+//*----------------------------------------------------
 
 
+
+async function handleClickDelete() { 
+  //primero lo eliminamos de la base de datos
+  
+  try {
+    const response = await axios.delete(`${REACT_APP_API}/task/${currentRecord.id}`);
+    
+    if (response.status === 200) {
+      if (response.data === 'RequestDeleted') {
+        //lo quitaremos del store
+        dispatch(deleteTask(currentRecord.id));
+        
+        setShow(false);
+        navigate('/home', { replace: true });
+      }
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const handleClose = () => {
+  setShow(false);
+}
+
+const handleDelete = ()=> {
+  handleClickDelete();
+  setShow(false)
+}
+
+const handleSmClose =() => {
+  setSmShow(false);
+}
+
+const handleLgClose =()=> {
+  setLgShow(false);
+}
+
+const handleLgUpdate = ()=> {
+  setLgShow(false);
+}
+
+const handleShowPreview  = (row) =>  {
+  setcurrentRecord(row);
+  setShow(true);  
+}
+
+const handleShowEdit  = (row) => {
+  setcurrentRecord(row);
+  setLgShow(true);   
+};
+
+  
+const handleResolve =()=> {
+  //navigate(`/homeresolve/${t.number}`);
+}
+
+let myData = {
+  id        : currentRecord.id,
+  number    : currentRecord.number,
+  dateTask  : currentRecord.dateTask,    
+  classRoom : currentRecord.classRoom,
+  level     : currentRecord.level,
+  gyg       : currentRecord.gyg,
+  teacher   : currentRecord.teacher,
+  device    : currentRecord.device,
+  problem   : currentRecord.problem
+}
 
 
   return (
     <Container className = "container-fluid py-5 mb-2" >
-     <DataTable
-            columns={columns}
-            data={data}
-        />
+      <DataTable columns = { columns }  data = { DATA }  
+                  /*  selecttableRows  */
+                   fixedHeader 
+                   pagination 
+      />
 
+      <Confirmation  
+        titulo       = "Warning!"     
+        mensaje      = "Do you want Delete this Request?"   
+        textBtn      = "Delete"
+        show         = { show }    
+        handleClose  = { handleClose } 
+        handleDelete = { handleDelete }
+      />
+      <Annoument     titulo       = "Annoument"    
+                    mensaje       = "Request deleted susscesfull ✅ " 
+                    smShow        = { smShow }  
+                    handleSmClose = { handleSmClose }
+      /> 
+      <EditFormTask myTitle        = "Edit Request" 
+                    myData         = { currentRecord }    
+                    lgShow         = { lgShow }             
+                    handleLgClose  = { handleLgClose }     
+                    handleLgUpdate = { handleLgUpdate }
+      />
     </Container>    
   );
 }

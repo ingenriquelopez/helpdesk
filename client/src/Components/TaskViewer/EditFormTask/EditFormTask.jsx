@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import { useDispatch,useSelector } from 'react-redux';
 import { updateTask } from '../../../redux/tasks/tasksReducer';
 import Form      from 'react-bootstrap/Form';
@@ -22,7 +22,7 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
   const [newDevice,setNewDevice]       = useState(myData.device);
   const [newProblem, setNewProblem]    = useState(myData.problem);
   
-
+  
   async function handleUpdate() {
     const dataToChange = {
       id        : myData.id,
@@ -67,7 +67,7 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
     setNewProblem(e.target.value.toUpperCase());
   }
 
-  const clearForm=()=> {
+  const clearForm = () => {
     setNewClassRoom(myData.classRoom);
     setNewTeacher(myData.teacher);
     setNewDevice(myData.device);
@@ -77,6 +77,15 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
     handleLgClose();
   }
 
+  useEffect( ()=> {
+    setNewClassRoom(myData.classRoom);
+    setNewTeacher(myData.teacher);
+    setNewDevice(myData.device);
+    setNewProblem(myData.problem);
+    setNewGyg(myData.gyg);
+    setNewLevel(myData.level);
+  },[myData])
+  
   return (
     <Modal show = {lgShow} onHide = {handleLgClose} centered>
       <Modal.Header closeButton>
@@ -91,7 +100,7 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
             <Form.Label >ClassRoom</Form.Label>
                 <Form.Select 
                   options = {listOfClassRooms} 
-                  value = {newClassRoom}
+                  value = {newClassRoom} 
                   onChange = { (e)=> handleClassRoom(e) }
                   className = "md-1"
                 >

@@ -5,13 +5,6 @@ import { deleteTask }      from '../../../redux/tasks/tasksReducer';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import './Task.css';
-import Button        from 'react-bootstrap/Button';
-import { FcCancel }  from "react-icons/fc";
-import { BiEditAlt } from "react-icons/bi";
-import Confirmation  from '../../Alerts/Confirmation/Confirmation';
-import Annoument     from '../../Alerts/Annoument/Annoument';
-import EditFormTask  from '../EditFormTask/EditFormTask';
-import moment        from 'moment';
 import axios         from 'axios';
 
 const {REACT_APP_API} = process.env;
