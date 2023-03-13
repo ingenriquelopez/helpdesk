@@ -2,6 +2,7 @@ const { ClassRoom } = require('../db.js');
 const { op } = require('sequelize');
 
 const postClassRoom = async (req,res) => {
+    
     const newClassRoom = { 
         classRoom,
         level,

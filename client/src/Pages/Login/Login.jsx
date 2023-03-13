@@ -55,9 +55,10 @@ const validUser = async()=>
   } else 
       {
         try {
-          const response = await axios.get(`${REACT_APP_API}/user/${email}`);
+          const response = await axios.get(`${REACT_APP_API}/user/login/${email}`);
           const { data } = response;
-          if (data!== 'email not found') {
+          if (data!== 'Email not found') {
+            console.log(response)
             if (data.password === password) {
 
               const userTmp = {

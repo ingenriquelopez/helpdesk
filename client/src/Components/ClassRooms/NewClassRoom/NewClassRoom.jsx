@@ -88,7 +88,11 @@ export default function NewClassRoom() {
                         }
                         try 
                         {
-                            const response = await axios.post(`${REACT_APP_API}/classRoom`,newClassRoom);
+                            const response = await axios.post(`${REACT_APP_API}/classRoom`,newClassRoom, {
+                                header: {
+                                    "Autorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydWxlIjoiYWRtaW4iLCJuYW1lIjoiRW5yaXF1ZSBMb3BleiIsImFkbWluIjp0cnVlfQ.UdU8LgnOxglzP2wZZP6Zt0dRZWSXurBk91mWUGyH_As"
+                                }
+                            });
                             if (response) {
                                 // aviso de la mision fue un exito
                                 dispatch(addNewClassRoom(newClassRoom)); 
