@@ -2,7 +2,7 @@ const { User } = require('../db.js');
 const { op } = require('sequelize');
 
 const jwt = require('jsonwebtoken');
-const secret = { secret: process.env.SECRET || 's' }
+const secret = process.env.SECRET;
 
 const loginByEmail = async(req,res)=> {
     const email_user = req.params.email;
@@ -13,23 +13,25 @@ const loginByEmail = async(req,res)=> {
 
         if (response)  {
             const user = new Object(response.dataValues);
-            const accessToken = generateAccessToken(response.dataValues);
-            res.header('authorization',accessToken).json( {
-                message: 'usuario autenticado',
-                token: token
-            })
-            return  res.status(200).send(response)
-        }
-            else res.send('Email not found');
+            try {
+                const accessToken = generateAccessToken(response.dataValues);    
+                res.header('authorization',accessToken).json( {
+                    message: 'usuario autenticado',
+                    token: token
+                })
+                return  res.status(200).send(response)
+            } catch (error) {
+                return res.send(error.message);
+            }
+        } else 
+            res.send('Email not found');
         
-    } catch (error) 
-        { 
-            return res.send(error.message);
-        }
+    } catch (error) { return res.send(error.message ); }
+      
 }
 
 const generateAccessToken =(user)=> {
-    return jwt.sign(user,process.env.SECRET, {expiresIn: '5m'});
+    return jwt.sign(user,secret, {expiresIn: '5m'});
 }
 
 const validateToken = (req, res, next)=> {
