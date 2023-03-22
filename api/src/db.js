@@ -13,7 +13,7 @@ const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_
     native:false
   }
   )
- 
+
 const authentication =  async()=>{
     try {
         await sequelize.authenticate();

@@ -57,20 +57,33 @@ const validUser = async()=>
         try {
           const response = await axios.get(`${REACT_APP_API}/user/login/${email}`);
           const { data } = response;
+  
           if (data!== 'Email not found') {
-            console.log(response)
             if (data.password === password) {
-
-              const userTmp = {
-                userName  : data.userName,
-                email     : data.email,
-                typeUser  : data.typeUser,
-                levelUser : data.level,
-              }
-              dispatch(setUser( userTmp ))
-              setUserLogged(userTmp);
-              navigate('/home', { replace: true});
-              return true;
+                try { // si el usuario si es valido entonces 
+                  //conseguir el token
+                  const responseToken = await axios.get(`${REACT_APP_API}/user/login/gettoken/${email}`);
+                  if (responseToken) {
+                    //construir el registro ya con el token devuelto
+                    const userTmp = {
+                      userName  : data.userName,
+                      email     : data.email,
+                      typeUser  : data.typeUser,
+                      levelUser : data.level,
+                      userToken : responseToken.data,
+                    }
+                    dispatch(setUser( userTmp ))
+                    setUserLogged(userTmp);
+                    navigate('/home', { replace: true});
+                    return true;
+                  } else {
+                    console.log('Token no Generado!')
+                    return false;
+                  }
+                  
+                } catch (error) {
+                  console.log(error.message)
+                }
             } else 
                 {
                   setPasswordError('Invalid Password!')

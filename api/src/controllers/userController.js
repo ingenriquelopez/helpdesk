@@ -1,67 +1,78 @@
+'use strict';
+
+const moment = require('moment');
+const SECRET  = process.env.SECRET;
+
 const { User } = require('../db.js');
-const { op } = require('sequelize');
 
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
+
+
+
 
 const loginByEmail = async(req,res)=> {
     const email_user = req.params.email;
     try {
         const response = await User.findOne( { 
             where: { email : email_user}
+        } , (error,user)=> {
+            if  (error) return res.status(500).send( {message: error})
         });
 
-        if (response)  {
-            const user = new Object(response.dataValues);
-            try {
-                const accessToken = generateAccessToken(response.dataValues);    
-                res.header('authorization',accessToken).json( {
-                    message: 'usuario autenticado',
-                    token: token
-                })
-                return  res.status(200).send(response)
-            } catch (error) {
-                return res.send(error.message);
-            }
-        } else 
+        if (response)  return  res.status(201).send(response);
+        else 
             res.send('Email not found');
+    } catch(error) { res.send( { message: error.message })}
+}
+
+const createToken =async (req,res)=> {
+    const email_user = req.params.email;
+    try {
+        const response = await User.findOne( { 
+            where: { email : email_user}
+        } , (error,user)=> {
+            if  (error) return res.status(500).send( {message: error})
+        });
         
-    } catch (error) { return res.send(error.message ); }
-      
-}
-
-const generateAccessToken =(user)=> {
-    return jwt.sign(user,secret, {expiresIn: '5m'});
-}
-
-const validateToken = (req, res, next)=> {
-    const accessToken = req.headers['authorization'];
-    if (!accessToken) res.send('Access denied');
-    jwt.verify(accessToken,process.env.SECRET, (err,user)=> {
-        if (err) {
-            res.send('Access denied, token expired or incorrect');
-        } else {
-            next();
+        if (response) {
+            const newToken = jwt.sign(email_user,SECRET);
+            return  res.status(201).send(newToken);
         }
-    })
+        else res.send(response);
+    } catch(error) { res.send( { message: error.message })}
 }
+
+//response.token = service.createToken(response)
 
 const postUser = async (req,res) => {
-    const newUser = { 
+    console.log(req.body)
+     const newUser = {};
+
+    newUser.userName = req.body.userName;
+    newUser.email    = req.body.email;
+    newUser.password = req.body.password;
+    newUser.typeUser = req.body.typeUser;
+    newUser.level    = req.body.level; 
+
+
+    /* const newUser = { 
         userName,
         email,
         password,
         typeUser,
         level,
     } = req.body;
-    
-    try {
+     */
+
+     try {
         let user = await User.create( newUser);
         return res.status(200).send('successfull:');
     } catch (error) {
         return res.send(error.message);
-    }
+    } 
 }
+
 
 
 const getUsers = async(req,res)=> {
@@ -123,8 +134,8 @@ const getUserByEmail = async(req,res)=> {
 }
 
 module.exports = {
-    validateToken,
     loginByEmail,
+    createToken,
     postUser, 
     getUsers,
     deleteUser,

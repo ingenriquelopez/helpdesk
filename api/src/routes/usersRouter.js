@@ -1,13 +1,14 @@
 const {Router } = require('express');
-const { validateToken,loginByEmail,postUser, getUsers, deleteUser, putUser, getUserByEmail } = require('../controllers/userController.js');
-
+const { loginByEmail,createToken, postUser, getUsers, deleteUser, putUser, getUserByEmail } = require('../controllers/userController.js');
 const userRouter = Router();
 
+
 userRouter.get('/login/:email',loginByEmail);
-userRouter.post('/',validateToken,postUser);
-userRouter.delete('/:email',validateToken,deleteUser)
-userRouter.put('/',validateToken,putUser);
-userRouter.get('/',validateToken,getUsers);
-userRouter.get('/:email',validateToken,getUserByEmail);
+userRouter.get('/login/gettoken/:email',createToken);
+userRouter.post('/',postUser);
+userRouter.delete('/:email',deleteUser)
+userRouter.put('/',putUser);
+userRouter.get('/',getUsers);
+userRouter.get('/:email',getUserByEmail);
 
 module.exports = userRouter;
