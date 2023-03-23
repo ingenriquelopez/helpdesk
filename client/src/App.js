@@ -24,7 +24,8 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path = '/'    exact   element = { <Login/> }/>
+        <Route path = '/'       exact   element = { <Login/> }/>
+        <Route path = '/login'  exact   element = { <Login/> }/>
         <Route path = '/home'        element = { <Home/> } />
         <Route path = '/newtask'     element = { <NewTask/> }/>
         <Route path = '/homeresolve/:number' element = { <HomeResolve/>}/>

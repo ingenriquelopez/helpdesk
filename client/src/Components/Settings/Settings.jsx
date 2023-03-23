@@ -4,6 +4,8 @@ import { Container, Accordion, Form, Button, Row, Col } from 'react-bootstrap'
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
+import { useLocalStorage } from '../../js/useLocalStorage';
+
 const {REACT_APP_API} = process.env;
 
 
@@ -17,6 +19,8 @@ function Settings() {
     const [newResponsable , setnewResponsable] = useState('');
 
     const [listDocuments, setListDocuments] = useState();
+
+    const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
 
     const navigate = useNavigate();
 //-------------------------------------------------------------------------
@@ -37,7 +41,12 @@ function Settings() {
 
     const getListDocuments =async()=> {
         try {
-            const response = await axios.get(`${REACT_APP_API}/configServiceOrder`);
+            const response = await axios.get(`${REACT_APP_API}/configServiceOrder`, {
+                headers: {
+                    "authorization": `Bearer ${userLogged.userToken}`,
+                }
+                }
+            );
             if (response.data.length > 0) {
                 let listTmp = []
                 for (let d in response.data) listTmp.push(response.data[d].document);
@@ -60,7 +69,12 @@ function Settings() {
         setdocSelected(e);
         if (e) {
             try {
-                const response = await axios.get(`${REACT_APP_API}/configServiceOrder/${e}`);
+                const response = await axios.get(`${REACT_APP_API}/configServiceOrder/${e}`, {
+                    headers: {
+                        "authorization": `Bearer ${userLogged.userToken}`,
+                    }
+                    }
+                );
                 if (response) {
                     setnewTitle(response.data.title);
                     setnewRequester(response.data.requester);

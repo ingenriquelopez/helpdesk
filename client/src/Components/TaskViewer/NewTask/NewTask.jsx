@@ -59,7 +59,11 @@ export default function NewTask() {
         }
         try 
           {
-            const response = await axios.post(`${REACT_APP_API}/task`,newTask);
+            const response = await axios.post(`${REACT_APP_API}/task`,newTask, {
+                headers: {
+                    "authorization": `Bearer ${userLogged.userToken}`,
+                }
+                });
             if (response) {
                 newTask.dateTask = newTask.dateTask.toJSON();
                 dispatch(addTask(newTask));

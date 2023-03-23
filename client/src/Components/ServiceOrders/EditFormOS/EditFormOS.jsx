@@ -6,6 +6,7 @@ import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
 import { tostada_S } from '../../../utils/Tostadas';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import axios from 'axios';
 const {REACT_APP_API} = process.env;
@@ -14,6 +15,7 @@ export default function EditFormOS( {myTitle,myData,lgShow, handleLgClose, handl
     const navigate = useNavigate();
   
     const [newStatus,  setNewStatus]  = useState('');
+    const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
   
   const saveNewStatus = async()=> {
        //creamos el registro que se enviara por body al endpoint de classRoom Router
@@ -22,7 +24,12 @@ export default function EditFormOS( {myTitle,myData,lgShow, handleLgClose, handl
           orderService  : myData.number,
        }
        try {
-          const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState);
+          const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+            headers: {
+                "authorization": `Bearer ${userLogged.userToken}`,
+            }
+            }
+          );
           if (response) {
             tostada_S('Service DONE!',"top-center",1500,'light');
           }

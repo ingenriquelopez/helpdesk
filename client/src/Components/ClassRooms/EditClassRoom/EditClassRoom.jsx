@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 import { updateCR } from '../../../redux/classRooms/classRoomsReducer';
 import Form      from 'react-bootstrap/Form';
 import Button    from 'react-bootstrap/Button';
@@ -17,6 +18,8 @@ export default function EditFormClassRoom( {myTitle,myData,lgShow, handleLgClose
   const [newLevel,  setNewLevel]  = useState(myData.level);
   const [newCampus, setNewCampus] = useState(myData.campus);
   const [newFloor,  setNewFloor]  = useState(myData.floor);
+
+  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
   
   async function handleUpdate() {
     const dataToChange = {
@@ -28,7 +31,12 @@ export default function EditFormClassRoom( {myTitle,myData,lgShow, handleLgClose
     }
     
     try {
-      const response = await axios.put(`${REACT_APP_API}/classRoom`,dataToChange);
+      const response = await axios.put(`${REACT_APP_API}/classRoom`,dataToChange, {
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+        }
+      );
       if (response) {
         try {
           

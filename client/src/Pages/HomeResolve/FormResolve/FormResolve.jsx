@@ -1,6 +1,7 @@
 import React, { useState, useEffect }        from 'react'
 import { Container, Form, Row, Col, Button } from 'react-bootstrap'
 import "react-datepicker/dist/react-datepicker.css";
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import { useNavigate }          from 'react-router-dom';
 import DatePicker               from "react-datepicker";
@@ -35,6 +36,9 @@ function FormResolve( {propNumber}) {
    const [isOpenDS         , setIsOpenDS]           = useState(false);
    const [isOpenDREJ       , setIsOpenDREJ]         = useState(false);
 
+   const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
+   
+
    const {REACT_APP_API} = process.env;
       
    //---------------MOSTRAR EL MODAL DE NewService.jsx ---------------------//
@@ -42,7 +46,12 @@ function FormResolve( {propNumber}) {
 
     const findTaskOnDB = async() => {
       try {
-         const statusTask = await axios.get(`${REACT_APP_API}/status/${propNumber}`);
+         const statusTask = await axios.get(`${REACT_APP_API}/status/${propNumber}`, {
+            headers: {
+                "authorization": `Bearer ${userLogged.userToken}`,
+            }
+            }
+         );
          if (statusTask) {
             settaskState(statusTask.data);
             setnewNotes(statusTask.data.notes);
@@ -54,7 +63,11 @@ function FormResolve( {propNumber}) {
             if (statusTask.data.statusTask === 'Process' && !orderService) setdisableCOMPLETED(false);
             if (orderService) { // si hay una orden de servicio en la tabla de tareas de esta tarea encontrada en particular, busca el estado de esta orden
                try {
-                  const statusService = await axios.get(`${REACT_APP_API}/services/number/${orderService}`);
+                  const statusService = await axios.get(`${REACT_APP_API}/services/number/${orderService}`, {
+                     headers: {
+                         "authorization": `Bearer ${userLogged.userToken}`,
+                     }
+                     });
                   if (statusService) {
                      console.log(statusService.data.serviceStatus)
                      if (statusService.data.serviceStatus === 'Done') {
@@ -106,7 +119,11 @@ function FormResolve( {propNumber}) {
          }
          
          try {
-            const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState);
+            const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+               headers: {
+                   "authorization": `Bearer ${userLogged.userToken}`,
+               }
+               });
             if (response) {
                tostada_S('Changing Status to PROCESS',"top-right",2500,'colored');
                setTimeout( ()=> { navigate('/home', { replace: true })},2500)              
@@ -130,7 +147,11 @@ function FormResolve( {propNumber}) {
          dateSolution: null,
       }
       try {
-         const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState);
+         const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+            headers: {
+                "authorization": `Bearer ${userLogged.userToken}`,
+            }
+            });
          tostada_S('Changing Status to PROCESS',"top-right",2500,'colored');
          setTimeout( ()=> { navigate('/home', { replace: true })},2500)              
 
@@ -145,7 +166,12 @@ function FormResolve( {propNumber}) {
       let canContinue = false;
       if (!newOrderService) canContinue = true;
       else {
-         let response = await axios.get(`${REACT_APP_API}/services/number/${newOrderService}`);
+         let response = await axios.get(`${REACT_APP_API}/services/number/${newOrderService}`, {
+            headers: {
+                "authorization": `Bearer ${userLogged.userToken}`,
+            }
+            }
+         );
          if (response.data.serviceStatus ==='Done')  canContinue = true;
          else canContinue = false;
       }
@@ -158,7 +184,11 @@ function FormResolve( {propNumber}) {
             dateSolution  : newDateSolution,
          }
          try {
-            const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState);
+            const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+               headers: {
+                   "authorization": `Bearer ${userLogged.userToken}`,
+               }
+               });
             tostada_S('Changing Status to COMPLETED',"top-right",2500,'colored');
             setTimeout( ()=> { navigate('/home', { replace: true })},2500)              
 
@@ -207,7 +237,12 @@ function FormResolve( {propNumber}) {
     
     const thereAreDoc =async()=> {
       try {
-         const response = await axios.get(`${REACT_APP_API}/configServiceOrder`);
+         const response = await axios.get(`${REACT_APP_API}/configServiceOrder`, {
+            headers: {
+                "authorization": `Bearer ${userLogged.userToken}`,
+            }
+            }
+         );
          if (response.data.length <= 0)setdisabledOS (true);   
       } catch (error) {
          console.log(error.message)

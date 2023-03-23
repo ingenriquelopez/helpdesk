@@ -4,6 +4,7 @@ import Button    from 'react-bootstrap/Button';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import axios from 'axios';
 import { updateTask } from '../../../redux/tasks/tasksReducer';
@@ -16,6 +17,8 @@ export default function EditFormUser( {myTitle,myData,lgShow, handleLgClose, han
   const [newTypeUser,setNewTypeUser]   = useState(myData.typeUser);
   const [newLevel, setNewLevel]        = useState(myData.level);
 
+  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
+
   async function handleUpdateUser(e) {
     e.preventDefault();
     const dataToChange = {
@@ -26,7 +29,12 @@ export default function EditFormUser( {myTitle,myData,lgShow, handleLgClose, han
       level     : newLevel
     }
     try {
-        const response = await axios.put(`${REACT_APP_API}/user`,dataToChange);
+        const response = await axios.put(`${REACT_APP_API}/user`,dataToChange, {
+          headers: {
+              "authorization": `Bearer ${userLogged.userToken}`,
+          }
+          }
+        );
         if (response) {
           updateTask(dataToChange)
         }

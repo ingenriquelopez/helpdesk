@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import { useLocalStorage } from '../../js/useLocalStorage';
+
 import Button        from 'react-bootstrap/Button';
 import { FcCancel }  from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
@@ -15,6 +17,8 @@ export default function User( {u}) {
   const [show, setShow]     = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
+
+  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
   
   let myData = {
     userName  : u.userName,
@@ -27,7 +31,12 @@ export default function User( {u}) {
   async function handleClickDelete() { 
     //primero lo eliminamos de la base de datos
     try {
-      const response = await axios.delete(`${REACT_APP_API}/user/${u.email}`);
+      const response = await axios.delete(`${REACT_APP_API}/user/${u.email}`,{
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+        }
+      );
       if (response.status === 200) {
         if (response.data === 'UserDeleted') {
           return true

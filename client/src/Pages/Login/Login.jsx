@@ -39,18 +39,31 @@ const validUser = async()=>
   //valida primero si es admin
   if (email === REACT_APP_EMAIL_SUPER_ADMIN) {
     if (password === REACT_APP_PASSWORD_SUPER_ADMIN) {
-      const data = {
-        userName  : REACT_APP_USERNAME_SUPER_ADMIN, 
-        email     : REACT_APP_EMAIL_SUPER_ADMIN,
-        typeUser  : REACT_APP_TYPE_SUPER_ADMIN,
-        levelUser : REACT_APP_LEVEL_SUPER_ADMIN
-      }
-      dispatch(setUser( data ))
-      setUserLogged(data);
-      console.log(`bienvenido ${userLogged.userName}`);
-     
-      navigate('/home', {replace: true});
-      return true;
+      //-----------if password is correct
+      try {
+          const responseToken = await axios.get(`${REACT_APP_API}/user/login/gettoken/${email}`);
+          if (responseToken) {
+            const data = {
+              userName  : REACT_APP_USERNAME_SUPER_ADMIN, 
+              email     : REACT_APP_EMAIL_SUPER_ADMIN,
+              typeUser  : REACT_APP_TYPE_SUPER_ADMIN,
+              levelUser : REACT_APP_LEVEL_SUPER_ADMIN,
+              userToken : responseToken.data,
+            }
+  
+          dispatch(setUser( data ))
+          setUserLogged(data);
+          console.log(`bienvenido ${userLogged.userName}`);
+         
+          navigate('/home', {replace: true});
+          return true;  
+          }
+          
+      } catch (error) {
+           console.log(error.message);
+        }
+      
+    //passworr was correct
     }
   } else 
       {
@@ -72,6 +85,7 @@ const validUser = async()=>
                       levelUser : data.level,
                       userToken : responseToken.data,
                     }
+                    
                     dispatch(setUser( userTmp ))
                     setUserLogged(userTmp);
                     navigate('/home', { replace: true});

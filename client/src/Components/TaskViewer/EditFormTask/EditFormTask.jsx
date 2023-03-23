@@ -7,6 +7,7 @@ import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
 import { Container } from 'react-bootstrap';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import axios from 'axios';
 const {REACT_APP_API} = process.env;
@@ -21,6 +22,8 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
   const [newTeacher, setNewTeacher]    = useState(myData.teacher);
   const [newDevice,setNewDevice]       = useState(myData.device);
   const [newProblem, setNewProblem]    = useState(myData.problem);
+
+  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
   
   
   async function handleUpdate() {
@@ -35,7 +38,12 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
     }
     
     try {
-      const response = await axios.put(`${REACT_APP_API}/task`,dataToChange);
+      const response = await axios.put(`${REACT_APP_API}/task`,dataToChange, {
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+        }
+      );
       if (response) {
         try {
           dispatch(updateTask(dataToChange));  

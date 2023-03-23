@@ -10,6 +10,9 @@ import EditFormOS from '../EditFormOS/EditFormOS';
 import axios from 'axios';
 import { tostada_S } from '../../../utils/Tostadas';
 import moment from 'moment';
+import { useLocalStorage } from '../../../js/useLocalStorage';
+
+
 const {REACT_APP_API} = process.env;
 
 
@@ -21,6 +24,7 @@ export default function ServiceOrder( {c}) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
 
    
   let myData = {
@@ -40,7 +44,11 @@ export default function ServiceOrder( {c}) {
       orderService: '',
     }
     try {
-      const response = await axios.put(`${REACT_APP_API}/status/`,dataToSend);
+      const response = await axios.put(`${REACT_APP_API}/status/`,dataToSend, {
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+        });
       if (response.status ===200) {
         return true;
       }
@@ -58,7 +66,12 @@ export default function ServiceOrder( {c}) {
         c.dateCancel    = new Date();
         c.dateDone = null;
           //lo actualizamos en la base de datos
-          const response = await axios.put(`${REACT_APP_API}/services/`,c);
+          const response = await axios.put(`${REACT_APP_API}/services/`,c, {
+            headers: {
+                "authorization": `Bearer ${userLogged.userToken}`,
+            }
+            }
+          );
           if (response.status === 200) {
              if (response.data === 'Update-Successful') {
                 if (updateTaskRequired(c.numberTask)) {
@@ -75,7 +88,11 @@ export default function ServiceOrder( {c}) {
     
 
    const completeTask =async(nt)=> {
-    const response = await axios.get(`${REACT_APP_API}/status/${nt}`);
+    const response = await axios.get(`${REACT_APP_API}/status/${nt}`, {
+      headers: {
+          "authorization": `Bearer ${userLogged.userToken}`,
+      }
+      });
     if (response.data.statusTask === 'Completed')  return true
     else  return false;
   } 

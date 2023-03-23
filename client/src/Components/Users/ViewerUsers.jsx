@@ -6,17 +6,24 @@ import User      from './User';
 
 import axios from 'axios';
 import './ViewerUsers.css';
+import { useLocalStorage } from '../../js/useLocalStorage';
 
 const {REACT_APP_API} = process.env;
 
 function ViewerUsers() {
   
   const [listUsers, setListUsers] = useState(null);
+  const [userLogged, setUserLogged] = useLocalStorage('userLogged');
       
    //----------------------------------------------------------
   const getAllUsers =async()=> {
     try {
-      const response = await axios.get(`${REACT_APP_API}/user`);
+      const response = await axios.get(`${REACT_APP_API}/user`, {
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+        }
+      );
       const { data } = response;
       
       if (data) {

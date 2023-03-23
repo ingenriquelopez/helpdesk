@@ -8,6 +8,7 @@ import { Container } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { v4 as uuidv4 } from 'uuid';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import axios from 'axios';
 import { useEffect } from 'react';
@@ -30,6 +31,7 @@ export default function NewService( props ) {
   const [newResponsable  , setnewResponsable]  = useState('');
   const [newAccordance   , setnewAccordance]   = useState('');
   const [canSave         , setcanSave]         = useState(false);
+  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
 
   
   async function handleFormService() {
@@ -54,7 +56,11 @@ export default function NewService( props ) {
       level        : props.level,
     }
     try {
-      const response = await axios.post(`${REACT_APP_API}/services`,serviceData);
+      const response = await axios.post(`${REACT_APP_API}/services`,serviceData, {
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+        });
       if (response) {
         props.setnewOrderService(response.data.number);          
         props.onHide();
@@ -66,7 +72,8 @@ export default function NewService( props ) {
 
   async function handleDocument(e) {
     try {
-      let response = await axios.get(`${REACT_APP_API}/ConfigServiceOrder/${e}`);
+      let response = await axios.get(`${REACT_APP_API}/ConfigServiceOrder/${e}`
+      );
       if (response) {
         setnewTitle(response.data.title);
         setnewRequester(response.data.requester);

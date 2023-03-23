@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate  }     from 'react-router-dom';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -24,7 +25,8 @@ function NewUser() {
     const [txtTypeUser , setTxtTypeUser]   = useState('');
     const [txtLevel    , setTxtLevel]      = useState('');
     const [disabledAdd, setdisabledAdd]    = useState(true);
-    
+
+    const [userLogged, setUserLogged] = useLocalStorage('userLogged');
 
     function validateForm() {
       
@@ -79,14 +81,28 @@ function NewUser() {
                   level     : txtLevel,
                }
                try {
-                  const response = await axios.post(`${REACT_APP_API}/user`,newUser);
+                  const response = await axios.post(`${REACT_APP_API}/user`,newUser, {
+                     headers: {
+                         "authorization": `Bearer ${userLogged.userToken}`,
+                     }
+                     });
                   if (response) {
+                     
+                     if (response.data.message==='El token NO es valido!') {
+                        navigate('/login' );    
+                        tostada_W(response.data.message,"top-center",1500,'dark');
+                        return
+                  
+                     } else {
                         // aviso de la mision fue un exito
                         tostada_S('New User DONE!',"top-center",1500,'light');
+                     }
+                        
                   }
                   navigate('/dashboard/viewerusers', { replace: true });    
                } catch (error) {
-                  console.log(error.message);
+                  console.log("ERROR:" ,error.message);
+                  return 
                   } 
             } else {
                //mensaje de que no se ha caoturado el level

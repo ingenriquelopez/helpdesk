@@ -3,6 +3,7 @@ import { useDispatch, useSelector }     from 'react-redux';
 import { useNavigate }     from 'react-router-dom';
 import { addNewClassRoom  } from '../../../redux/classRooms/classRoomsReducer';
 import { createListClassRooms } from '../../../redux/classRooms/classRoomsReducer';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import  './NewClassRoom.css';
 
@@ -33,6 +34,8 @@ export default function NewClassRoom() {
     const [txtcampus      , setTxtCampus]    = useState('');
     const [txtfloor       , setTxtFloor]     = useState('');
     const [disabledAdd, setdisabledAdd]      = useState(true);
+
+    const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
     
     
     function validateForm() {
@@ -89,10 +92,10 @@ export default function NewClassRoom() {
                         try 
                         {
                             const response = await axios.post(`${REACT_APP_API}/classRoom`,newClassRoom, {
-                                header: {
-                                    "Autorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJydWxlIjoiYWRtaW4iLCJuYW1lIjoiRW5yaXF1ZSBMb3BleiIsImFkbWluIjp0cnVlfQ.UdU8LgnOxglzP2wZZP6Zt0dRZWSXurBk91mWUGyH_As"
+                                headers: {
+                                    "authorization": `Bearer ${userLogged.userToken}`,
                                 }
-                            });
+                                });
                             if (response) {
                                 // aviso de la mision fue un exito
                                 dispatch(addNewClassRoom(newClassRoom)); 

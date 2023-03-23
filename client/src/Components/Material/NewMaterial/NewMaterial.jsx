@@ -55,7 +55,12 @@ export default function NewMaterial( props ) {
       numberTask   : props.numrequest,
     }
     try {
-      const response = await axios.post(`${REACT_APP_API}/services`,serviceData);
+      const response = await axios.post(`${REACT_APP_API}/services`,serviceData, {
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+        });
+        
       if (response) {
         props.setnewOrderService(response.data.number);
         props.onHide();

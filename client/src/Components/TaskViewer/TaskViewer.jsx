@@ -159,7 +159,12 @@ async function handleClickDelete() {
   //primero lo eliminamos de la base de datos
   
   try {
-    const response = await axios.delete(`${REACT_APP_API}/task/${currentRecord.id}`);
+    const response = await axios.delete(`${REACT_APP_API}/task/${currentRecord.id}`, {
+      headers: {
+          "authorization": `Bearer ${userLogged.userToken}`,
+      }
+      }
+    );
     
     if (response.status === 200) {
       if (response.data === 'RequestDeleted') {
