@@ -1,10 +1,8 @@
 'use strict';
 const express  = require('express');
 const moment   = require('moment');
-const SECRET   = process.env.SECRET;
+
 const { User } = require('../db.js');
-const jwt      = require('jsonwebtoken');
-const secret   = process.env.SECRET;
 
 
 const { 
@@ -15,13 +13,11 @@ const {
 
 const loginByEmail = async(req,res)=> {
     const email_user = req.params.email;
+    
     try {
         const response = await User.findOne( { 
             where: { email : email_user}
-        } , (error,user)=> {
-            if  (error) return res.status(500).send( {message: error})
         });
-
         if (response)  return  res.status(201).send(response);
         else 
             res.send('Email not found');
@@ -30,7 +26,7 @@ const loginByEmail = async(req,res)=> {
 
 
 const postUser = async (req,res) => {
-     const newUser = {};
+    const newUser = {};
 
     newUser.userName = req.body.userName;
     newUser.email    = req.body.email;
@@ -47,9 +43,7 @@ const postUser = async (req,res) => {
 }
 
 
-
 const getUsers = async(req,res)=> {
-    
     try {
         const users = await User.findAll(); 
         return res.status(200).send(users);
@@ -69,6 +63,7 @@ const deleteUser = async(req,res)=> {
         return res.send(error.message);
     }
 }
+
 const putUser = async(req, res)=> {
     const { userName,email,password,typeUser,level } = req.body;
     try {
@@ -106,58 +101,6 @@ const getUserByEmail = async(req,res)=> {
         }
 }
 
-const createToken =async (req,res)=> {
-    const email_user = req.params.email;
-
-    if (email_user === REACT_APP_EMAIL_SUPER_ADMIN ) {
-        const newToken = jwt.sign({ email_user },SECRET ,{expiresIn: '7d' });
-        return  res.status(201).send(newToken);
-    } 
-
-    try {
-        const response = await User.findOne( { 
-            where: { email : email_user}
-        } , (error,user)=> {
-            if  (error) return res.status(500).send( {message: error})
-        });
-        
-        if (response) {
-            const newToken = jwt.sign( {email_user },SECRET,{expiresIn: '7d' });
-            return  res.status(201).send(newToken);
-        }
-        else res.send(response);
-    } catch(error) { res.send( { message: error.message })}
-}
-
-const verification  = express.Router()
-
-verification.use( (req, res, next)=> {
-    let tokenR = req.headers['x-access-token'] || req.headers['authorization']
-    
-    if (!tokenR) {
-        res.status(401).send( {
-            error: "Es necesario un tokencito"
-        })
-        return;
-    }
-    if (tokenR.startsWith('Bearer ')) {
-        let token = tokenR.split(" ")[1]
-        if (token) {
-            jwt.verify(token,SECRET,(error, decoded)=> {
-                if (error) {
-                    return res.json( 
-                        { message:"El token NO es valido!" }
-                    )
-                } else {
-                    req.decoded = decoded;
-                    next();
-                }
-            })
-        }
-        
-    }
-    
-});
 
 module.exports = {
     loginByEmail,
@@ -166,6 +109,4 @@ module.exports = {
     deleteUser,
     putUser,
     getUserByEmail,
-    createToken,
-    verification,
 }

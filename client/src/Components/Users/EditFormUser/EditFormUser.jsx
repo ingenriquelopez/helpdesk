@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useNavigate  }     from 'react-router-dom';
 import Form      from 'react-bootstrap/Form';
 import Button    from 'react-bootstrap/Button';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
 import { useLocalStorage } from '../../../js/useLocalStorage';
+import { tostada_W } from '../../../utils/Tostadas';
 
 import axios from 'axios';
 import { updateTask } from '../../../redux/tasks/tasksReducer';
@@ -18,6 +20,7 @@ export default function EditFormUser( {myTitle,myData,lgShow, handleLgClose, han
   const [newLevel, setNewLevel]        = useState(myData.level);
 
   const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
+  const navigate= useNavigate();
 
   async function handleUpdateUser(e) {
     e.preventDefault();
@@ -33,15 +36,18 @@ export default function EditFormUser( {myTitle,myData,lgShow, handleLgClose, han
           headers: {
               "authorization": `Bearer ${userLogged.userToken}`,
           }
-          }
-        );
+        });
+
         if (response) {
+          if (response.data.message==='El token NO es valido!') {
+             navigate('/login' );    
+             tostada_W(response.data.message,"top-center",1500,'dark');
+             return false
+          }           
           updateTask(dataToChange)
-        }
+        } 
         handleLgUpdate();
-    } catch(error) {
-        console.log(error.message);
-    }   
+    } catch(error) {console.log(error.message) };  
   }
 
 

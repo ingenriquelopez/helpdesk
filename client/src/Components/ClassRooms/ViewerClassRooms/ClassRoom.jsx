@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { deleteClassRoom } from '../../../redux/classRooms/classRoomsReducer';
 import Button from 'react-bootstrap/Button';
+import { tostada_W } from '../../../utils/Tostadas';
 
 import { FcCancel } from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
 import Confirmation from '../../Alerts/Confirmation/Confirmation';
 import Annoument    from '../../Alerts/Annoument/Annoument';
 import EditFormClassRoom from '../EditClassRoom/EditClassRoom';
+import { useLocalStorage } from '../../../js/useLocalStorage';
 import axios from 'axios';
 const {REACT_APP_API} = process.env;
 
@@ -16,6 +18,8 @@ export default function ClassRoom( {c}) {
   const [show, setShow]     = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
+
+  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,7 +36,18 @@ export default function ClassRoom( {c}) {
     //primero lo eliminamos de la base de datos
     
     try {
-      const response = await axios.delete(`${REACT_APP_API}/classRoom/${c.classRoom}`);
+      const response = await axios.delete(`${REACT_APP_API}/classRoom/${c.classRoom}`, {
+        headers: {
+            "authorization": `Bearer ${userLogged.userToken}`,
+        }
+      });
+
+      if (response.data.message==='El token NO es valido!') {
+        navigate('/login' );    
+        tostada_W(response.data.message,"top-center",1500,'dark');
+        return false
+    } 
+
       if (response.status === 200) {
         if (response.data === 'ClassRoomDeleted') {
           //lo quitaremos del store

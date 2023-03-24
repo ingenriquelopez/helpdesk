@@ -1,8 +1,11 @@
 import React, { useEffect, useState }     from 'react'
+import { useNavigate  }     from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Table     from 'react-bootstrap/Table';
 import Container from 'react-bootstrap/Container';
 import User      from './User';
+import { tostada_W } from '../../utils/Tostadas';
+
 
 import axios from 'axios';
 import './ViewerUsers.css';
@@ -11,7 +14,8 @@ import { useLocalStorage } from '../../js/useLocalStorage';
 const {REACT_APP_API} = process.env;
 
 function ViewerUsers() {
-  
+  const navigate= useNavigate();
+
   const [listUsers, setListUsers] = useState(null);
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
       
@@ -22,8 +26,15 @@ function ViewerUsers() {
         headers: {
             "authorization": `Bearer ${userLogged.userToken}`,
         }
+        });
+        if (response) {
+          if (response.data.message==='El token NO es valido!') {
+             navigate('/login' );    
+             tostada_W(response.data.message,"top-center",1500,'dark');
+             return
+          } 
         }
-      );
+
       const { data } = response;
       
       if (data) {

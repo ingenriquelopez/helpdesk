@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate  }     from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 import { updateCR } from '../../../redux/classRooms/classRoomsReducer';
@@ -7,12 +8,14 @@ import Button    from 'react-bootstrap/Button';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
+import { tostada_W } from '../../../utils/Tostadas';
 
 import axios from 'axios';
 const {REACT_APP_API} = process.env;
 
 export default function EditFormClassRoom( {myTitle,myData,lgShow, handleLgClose, handleLgUpdate}) {
   const dispatch = useDispatch();
+  const navigate= useNavigate();
   
   const [newGyg,    setNewGyg]    = useState(myData.gyg);
   const [newLevel,  setNewLevel]  = useState(myData.level);
@@ -20,6 +23,7 @@ export default function EditFormClassRoom( {myTitle,myData,lgShow, handleLgClose
   const [newFloor,  setNewFloor]  = useState(myData.floor);
 
   const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
+  
   
   async function handleUpdate() {
     const dataToChange = {
@@ -35,20 +39,28 @@ export default function EditFormClassRoom( {myTitle,myData,lgShow, handleLgClose
         headers: {
             "authorization": `Bearer ${userLogged.userToken}`,
         }
+      });
+
+      if (response) 
+        {
+          if (response.data.message==='El token NO es valido!') {
+            navigate('/login' );    
+            tostada_W(response.data.message,"top-center",1500,'dark');
+            return false
+         } 
+ 
+         try {
+           dispatch(updateCR(dataToChange));  
+         } catch (error) {
+           console.log(error.message);
+           }
+       
+       handleLgUpdate();
         }
-      );
-      if (response) {
-        try {
-          
-          dispatch(updateCR(dataToChange));  
-        } catch (error) {
-          console.log(error.message);
-        }
-      }
-      handleLgUpdate();
+        
     } catch(error) {
-      console.log(error.message);
-    }   
+        console.log(error.message);
+      }   
   }
 
   return (

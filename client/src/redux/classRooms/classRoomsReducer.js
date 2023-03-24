@@ -1,9 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+
+
+
 const {REACT_APP_API} = process.env;
 
-
 const initialState = { listCR:[] };
+
 
   export const classRoomsReducer = createSlice({
     name: 'classRooms',
@@ -37,10 +40,10 @@ const initialState = { listCR:[] };
   export const { addNewClassRoom, deleteClassRoom, updateCR,loadAllClassRooms } = classRoomsReducer.actions;
   export default classRoomsReducer.reducer;
 
-  export const createListClassRooms = () => (dispatch) => {
+   export const createListClassRooms = () => (dispatch) => {
       axios.get(`${REACT_APP_API}/classRoom`)
       .then((response) => {
       dispatch(loadAllClassRooms(response.data));
       })
       .catch((error) => console.log(error));
-  };
+  }; 

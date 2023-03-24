@@ -87,7 +87,6 @@ function NewUser() {
                      }
                      });
                   if (response) {
-                     
                      if (response.data.message==='El token NO es valido!') {
                         navigate('/login' );    
                         tostada_W(response.data.message,"top-center",1500,'dark');
@@ -96,8 +95,7 @@ function NewUser() {
                      } else {
                         // aviso de la mision fue un exito
                         tostada_S('New User DONE!',"top-center",1500,'light');
-                     }
-                        
+                     } 
                   }
                   navigate('/dashboard/viewerusers', { replace: true });    
                } catch (error) {

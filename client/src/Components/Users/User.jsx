@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import { useNavigate  }     from 'react-router-dom';
 import { useLocalStorage } from '../../js/useLocalStorage';
 
 import Button        from 'react-bootstrap/Button';
@@ -7,18 +7,21 @@ import { FcCancel }  from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
 import Confirmation  from '../Alerts/Confirmation/Confirmation';
 import Annoument     from '../Alerts/Annoument/Annoument';
-import { tostada_S } from '../../utils/Tostadas';
 import EditFormUser  from './EditFormUser/EditFormUser';
 import axios         from 'axios';
+
+import { tostada_S, tostada_W } from '../../utils/Tostadas';
 
 const {REACT_APP_API} = process.env;
 
 export default function User( {u}) {
+
   const [show, setShow]     = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
 
   const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
+  const navigate= useNavigate();
   
   let myData = {
     userName  : u.userName,
@@ -35,16 +38,21 @@ export default function User( {u}) {
         headers: {
             "authorization": `Bearer ${userLogged.userToken}`,
         }
-        }
-      );
-      if (response.status === 200) {
-        if (response.data === 'UserDeleted') {
-          return true
-        }
+      });
+
+      if (response) {
+        if (response.data.message==='El token NO es valido!') {
+           navigate('/login' );    
+           tostada_W(response.data.message,"top-center",1500,'dark');
+           return false
+        } else {
+            // aviso de la mision fue un exito
+            if (response.data === 'UserDeleted')  return true
+          } 
       }
     } catch (error) {
-      console.log(error.message);
-    }
+        console.log(error.message);
+      }
   }
 
   const handleDelete = (e) => {

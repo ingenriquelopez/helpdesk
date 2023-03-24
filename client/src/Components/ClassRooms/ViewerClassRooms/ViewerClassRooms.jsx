@@ -12,7 +12,6 @@ import { createListClassRooms } from '../../../redux/classRooms/classRoomsReduce
 function ViewerClassRooms() {
   const { listCR } = useSelector( (state=> state.classRooms))
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
-
   const dispatch = useDispatch();
 
 useEffect(() => {

@@ -95,7 +95,14 @@ export default function NewClassRoom() {
                                 headers: {
                                     "authorization": `Bearer ${userLogged.userToken}`,
                                 }
-                                });
+                            });
+                            
+                            if (response.data.message==='El token NO es valido!') {
+                                navigate('/login' );    
+                                tostada_W(response.data.message,"top-center",1500,'dark');
+                                return false
+                            } 
+
                             if (response) {
                                 // aviso de la mision fue un exito
                                 dispatch(addNewClassRoom(newClassRoom)); 

@@ -236,19 +236,20 @@ function FormResolve( {propNumber}) {
 
     
     const thereAreDoc =async()=> {
-      try {
-         const response = await axios.get(`${REACT_APP_API}/configServiceOrder`, {
-            headers: {
+      try 
+         {
+            const response = await axios.get(`${REACT_APP_API}/configServiceOrder`, {
+               headers: {
                 "authorization": `Bearer ${userLogged.userToken}`,
+               }
+            });
+
+            if (response.data.length <= 0) setdisabledOS (true);   
+         } catch (error) {
+            console.log(error.message)
             }
-            }
-         );
-         if (response.data.length <= 0)setdisabledOS (true);   
-      } catch (error) {
-         console.log(error.message)
-      }
-      
-    }
+   }
+
 
     const handleChangeDateReview   = (date) => {
       setIsOpenDR(!isOpenDR);

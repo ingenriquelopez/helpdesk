@@ -17,6 +17,7 @@ import moment        from 'moment';
 import { loadAllTasks, loadTasks } from '../../redux/tasks/tasksReducer';
 import { createListClassRooms } from '../../redux/classRooms/classRoomsReducer';
 import { deleteTask }      from '../../redux/tasks/tasksReducer';
+import { tostada_W } from '../../utils/Tostadas';
 import axios         from 'axios';
 
 
@@ -27,6 +28,7 @@ function TaskViewer() {
   const dispatch = useDispatch();  
   const navigate = useNavigate();
   const { listOfTasks } = useSelector( state=> state.tasks);
+  
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
   
   const [show, setShow]     = useState(false);
@@ -145,7 +147,7 @@ createTheme('solarized', {
 const DATA = listOfTasks;
 
   useEffect(() => {
-      dispatch(createListClassRooms());
+      dispatch(createListClassRooms);
   },[])
 
   useEffect(() => {
@@ -163,10 +165,15 @@ async function handleClickDelete() {
       headers: {
           "authorization": `Bearer ${userLogged.userToken}`,
       }
-      }
-    );
+    });
     
     if (response.status === 200) {
+      if (response.data.message==='El token NO es valido!') {
+        navigate('/login' );    
+        tostada_W(response.data.message,"top-center",1500,'dark');
+        return
+     } 
+
       if (response.data === 'RequestDeleted') {
         //lo quitaremos del store
         dispatch(deleteTask(currentRecord.id));

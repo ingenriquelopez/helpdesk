@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 import { addTask  } from '../../../redux/tasks/tasksReducer';
 import { createListClassRooms } from '../../../redux/classRooms/classRoomsReducer';
+import { tostada_W } from '../../../utils/Tostadas';
 
 import  './NewTask.css';
 
@@ -64,7 +65,14 @@ export default function NewTask() {
                     "authorization": `Bearer ${userLogged.userToken}`,
                 }
                 });
+
             if (response) {
+                if (response.data.message==='El token NO es valido!') {
+                    navigate('/login' );    
+                    tostada_W(response.data.message,"top-center",1500,'dark');
+                    return false
+                 }
+
                 newTask.dateTask = newTask.dateTask.toJSON();
                 dispatch(addTask(newTask));
             }

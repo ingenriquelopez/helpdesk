@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react'
+import { useNavigate  }     from 'react-router-dom';
 import { useDispatch,useSelector } from 'react-redux';
 import { updateTask } from '../../../redux/tasks/tasksReducer';
 import Form      from 'react-bootstrap/Form';
@@ -8,6 +9,7 @@ import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
 import { Container } from 'react-bootstrap';
 import { useLocalStorage } from '../../../js/useLocalStorage';
+import { tostada_W } from '../../../utils/Tostadas';
 
 import axios from 'axios';
 const {REACT_APP_API} = process.env;
@@ -15,6 +17,7 @@ const {REACT_APP_API} = process.env;
 export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, handleLgUpdate}) {
   const { listCR:listOfClassRooms }  = useSelector ( (state) => state.classRooms);
   const dispatch = useDispatch();
+  const navigate= useNavigate();
   
   const [newClassRoom,setNewClassRoom] = useState(myData.classRoom);
   const [newGyg, setNewGyg]            = useState(myData.gyg);
@@ -45,6 +48,12 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
         }
       );
       if (response) {
+        if (response.data.message==='El token NO es valido!') {
+          navigate('/login' );    
+          tostada_W(response.data.message,"top-center",1500,'dark');
+          return
+        }
+
         try {
           dispatch(updateTask(dataToChange));  
         } catch (error) {
