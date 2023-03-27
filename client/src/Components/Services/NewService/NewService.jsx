@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import Form      from 'react-bootstrap/Form';
 import Button    from 'react-bootstrap/Button';
 import Row       from 'react-bootstrap/Row';
@@ -11,7 +11,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
 import axios from 'axios';
-import { useEffect } from 'react';
+
+import { jsPDF } from "jspdf";
+
 const {REACT_APP_API} = process.env;
 
 
@@ -34,6 +36,32 @@ export default function NewService( props ) {
   const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
 
   
+function genPDF() {
+  // Landscape export, 2×4 inches
+  const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "mm",
+    format: 'a4',
+    
+});
+let pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+let pageWidth = doc.internal.pageSize.width || doc.internal.pageSize.getWidth();
+
+doc.rect(2,2,pageWidth-5,30)
+
+let img = new Image();
+img.src = path.resolve('../../assets/logo-columbia.jpg');
+
+doc.addImage(img, 'JPEG', 1, 2);
+
+doc.text("COLEGIO COLUMBIA AC", pageWidth / 2, 10,{align:"center"});
+doc.text("SOLICITUD DE SERVICIOS DE INFORMÁTICA", pageWidth / 2, 20,{align:"center"});
+doc.text("SG-INF-FO-07", pageWidth / 2, 30,{align:"center"});
+
+doc.save("winnithepoo.pdf");
+}
+
+
   async function handleFormService() {
     let id_tmp = uuidv4();
     
@@ -239,6 +267,11 @@ const getListDocuments =async()=> {
     </Modal.Body>
     <Modal.Footer>
       <Row className = "d-md-flex justify-content-center py-1">
+      <Col>
+          <Button variant="info" onClick = {genPDF}>
+            PDF
+          </Button>
+        </Col>
         <Col>
           <Button variant="secondary" onClick = {props.onHide}>
             Close

@@ -145,9 +145,8 @@ createTheme('solarized', {
 ];
 
 const DATA = listOfTasks;
-
   useEffect(() => {
-      dispatch(createListClassRooms);
+      dispatch(createListClassRooms(userLogged.levelUser));
   },[])
 
   useEffect(() => {

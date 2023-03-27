@@ -44,7 +44,7 @@ export default function ServiceOrder( {c}) {
       orderService: '',
     }
     try {
-      const response = await axios.put(`${REACT_APP_API}/status/`,dataToSend, {
+      const response = await axios.put(`${REACT_APP_API}/task/status/`,dataToSend, {
         headers: {
             "authorization": `Bearer ${userLogged.userToken}`,
         }
@@ -88,7 +88,7 @@ export default function ServiceOrder( {c}) {
     
 
    const completeTask =async(nt)=> {
-    const response = await axios.get(`${REACT_APP_API}/status/${nt}`, {
+    const response = await axios.get(`${REACT_APP_API}/task/status/${nt}`, {
       headers: {
           "authorization": `Bearer ${userLogged.userToken}`,
       }

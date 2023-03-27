@@ -53,6 +53,7 @@ const validUser = async()=>
   
           dispatch(setUser( data ))
           setUserLogged(data);
+          
           console.log(`bienvenido ${userLogged.userName}`);
          
           navigate('/home', {replace: true});
@@ -85,9 +86,10 @@ const validUser = async()=>
                       levelUser : data.level,
                       userToken : responseToken.data,
                     }
-                    
                     dispatch(setUser( userTmp ))
                     setUserLogged(userTmp);
+          
+
                     navigate('/home', { replace: true});
                     return true;
                   } else {

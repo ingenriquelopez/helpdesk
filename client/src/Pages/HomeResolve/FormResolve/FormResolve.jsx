@@ -46,7 +46,7 @@ function FormResolve( {propNumber}) {
 
     const findTaskOnDB = async() => {
       try {
-         const statusTask = await axios.get(`${REACT_APP_API}/status/${propNumber}`, {
+         const statusTask = await axios.get(`${REACT_APP_API}/task/status/${propNumber}`, {
             headers: {
                 "authorization": `Bearer ${userLogged.userToken}`,
             }
@@ -119,7 +119,7 @@ function FormResolve( {propNumber}) {
          }
          
          try {
-            const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+            const response = await axios.put(`${REACT_APP_API}/task/status`,dataOfNewState, {
                headers: {
                    "authorization": `Bearer ${userLogged.userToken}`,
                }
@@ -147,7 +147,7 @@ function FormResolve( {propNumber}) {
          dateSolution: null,
       }
       try {
-         const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+         const response = await axios.put(`${REACT_APP_API}/task/status`,dataOfNewState, {
             headers: {
                 "authorization": `Bearer ${userLogged.userToken}`,
             }
@@ -184,7 +184,7 @@ function FormResolve( {propNumber}) {
             dateSolution  : newDateSolution,
          }
          try {
-            const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+            const response = await axios.put(`${REACT_APP_API}/task/status`,dataOfNewState, {
                headers: {
                    "authorization": `Bearer ${userLogged.userToken}`,
                }
@@ -379,13 +379,14 @@ function FormResolve( {propNumber}) {
                         <Col xl = {5} lg = {5} md = {5} sm className = "text-center">            
                            <Row className = "d-md-flex justify-content-center py-1">
                               <Col>
-                                 <button className = {newDateReview ? "btn-info" : "btn-light"}
-                                    onClick = { (e) => handleClickDateReview(e) } 
-                                 >
-                                 {newDateReview ? moment(newDateReview).format("dddd DD/MMMM/YYYY"): 'Date...?' }
-                                 {isOpenDR && (<DatePicker selected={newDateReview} onChange={ (date) => handleChangeDateReview(date)} inline />  )} 
                                  
-                                 </button>
+                      <button className = {newDateReview ? "btn-info" : "btn-light"}
+                           onClick = { (e) => handleClickDateReview(e) } 
+
+                                 > 
+                                  {newDateReview ? moment(newDateReview).format("dddd DD/MMMM/YYYY"): 'Date...?' }
+                                  </button> 
+                                  {isOpenDR && (<DatePicker selected={newDateReview} onChange={ (date) => handleChangeDateReview(date)} inline />  )}  
                               </Col>
                            </Row>
                         </Col> 
@@ -396,7 +397,7 @@ function FormResolve( {propNumber}) {
                            <Form.Control 
                               as           = "textarea"  
                               name         = "notes" 
-                              defaultValue = {taskState.notes}
+                              //defaultValue = {taskState.notes}
                               className    = "text-center mb-0 "
                               value        = {newNotes}
                               onChange     = { (e)=> handleNewNotes(e.target.value)}
@@ -410,7 +411,7 @@ function FormResolve( {propNumber}) {
                               disabled     
                               className    = "text-center" 
                               type         = "text" 
-                              defaultValue = {taskState.orderService} 
+                              //defaultValue = {taskState.orderService} 
                               value        = {newOrderService ? newOrderService:''}
                               onChange     = { (e)=> handleNewOrderService(e.target.value)}
                            />
@@ -432,8 +433,9 @@ function FormResolve( {propNumber}) {
                                           onClick = { (e) => handleClickDateRejected(e) } 
                                        >
                                           {newDateRejected ? moment(newDateRejected).format("dddd DD/MMMM/YYYY"): 'Date...?' }
-                                          {isOpenDREJ && (<DatePicker selected={newDateRejected} onChange={ (date) => handleChangeDateRejected(date)} inline />  )} 
+                                          
                                        </button>
+                                       {isOpenDREJ && (<DatePicker selected={newDateRejected} onChange={ (date) => handleChangeDateRejected(date)} inline />  )} 
                                     </Col>
                                  </Row>
                               </Col>

@@ -24,7 +24,7 @@ export default function EditFormOS( {myTitle,myData,lgShow, handleLgClose, handl
           orderService  : myData.number,
        }
        try {
-          const response = await axios.put(`${REACT_APP_API}/status`,dataOfNewState, {
+          const response = await axios.put(`${REACT_APP_API}/task/status`,dataOfNewState, {
             headers: {
                 "authorization": `Bearer ${userLogged.userToken}`,
             }

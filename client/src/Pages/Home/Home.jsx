@@ -8,7 +8,7 @@ import { Outlet } from 'react-router-dom';
 function Home() {
   return (
     <div className = "container">
-      <NavBarHD />  
+      <NavBarHD buttonEnabled={false} />  
       <TaskViewer/>   
       <Footer/> 
       <Outlet/>

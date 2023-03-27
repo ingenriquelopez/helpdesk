@@ -12,20 +12,22 @@ export default function NavBarHD( { buttonEnabled }) {
   const { listCR }  = useSelector ( (state) => state.classRooms);
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
   
+  
   return (    
     <nav className="navbar fixed-top navbar-light gradientNavBar">
         <div className="container-fluid">
           
           <div>
             <ButtonBack enabled = {buttonEnabled}/>
+            
           </div>
           {
                 (listCR.length > 0) 
                 ? 
                   <NavDropdown
-                    id = "styleLinks"
-                    title={userLogged.levelUser}
-                    menuVariant="light"
+                    id          = "styleLinks"
+                    title       = {userLogged.levelUser}
+                    menuVariant = "light"
                   >
             
                     <NavLink className = "dropdown-item " to='/newtask'> New Task </NavLink>
