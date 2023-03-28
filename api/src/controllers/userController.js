@@ -34,8 +34,6 @@ const postUser = async (req,res) => {
     newUser.typeUser = req.body.typeUser;
     newUser.level    = req.body.level; 
 
-    console.log(newUser)
-
      try {
         let user = await User.create( newUser);
         return res.status(200).send('successfull:');

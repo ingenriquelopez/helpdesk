@@ -35,18 +35,328 @@ export default function NewService( props ) {
   const [newResponsable  , setnewResponsable]  = useState('');
   const [newAccordance   , setnewAccordance]   = useState('');
   const [canSave         , setcanSave]         = useState(false);
-  const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
+  const [userLogged    , setUserLogged]        = useLocalStorage('userLogged','');
 
   
-  /*  docPdf.setFillColor(165,35,35);
-  docPdf.rect(0,0,250,20,'F');
- */
-function genPDF() {
+  
+  const SendFileToServer = async(nameFilePDF)=> {
+    console.log(nameFilePDF)
+    const form = new FormData();
+    /* const responseFileUpload = await axios.post('/serviceUpload',nameFilePDF, {
+      headers: {
+          "authorization": `Bearer ${userLogged.userToken}`,
+      }
+      }); */
+  
+      const file = {
+        file : nameFilePDF,
+      }
+    const responseFileUpload = await axios.post(`${REACT_APP_API}/serviceUpload`,file);
+    console.log(responseFileUpload)
+    if (responseFileUpload) {
+      alert()
+    } else {
+      
+      alert('NO PASO NADA')
+    }
+  }
+  
+
+ //version MEDIA CARTA
+ function genPDF(numberService) {
+  let nameFilePDF = docSelected+ "-"+ numberService+".pdf";
+  
+  const docPdf = new jsPDF({
+    orientation: "landscape",
+    unit: "mm",
+    format: 'letter',
+  });
+
+  let pageHeight = docPdf.internal.pageSize.height || docPdf.internal.pageSize.getHeight();
+  let pageWidth = docPdf.internal.pageSize.width || docPdf.internal.pageSize.getWidth();
+
+  let centerText = function(text, y) {
+    var textWidth = docPdf.getStringUnitWidth(text) * docPdf.internal.getFontSize() / docPdf.internal.scaleFactor;
+    var textOffset = (docPdf.internal.pageSize.width - textWidth) / 2;
+    docPdf.text(textOffset, y, text);
+  }
+
+  var logo = new Image();
+  logo.src = logoColumbia;
+
+  docPdf.rect(10,2,pageWidth-20,17)
+
+  docPdf.addImage(logo, 'JPEG', 20, 5, 12, 12);
+
+  docPdf.setFont('times','bold');
+  docPdf.setFontSize(11);
+    docPdf.text("SOLICITUD DE SERVICIOS DE "+ newTitle, pageWidth / 2, 7,{align:"center"});
+
+    docPdf.text(docSelected, pageWidth / 2, 12,{align:"center"}); 
+
+  docPdf.setFontSize(9);
+    docPdf.text("NOMBRE:" + newRequester,10,25)
+    docPdf.text("FECHA:"  + moment(newDate).format('dddd DD/MMMM/YYYY'),pageWidth / 2+30,25)
+    docPdf.text("PUESTO:" + newPosition,10,35) 
+
+  
+  docPdf.setFillColor(0,0,255);
+  docPdf.rect(10,30,pageWidth-20,6,'F')
+  docPdf.setTextColor(255,255,255);
+    centerText("DESCRIPCIÓN DEL SERVICIO",35)
+  docPdf.rect(10,30,pageWidth-20,23)
+  docPdf.setTextColor(0,0,0);
+  docPdf.setFont('arial','normal');
+    centerText(newService,45);
+
+  docPdf.setFillColor(0,0,255);
+  docPdf.rect(10,50,pageWidth-20,6,'F')
+  docPdf.setTextColor(255,255,255);
+    centerText("OBSERVACIONES",55)
+  docPdf.rect(10,50,pageWidth-20,23)
+  docPdf.setTextColor(0,0,0);
+  docPdf.setFont('arial','normal');
+    centerText(newObservations,60);
+
+  //SOLICITANTE
+  docPdf.setFillColor(204,204,204);
+  docPdf.setLineDash([1, 1], 10);
+  docPdf.rect(10,75,55,5,'F')
+  docPdf.setTextColor(0,0,0);
+  docPdf.setFontSize(8);
+  docPdf.setFont('arial','normal');
+    docPdf.text("SOLICITANTE",30,79)
+
+  docPdf.rect(10,75,55,20) 
+  docPdf.rect(10,95,55,5)
+
+  docPdf.setFont('arial','normal');
+    docPdf.text(newRequester,28,99)
+
+  docPdf.setFillColor(204,204,204);
+  
+  docPdf.rect(10,100,55,5,'F')
+  docPdf.setTextColor(0,0,0);
+  
+  docPdf.rect(10,100,55,5)
+  docPdf.setFontSize(8);
+  docPdf.setFont('arial','normal');
+    docPdf.text("FIRMA DEL SOLICITANTE",21,103)
+ 
+
+    //vobo
+    docPdf.setFillColor(204,204,204);
+    docPdf.setLineDash([1, 1], 10);
+    docPdf.rect(80,75,55,6,'F')
+    docPdf.setTextColor(0,0,0);
+    docPdf.setFontSize(8);
+      docPdf.text("VO.BO",104,79)
+  
+    docPdf.rect(80,75,55,20) 
+    docPdf.rect(80,95,55,5)
+  
+      docPdf.text(newVobo,94,99)
+  
+    docPdf.setFillColor(204,204,204);
+    
+    docPdf.rect(80,100,55,5,'F')
+    docPdf.setTextColor(0,0,0);
+    
+    docPdf.rect(80,100,55,5)
+    docPdf.setFontSize(8);
+      docPdf.text("FIRMA  DIRECTOR",97,103)
+   
+
+  //ENTERADO
+  docPdf.setFillColor(204,204,204);
+    docPdf.setLineDash([1, 1], 10);
+    docPdf.rect(150,75,55,6,'F')
+    docPdf.setTextColor(0,0,0);
+    docPdf.setFontSize(8);
+      docPdf.text("ENTERADO",171,79)
+  
+    docPdf.rect(150,75,55,20) 
+    docPdf.rect(150,95,55,5)
+  
+      docPdf.text(newResponsable,165,99)
+  
+    docPdf.setFillColor(204,204,204);
+    
+    docPdf.rect(150,100,55,5,'F')
+    docPdf.setTextColor(0,0,0);
+    
+    docPdf.rect(150,100,55,5)
+    docPdf.setFontSize(8);
+      docPdf.text("ENCARGADO DE INFORMATICA",156,103)
+   
+
+//C O N F O R M I D A D 
+docPdf.setFillColor(204,204,204);
+    docPdf.setLineDash([1, 1], 10);
+    docPdf.rect(215,75,55,6,'F')
+    docPdf.setTextColor(0,0,0);
+    docPdf.setFontSize(8);
+      docPdf.text("SOLICITANTE",231,79)
+  
+    docPdf.rect(215,75,55,20) 
+    docPdf.rect(215,95,55,5)
+  
+      docPdf.text(newRequester,232,99)
+  
+    docPdf.setFillColor(204,204,204);
+    
+    docPdf.rect(215,100,55,5,'F')
+    docPdf.setTextColor(0,0,0);
+    
+    docPdf.rect(215,100,55,5)
+    docPdf.setFontSize(8);
+      docPdf.text("CONFORMIDAD CON EL SERVICIO",221,103)
+  
+//PARTE SEGUNDA, MITAD HACIA ABAJO
+let NUEVO_LIMITE= 105
+docPdf.setLineDash([1, 0], 10);
+docPdf.rect(10,2+NUEVO_LIMITE,pageWidth-20,17)
+
+  docPdf.addImage(logo, 'JPEG', 20, 5+NUEVO_LIMITE, 12, 12);
+
+  docPdf.setFont('times','bold');
+  docPdf.setFontSize(11);
+    docPdf.text("SOLICITUD DE SERVICIOS DE "+ newTitle, pageWidth / 2, 7+ NUEVO_LIMITE,{align:"center"});
+
+    docPdf.text(docSelected, pageWidth / 2, 12+ NUEVO_LIMITE,{align:"center"}); 
+
+  docPdf.setFontSize(9);
+    docPdf.text("NOMBRE:" + newRequester,10,25+ NUEVO_LIMITE);
+    docPdf.text("FECHA:"  + moment(newDate).format('dddd DD/MMMM/YYYY'),pageWidth / 2+30,25+ NUEVO_LIMITE);
+    docPdf.text("PUESTO:" + newPosition,10,35+ NUEVO_LIMITE) ;
+
+  docPdf.setFillColor(0,0,255);
+  docPdf.rect(10,30+ NUEVO_LIMITE,pageWidth-20,6,'F')
+  docPdf.setTextColor(255,255,255);
+    centerText("DESCRIPCIÓN DEL SERVICIO",35+ NUEVO_LIMITE)
+  docPdf.rect(10,30 + NUEVO_LIMITE,pageWidth-20,23)
+  docPdf.setTextColor(0,0,0);
+  docPdf.setFont('arial','normal');
+    centerText(newService,45 + NUEVO_LIMITE);
+
+  docPdf.setFillColor(0,0,255);
+  docPdf.rect(10,50 +NUEVO_LIMITE,pageWidth-20,6,'F')
+  docPdf.setTextColor(255,255,255);
+    centerText("OBSERVACIONES",55+ NUEVO_LIMITE)
+  docPdf.rect(10,50 + NUEVO_LIMITE,pageWidth-20,23)
+  docPdf.setTextColor(0,0,0);
+  docPdf.setFont('arial','normal');
+    centerText(newObservations,60 + NUEVO_LIMITE);
+
+//SOLICITANTE
+docPdf.setFillColor(204,204,204);
+docPdf.setLineDash([1, 1], 10);
+docPdf.rect(10,75+ NUEVO_LIMITE,55,5,'F')
+docPdf.setTextColor(0,0,0);
+docPdf.setFontSize(8);
+docPdf.setFont('arial','normal');
+  docPdf.text("SOLICITANTE",30,79 + NUEVO_LIMITE)
+
+docPdf.rect(10,75+ NUEVO_LIMITE,55,20) 
+docPdf.rect(10,95+ NUEVO_LIMITE,55,5)
+
+docPdf.setFont('arial','normal');
+  docPdf.text(newRequester,28,99+ NUEVO_LIMITE)
+
+docPdf.setFillColor(204,204,204);
+
+docPdf.rect(10,100 + NUEVO_LIMITE,55,5,'F')
+docPdf.setTextColor(0,0,0);
+
+docPdf.rect(10,100 + NUEVO_LIMITE,55,5)
+docPdf.setFontSize(8);
+docPdf.setFont('arial','normal');
+  docPdf.text("FIRMA DEL SOLICITANTE",21,103+ NUEVO_LIMITE)
+
+//vobo
+docPdf.setFillColor(204,204,204);
+docPdf.setLineDash([1, 1], 10);
+docPdf.rect(80,75+ NUEVO_LIMITE,55,6,'F')
+docPdf.setTextColor(0,0,0);
+docPdf.setFontSize(8);
+  docPdf.text("VO.BO",104,79 + NUEVO_LIMITE)
+
+docPdf.rect(80,75 + NUEVO_LIMITE,55,20) 
+docPdf.rect(80,95 + NUEVO_LIMITE,55,5)
+
+  docPdf.text(newVobo,94,99 + NUEVO_LIMITE)
+
+docPdf.setFillColor(204,204,204);
+
+docPdf.rect(80,100+ NUEVO_LIMITE,55,5,'F')
+docPdf.setTextColor(0,0,0);
+
+docPdf.rect(80,100 + NUEVO_LIMITE,55,5)
+docPdf.setFontSize(8);
+  docPdf.text("FIRMA  DIRECTOR",97,103+ NUEVO_LIMITE)
+
+
+//ENTERADO
+docPdf.setFillColor(204,204,204);
+docPdf.setLineDash([1, 1], 10);
+docPdf.rect(150,75 + NUEVO_LIMITE,55,6,'F')
+docPdf.setTextColor(0,0,0);
+docPdf.setFontSize(8);
+  docPdf.text("ENTERADO",171,79+ NUEVO_LIMITE)
+
+docPdf.rect(150,75 + NUEVO_LIMITE,55,20) 
+docPdf.rect(150,95 + NUEVO_LIMITE,55,5)
+
+  docPdf.text(newResponsable,165,99 + NUEVO_LIMITE);
+
+docPdf.setFillColor(204,204,204);
+
+docPdf.rect(150,100 + NUEVO_LIMITE,55,5,'F')
+docPdf.setTextColor(0,0,0);
+
+docPdf.rect(150,100 + NUEVO_LIMITE,55,5)
+docPdf.setFontSize(8);
+  docPdf.text("ENCARGADO DE INFORMATICA",156,103 + NUEVO_LIMITE);
+
+
+//C O N F O R M I D A D 
+docPdf.setFillColor(204,204,204);
+docPdf.setLineDash([1, 1], 10);
+docPdf.rect(215,75 + NUEVO_LIMITE,55,6,'F')
+docPdf.setTextColor(0,0,0);
+docPdf.setFontSize(8);
+  docPdf.text("SOLICITANTE",231,79+ NUEVO_LIMITE)
+
+docPdf.rect(215,75 + NUEVO_LIMITE,55,20) 
+docPdf.rect(215,95 + NUEVO_LIMITE,55,5)
+
+  docPdf.text(newRequester,232,99 + NUEVO_LIMITE)
+
+docPdf.setFillColor(204,204,204);
+
+docPdf.rect(215,100 + NUEVO_LIMITE,55,5,'F')
+docPdf.setTextColor(0,0,0);
+
+docPdf.rect(215,100 + NUEVO_LIMITE,55,5)
+docPdf.setFontSize(8);
+  docPdf.text("CONFORMIDAD CON EL SERVICIO",221,103 + NUEVO_LIMITE);
+
+
+docPdf.save(nameFilePDF);
+SendFileToServer(nameFilePDF);
+
+}
+
+
+
+
+  //version HOJA CARTA COMPLETA
+  function genPDF_HOJA_CARTA() {
   
     const docPdf = new jsPDF({
       orientation: "landscape",
       unit: "mm",
-      format: 'a4',
+      format: 'letter',
     });
 
     let pageHeight = docPdf.internal.pageSize.height || docPdf.internal.pageSize.getHeight();
@@ -61,9 +371,9 @@ function genPDF() {
     var logo = new Image();
     logo.src = logoColumbia;
 
-    docPdf.rect(2,2,pageWidth-5,30)
+    docPdf.rect(10,2,pageWidth-10,30)
 
-    docPdf.addImage(logo, 'JPEG', 5, 5, 20, 20);
+    docPdf.addImage(logo, 'JPEG', 10, 5, 20, 20);
 
     docPdf.setFont('times','bold');
     docPdf.setFontSize(14);
@@ -82,80 +392,96 @@ function genPDF() {
 
     
     docPdf.setFillColor(0,0,255);
-    docPdf.rect(2,60,pageWidth-5,8,'F')
+    docPdf.rect(10,60,pageWidth-10,8,'F')
     docPdf.setTextColor(255,255,255);
       centerText("DESCRIPCIÓN DEL SERVICIO",65)
-    docPdf.rect(2,60,pageWidth-5,30)
+    docPdf.rect(10,60,pageWidth-10,30)
 
     docPdf.setFillColor(0,0,255);
-    docPdf.rect(2,100,pageWidth-5,8,'F')
+    docPdf.rect(10,100,pageWidth-10,8,'F')
     docPdf.setTextColor(255,255,255);
       centerText("OBSERVACIONES",105)
-    docPdf.rect(2,100,pageWidth-5,30)
+    docPdf.rect(10,100,pageWidth-10,30)
 
     //SOLICITANTE
     docPdf.setFillColor(204,204,204);
     docPdf.setLineDash([1, 1], 10);
-    docPdf.rect(2,140,60,8,'F')
+    docPdf.rect(10,140,60,8,'F')
     docPdf.setTextColor(0,0,0);
     docPdf.setFontSize(8);
-      docPdf.text("SOLICITANTE",21,145)
-    docPdf.rect(2,140,60,25)
+      docPdf.text("SOLICITANTE",30,145)
+    docPdf.rect(10,140,60,25)
 
-    docPdf.rect(2,165,60,7)
-      docPdf.text(newRequester,15,170)
+    docPdf.rect(10,165,60,7)
+      docPdf.text(newRequester,28,170)
 
     docPdf.setFillColor(204,204,204);
     
-    docPdf.rect(2,172,60,8,'F')
+    docPdf.rect(10,172,60,8,'F')
     docPdf.setTextColor(0,0,0);
     
-    docPdf.rect(2,172,60,8)
+    docPdf.rect(10,172,60,8)
     docPdf.setFontSize(8);
-      docPdf.text("FIRMA DEL SOLICITANTE",13,176)
+      docPdf.text("FIRMA DEL SOLICITANTE",21,176)
 
 
       //vobo
     docPdf.setFillColor(204,204,204);
-    docPdf.rect(72,140,60,8,'F')
+    docPdf.rect(85,140,60,8,'F')
     docPdf.setTextColor(0,0,0);
     docPdf.setFontSize(8);
-      docPdf.text("VO.BO",95,145)
-    docPdf.rect(72,140,60,25)
+      docPdf.text("VO.BO",109,145)
+    docPdf.rect(85,140,60,25)
 
-    docPdf.rect(72,165,60,7)
-      docPdf.text(newVobo,88,170)
+    docPdf.rect(85,165,60,7)
+      docPdf.text(newVobo,101,170)
 
     docPdf.setFillColor(204,204,204);
-    docPdf.rect(72,172,60,8,'F')
+    docPdf.rect(85,172,60,8,'F')
     docPdf.setTextColor(0,0,0);
-    docPdf.rect(72,172,60,8)
+    docPdf.rect(85,172,60,8)
     docPdf.setFontSize(8);
-      docPdf.text("FIRMA DIRECTOR",90,176)
+      docPdf.text("FIRMA DIRECTOR",104,176)
 
     //enterado
     docPdf.setFillColor(204,204,204);
-    docPdf.rect(142,140,60,8,'F')
+    docPdf.rect(155,140,60,8,'F');
     docPdf.setTextColor(0,0,0);
     docPdf.setFontSize(8);
-      docPdf.text("ENTERADO",160,145)
-    docPdf.rect(142,140,60,25)
+      docPdf.text("ENTERADO",176,145)
+    docPdf.rect(155,140,60,25)
 
-    docPdf.rect(142,165,60,7)
-      docPdf.text(newResponsable,160,170)
+    docPdf.rect(155,165,60,7)
+      docPdf.text(newResponsable,172,170)
 
     docPdf.setFillColor(204,204,204);
-    docPdf.rect(142,172,60,8,'F')
+    docPdf.rect(155,172,60,8,'F')
     docPdf.setTextColor(0,0,0);
-    docPdf.rect(142,172,60,8)
+    docPdf.rect(155,172,60,8)
     docPdf.setFontSize(8);
-      docPdf.text("ENCARGADO DE INFORMATICA",150,176)
+      docPdf.text("ENCARGADO DE INFORMATICA",165,176)
 
+//C O N F O R M I D A D 
+  docPdf.setFillColor(204,204,204);
+  docPdf.rect(228,140,60,8,'F')
+  docPdf.setTextColor(0,0,0);
+  docPdf.setFontSize(8);
+    docPdf.text("S O L I C I T A N T E",248,145)
+  docPdf.rect(228,140,60,25)
 
-    
+  docPdf.rect(228,165,60,7)
+    docPdf.text(newRequester,248,170)
 
+  docPdf.setFillColor(204,204,204);
+  docPdf.rect(228,172,60,8,'F')
+  docPdf.setTextColor(0,0,0);
+  docPdf.rect(228,172,60,8)
+  docPdf.setFontSize(8);
+    docPdf.text("CONFORMIDAD CON EL SERVICIO",234,176)
 
-docPdf.save("winnithepoo.pdf");
+    centerText("Original:  Encargado de Informática y Sistemas            Copia: Solicitante",245)
+
+  docPdf.save("winnithepoo.pdf");
 }
 
 
@@ -187,7 +513,9 @@ docPdf.save("winnithepoo.pdf");
         }
         });
       if (response) {
+        console.log(response)
         props.setnewOrderService(response.data.number);          
+        genPDF(response.data.number)
         props.onHide();
       }
     } catch(error) {
@@ -364,11 +692,6 @@ const getListDocuments =async()=> {
     </Modal.Body>
     <Modal.Footer>
       <Row className = "d-md-flex justify-content-center py-1">
-      <Col>
-          <Button variant="info" onClick = {genPDF}>
-            PDF
-          </Button>
-        </Col>
         <Col>
           <Button variant="secondary" onClick = {props.onHide}>
             Close
