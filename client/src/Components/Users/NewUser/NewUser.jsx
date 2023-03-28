@@ -70,6 +70,7 @@ function NewUser() {
 
    async function handleSubmitForm(e) {
       e.preventDefault();
+      
       if (!disabledAdd) {
          if (txtTypeUser && txtTypeUser !== 'Choose...') {
             if (txtLevel && txtLevel !== 'Choose...') {
@@ -86,6 +87,7 @@ function NewUser() {
                          "authorization": `Bearer ${userLogged.userToken}`,
                      }
                      });
+                     console.log(response)
                   if (response) {
                      if (response.data.message==='El token NO es valido!') {
                         navigate('/login' );    

@@ -49,6 +49,7 @@ function ViewerUsers() {
     getAllUsers();
   },[])
 
+  console.log(listUsers);
   return (
     <Container className = "container-fluid py-5">
       <Link to='/dashboard/newuser'>
