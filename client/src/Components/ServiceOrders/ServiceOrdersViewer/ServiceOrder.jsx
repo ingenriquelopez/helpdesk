@@ -9,6 +9,8 @@ import Annoument     from '../../Alerts/Annoument/Annoument';
 import EditFormOS from '../EditFormOS/EditFormOS';
 import axios from 'axios';
 import { tostada_S } from '../../../utils/Tostadas';
+import ManagePdfs from '../../../Pdfs/ManagePdfs';
+
 import moment from 'moment';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
@@ -18,9 +20,10 @@ const {REACT_APP_API} = process.env;
 
 export default function ServiceOrder( {c}) {
 
-  const [show, setShow]     = useState(false);
-  const [smShow, setSmShow] = useState(false);
-  const [lgShow, setLgShow] = useState(false);
+  const [show, setShow]         = useState(false);
+  const [showPdfs, setShowPdfs] = useState(false);
+  const [smShow, setSmShow]     = useState(false);
+  const [lgShow, setLgShow]     = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -114,17 +117,31 @@ export default function ServiceOrder( {c}) {
   const handleLgClose =()=> {
     setLgShow(false);
   }
+
+  const handleClosePdfs =() => {
+    setShowPdfs(false);
+  }
   const handleLgUpdate = ()=> {
     setLgShow(false);
   }
+  const handleManagePdfs = ()=> {
+    setShowPdfs(false);
+  }
 
   const handleShow           = () => setShow(true);
-  const handleShowEdit       = () => setLgShow(true);   
+  const handleShowEdit       = () => setLgShow(true);
+  const handleShowPdfs       = () => setShowPdfs(true)   ;
   
+
+  const handleClick =(e)=> {
+    if (e.detail ===2) {
+      handleShowPdfs();
+    }
+  }
   
   return (    
     <>
-      <tr>
+      <tr onClick = { (e)=>handleClick(e)}>
           <td className = {`text-center fs-6 ${c.serviceStatus === "Canceled" ? "text-decoration-line-through": '' }`}> {c.number}</td>
           <td className = {`text-center fs-6 ${c.serviceStatus === "Canceled" ? "text-decoration-line-through": '' }`}> {c.document}</td>
           <td className = {`text-center fs-6 ${c.serviceStatus === "Canceled" ? "text-decoration-line-through ": '' }` }> {moment(c.date).format('dddd DD/MMMM/YYYY')}</td>          
@@ -181,6 +198,13 @@ export default function ServiceOrder( {c}) {
                     mensaje        = " Cancel susscesfull ✅ " 
                     smShow         = {smShow}  
                     handleSmClose  = { handleSmClose }
+      /> 
+
+      <ManagePdfs  myTitle           = "PDFS files Management" 
+                    myData           = {myData} 
+                    show             = {showPdfs}   
+                    handleClosePdfs  = { handleClosePdfs } 
+                    handleManagePdfs = { handleManagePdfs }
       /> 
     </>
   )

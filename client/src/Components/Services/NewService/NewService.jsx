@@ -5,15 +5,15 @@ import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 import Modal     from 'react-bootstrap/Modal'
 import { Container } from 'react-bootstrap';
-import DatePicker from "react-datepicker";
+import DatePicker    from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 }    from 'uuid';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
-import axios from 'axios';
+import axios  from 'axios';
 import moment from 'moment';
 
-import { jsPDF } from "jspdf";
+import { jsPDF }    from "jspdf";
 import logoColumbia from './logo-columbia.jpeg';
 
 const {REACT_APP_API} = process.env;
@@ -39,24 +39,7 @@ export default function NewService( props ) {
 
   
   
-  const SendFileToServer = async(nameFilePDF)=> {
-    const formdata = new FormData();
-    /* const responseFileUpload = await axios.post('/serviceUpload',nameFilePDF, {
-      headers: {
-          "authorization": `Bearer ${userLogged.userToken}`,
-      }
-      }); */
-  
-     formdata.append('name',nameFilePDF);
-    const responseFileUpload = await axios.post(`${REACT_APP_API}/serviceUpload`,{formdata});
-    console.log(responseFileUpload)
-    if (responseFileUpload) {
-      alert()
-    } else {
-      
-      alert('NO PASO NADA')
-    }
-  }
+
   
 
  //version MEDIA CARTA
@@ -340,7 +323,6 @@ docPdf.setFontSize(8);
 
 
 docPdf.save(nameFilePDF);
-SendFileToServer(nameFilePDF);
 
 }
 
@@ -510,7 +492,7 @@ SendFileToServer(nameFilePDF);
         }
         });
       if (response) {
-        console.log(response)
+        
         props.setnewOrderService(response.data.number);          
         genPDF(response.data.number)
         props.onHide();
