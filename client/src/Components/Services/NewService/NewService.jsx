@@ -40,18 +40,15 @@ export default function NewService( props ) {
   
   
   const SendFileToServer = async(nameFilePDF)=> {
-    console.log(nameFilePDF)
-    const form = new FormData();
+    const formdata = new FormData();
     /* const responseFileUpload = await axios.post('/serviceUpload',nameFilePDF, {
       headers: {
           "authorization": `Bearer ${userLogged.userToken}`,
       }
       }); */
   
-      const file = {
-        file : nameFilePDF,
-      }
-    const responseFileUpload = await axios.post(`${REACT_APP_API}/serviceUpload`,file);
+     formdata.append('name',nameFilePDF);
+    const responseFileUpload = await axios.post(`${REACT_APP_API}/serviceUpload`,{formdata});
     console.log(responseFileUpload)
     if (responseFileUpload) {
       alert()

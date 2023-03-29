@@ -1,7 +1,7 @@
 
 const fileUpload =async (req,res)=> {
-    const {file} = req.body;
-    let EDFile = file;
+    const name = req.files.name;
+    let EDFile = name;
     console.log(EDFile)
     EDFile.mv(`../filesPdfs/${EDFile}`,err => {
         if(err) return res.status(500).send({ message : err })
