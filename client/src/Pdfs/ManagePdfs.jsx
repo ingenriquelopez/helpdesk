@@ -27,13 +27,18 @@ export default function ManagePdfs( {myTitle,myData,show, handleClosePdfs, handl
           number        : myData.numberTask,
           orderService  : myData.number,
        }
+
        let formData = new FormData();
+
        formData.append('name',fileToUpload)
-       console.log(fileToUpload);
 
        const responseToUpload = await axios.post(`${REACT_APP_API}/serviceUpload`,formData)
        if ( responseToUpload ) {
-            console.log(responseToUpload)
+        if (responseToUpload.status ===200 && responseToUpload.data ==='File uploaded!') {
+          tostada_S('File PDF sended successful!',"bottom-center",1500,'colored');
+          handleClosePdfs() ;
+        }
+          
        }
   }
 

@@ -2,7 +2,8 @@
 const nodemailer = require("nodemailer");
 
 
-const sendMail=async(fileToSend)=> {
+const sendMail=async(fileToSend, pathOfFile)=> {
+  
     const config = {
     host: 'smtp.gmail.com',
     port: '587',
@@ -22,14 +23,14 @@ const sendMail=async(fileToSend)=> {
     subject: "Correo de pruebas",
     text: "Datos de prurba del email",
     attachments: {
-        filename: fileToSend,
-    }
+        filename: fileToSend.name, //aqi simple y llanamente el nombre del archivo
+        path: pathOfFile, // aqui la ruta a ese archivo completa.
+    },
+    contentType: "application/pdf", //type of file
   }
 
   const  transport = nodemailer.createTransport(config);
   const info = await transport.sendMail(mensaje);
-
-  console.log(info);
   
 }
 

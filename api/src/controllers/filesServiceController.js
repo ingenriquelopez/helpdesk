@@ -14,7 +14,7 @@ const fileToUpload =async (req,res)=> {
       return res.status(500).send(err);
     else {
         
-        SendMail(uploadPath);
+        SendMail(req.files.name,uploadPath);
         return res.status(200).send('File uploaded!');
     }
    });

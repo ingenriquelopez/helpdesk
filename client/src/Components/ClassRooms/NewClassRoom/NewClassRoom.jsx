@@ -106,7 +106,7 @@ export default function NewClassRoom() {
                             if (response) {
                                 // aviso de la mision fue un exito
                                 dispatch(addNewClassRoom(newClassRoom)); 
-                                tostada_S('New ClassRoom DONE!',"top-center",1500,'light');
+                                tostada_S('New ClassRoom DONE!',"top-center",1500,'colored');
                             }
                             navigate('/dashboard/viewerclassrooms', { replace: true });    
                         } catch (error) {

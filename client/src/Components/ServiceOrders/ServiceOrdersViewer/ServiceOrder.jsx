@@ -132,7 +132,7 @@ export default function ServiceOrder( {c}) {
   const handleShowEdit       = () => setLgShow(true);
   const handleShowPdfs       = () => setShowPdfs(true)   ;
   
-
+// SI HAY DOSBLE CLICK PROCEDERA GESTIONAR EL ENVIO DELOS PDFS
   const handleClick =(e)=> {
     if (e.detail ===2) {
       handleShowPdfs();
