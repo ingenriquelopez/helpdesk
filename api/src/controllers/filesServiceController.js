@@ -1,17 +1,26 @@
+const SendMail = require('../mailer')
 
-const fileUpload =async (req,res)=> {
-    console.log(req.name)
-    /* const name = req.files.name;
-    let EDFile = name;
-    console.log(EDFile)
-    EDFile.mv(`../filesPdfs/${EDFile}`,err => {
-        if(err) return res.status(500).send({ message : err })
+const fileToUpload =async (req,res)=> {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+      }
 
-        return res.status(200).send({ message : 'File upload' })
-    }) */
-    res.send(200);
-}
+    let fileToUpload = req.files.name;
+    let uploadPath   = `${__dirname}/public/${fileToUpload.name}`; 
+
+    // Use the mv() method to place the file somewhere on your server
+   fileToUpload.mv(uploadPath, function(err) {
+   if (err)
+      return res.status(500).send(err);
+    else {
+        
+        SendMail(uploadPath);
+        return res.status(200).send('File uploaded!');
+    }
+   });
+
+} 
 
 module.exports = {
-    fileUpload
+    fileToUpload
 }

@@ -13,7 +13,9 @@ const filesRouter               = require('./routes/filesRouter');
 const server = express();
 server.use(cors());
 server.use(express.json());
-server.use(fileUpload());
+server.use(fileUpload( {
+  createParentPath:true  
+}));
 
 server.use('/task',taskRouter);
 server.use('/user',userRouter);
