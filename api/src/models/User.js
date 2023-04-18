@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
                 }
             },
             password: {
-                type: DataTypes.STRING(15)
+                type: DataTypes.STRING
             },
             typeUser: {
                 type: DataTypes.ENUM(['User','superUser','Admin','superAdmin'])

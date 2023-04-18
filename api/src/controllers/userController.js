@@ -3,11 +3,12 @@ const express  = require('express');
 const moment   = require('moment');
 
 const { User } = require('../db.js');
+const  CryptoJS = require("crypto-js");
 
 
 const { 
         REACT_APP_EMAIL_SUPER_ADMIN, 
-        REACT_APP_PASSWORD_SUPER_ADMIN, 
+        REACT_APP_PASSWORD_SUPER_ADMIN, KEY_CRYPTO_SECRET,
      } = process.env;
 
 
@@ -27,16 +28,23 @@ const loginByEmail = async(req,res)=> {
 
 const postUser = async (req,res) => {
     const newUser = {};
+    let cryptoPass = CryptoJS.AES.encrypt(JSON.stringify(req.body.password), KEY_CRYPTO_SECRET).toString();
+    console.log(cryptoPass);
 
     newUser.userName = req.body.userName;
     newUser.email    = req.body.email;
-    newUser.password = req.body.password;
+    newUser.password = cryptoPass;
     newUser.typeUser = req.body.typeUser;
     newUser.level    = req.body.level; 
+    
 
      try {
         let user = await User.create( newUser);
-        return res.status(200).send('successfull:');
+        if (user) {
+            return res.status(200).send('successfull:');
+        }
+        console.log(user)
+        return user;
     } catch (error) {
         return res.send(error.message);
     } 
