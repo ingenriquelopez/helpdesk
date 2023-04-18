@@ -14,13 +14,16 @@ import face from './face-scan.gif';
 import axios      from 'axios';
 import { setUser } from '../../redux/users/userReducer';
 
+import CryptoJS from 'crypto-js';
+
 
 const { REACT_APP_USERNAME_SUPER_ADMIN,
         REACT_APP_EMAIL_SUPER_ADMIN, 
         REACT_APP_PASSWORD_SUPER_ADMIN, 
         REACT_APP_TYPE_SUPER_ADMIN,
         REACT_APP_LEVEL_SUPER_ADMIN,
-        REACT_APP_API
+        REACT_APP_API,
+        REACT_APP_KEY_CRYPTO_SECRET,
          } = process.env;
 
 function Login() {
@@ -33,6 +36,9 @@ function Login() {
   const [email         , setEmail]         = useState("");
   const [passwordError , setPasswordError] = useState("");
   const [emailError    , setEmailError]    = useState("");
+
+
+  const [mostrarPass   , setmostrarPass]   = useState(false);
 
 const validUser = async()=> 
 {
@@ -70,10 +76,21 @@ const validUser = async()=>
       {
         try {
           const response = await axios.get(`${REACT_APP_API}/user/login/${email}`);
-          const { data } = response;
-  
+          const { data } = response;          
+        
           if (data!== 'Email not found') {
-            if (data.password === password) {
+            let encrypted = data.password;
+            const previewDecrypted = CryptoJS.AES.decrypt(encrypted, REACT_APP_KEY_CRYPTO_SECRET);
+            
+            const decrypted = previewDecrypted.toString(CryptoJS.enc.Utf8);
+                        
+            //let decrypted = CryptoJS.AES.decrypt(encrypted.trim(), REACT_APP_KEY_CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
+
+            console.log(password);
+            console.log(decrypted)
+            console.log(password === decrypted)
+            if (password == decrypted) {
+              
                 try { // si el usuario si es valido entonces 
                   //conseguir el token
                   const responseToken = await axios.get(`${REACT_APP_API}/user/login/gettoken/${email}`);
@@ -117,6 +134,23 @@ const validUser = async()=>
     }
 
 
+
+    const handleOjito = ()=> {
+      let OJO = document.getElementById('ojito');
+
+      setmostrarPass(!mostrarPass);
+      if (mostrarPass) {
+        OJO.classList.remove('fa-eye');
+        OJO.classList.add('fa-eye-slash');
+      } else {
+        OJO.classList.remove('fa-eye-slash');
+        OJO.classList.add('fa-eye');
+        
+      }
+      
+      
+    }
+
   const loginSubmit = (e) => {
     e.preventDefault();
     localStorage.removeItem('txtgyg')
@@ -157,13 +191,25 @@ return (
                     <Col>
                         <Form.Group className="mx-auto">
                             <Row> <Form.Label className="text-center">Password</Form.Label>  </Row>
-                            <Form.Control 
-                            type      = "password"
-                            className = "password"
-                            id        = "inputPassword"
-                            placeholder="Password"
-                            onChange={(event) => setPassword(event.target.value)}
-                            />
+                            <Row > 
+                              <div  className = "rowPassword" >
+                                <Form.Control 
+                                  type={mostrarPass ? 'text' : 'password'}
+                                  className   = "password"
+                                  id          = "inputPassword"
+                                  placeholder = "Password"
+                                  onChange    = {(event) => setPassword(event.target.value)}
+                                  value       = {password}
+                                />
+                              </div>
+                              <div className = "colOjito">
+                                 <i id = "ojito" className = "fa fa-eye-slash" aria-hidden="true" onClick = { (e)=> handleOjito(e) }></i>
+                              </div>
+                              
+                       
+                            </Row>
+                            
+
                         </Form.Group>
                         <small id="passworderror" className="text-danger form-text">
                           {passwordError}
