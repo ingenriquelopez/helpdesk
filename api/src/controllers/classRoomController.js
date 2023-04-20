@@ -11,6 +11,7 @@ const postClassRoom = async (req,res) => {
         floor,
     } = req.body;
 
+
     try {
         let classRoom = await ClassRoom.create( newClassRoom);
         return res.status(200).send('successfull:');
@@ -26,7 +27,6 @@ const getClassRooms = async(req,res)=> {
         const classRooms = await ClassRoom.findAll( { 
             where: {level}
         }); 
-        console.log("GETCLASSROOMS.. LINEA 25:", classRooms)
         return res.status(200).send(classRooms);
     } catch (error) {
         return res.send(error.message);
@@ -43,8 +43,10 @@ const getAllClassRooms = async(req,res)=> {
 }
 const getClassRoom = async(req,res)=> {
     const classRoom = req.params.classRoom;
+    
     try {
         const response = await ClassRoom.findByPk( classRoom );
+    
         return res.status(200).send(response);
     } catch (error) {
         return res.send(error.message);

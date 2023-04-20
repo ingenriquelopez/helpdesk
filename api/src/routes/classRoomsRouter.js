@@ -9,7 +9,7 @@ classRoomRouter.use( verifyToken );
 
 classRoomRouter.post('/',postClassRoom);
 classRoomRouter.get('/:level',getClassRooms);
-classRoomRouter.get('/:classRoom',getClassRoom);
+classRoomRouter.get('/room/:classRoom',getClassRoom);
 classRoomRouter.delete('/:classRoom',deleteClassRoom)
 classRoomRouter.put('/',putClassRoom);
 

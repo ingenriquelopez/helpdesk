@@ -28,9 +28,8 @@ const loginByEmail = async(req,res)=> {
 
 const postUser = async (req,res) => {
     const newUser = {};
-    let cryptoPass = CryptoJS.AES.encrypt(JSON.stringify(req.body.password), KEY_CRYPTO_SECRET).toString();
-    console.log(cryptoPass);
-
+    let cryptoPass = CryptoJS.AES.encrypt(JSON.stringify(req.body.password.trim()), KEY_CRYPTO_SECRET).toString();
+    
     newUser.userName = req.body.userName;
     newUser.email    = req.body.email;
     newUser.password = cryptoPass;
@@ -43,7 +42,6 @@ const postUser = async (req,res) => {
         if (user) {
             return res.status(200).send('successfull:');
         }
-        console.log(user)
         return user;
     } catch (error) {
         return res.send(error.message);
@@ -74,11 +72,12 @@ const deleteUser = async(req,res)=> {
 
 const putUser = async(req, res)=> {
     const { userName,email,password,typeUser,level } = req.body;
+    let cryptoPass = CryptoJS.AES.encrypt(JSON.stringify(req.body.password.trim()), KEY_CRYPTO_SECRET).toString();
     try {
         const response = await User.update( {
             userName,
             email,
-            password,
+            password:cryptoPass,
             typeUser,
             level,
         }, { 
@@ -95,7 +94,6 @@ const putUser = async(req, res)=> {
 
 const getUserByEmail = async(req,res)=> {
     const email_user = req.params.email;
-    
     try {
         const response = await User.findOne( { 
             where: { email : email_user}
