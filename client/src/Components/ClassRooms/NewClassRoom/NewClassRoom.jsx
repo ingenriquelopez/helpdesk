@@ -1,4 +1,6 @@
 import React, { useState, useEffect }  from 'react';
+import { motion } from 'framer-motion/dist/framer-motion';
+
 import { useDispatch, useSelector }     from 'react-redux';
 import { useNavigate }     from 'react-router-dom';
 import { addNewClassRoom  } from '../../../redux/classRooms/classRoomsReducer';
@@ -21,6 +23,11 @@ const {REACT_APP_API} = process.env;
 
 moment.locale('us');
 
+const animations = {
+    initial: { opacity: 0, x: 0 },
+    animate: { opacity: 1, x: 0 },
+    
+};
 
 export default function NewClassRoom() {
     const dispatch = useDispatch();
@@ -38,6 +45,18 @@ export default function NewClassRoom() {
     const [userLogged    , setUserLogged]    = useLocalStorage('userLogged','');
     
     
+    const yaExisteClassRoom = async()=> {
+        /* buscamos el classroom en db */
+        
+        const response = await axios.get(`${REACT_APP_API}/classRoom/room/${txtclassRoom}`, {
+           headers: {
+               "authorization": `Bearer ${userLogged.userToken}`,
+           }
+           });
+        if (response.data.classRoom) return true;
+         else return false
+      }
+
     function validateForm() {
         if (!txtclassRoom) {
             setTxtGyg('');
@@ -89,28 +108,32 @@ export default function NewClassRoom() {
                             campus     : txtcampus,
                             floor      : txtfloor,
                         }
-                        try 
-                        {
-                            const response = await axios.post(`${REACT_APP_API}/classRoom`,newClassRoom, {
-                                headers: {
-                                    "authorization": `Bearer ${userLogged.userToken}`,
-                                }
-                            });
+                        if (await yaExisteClassRoom()) {
+                            tostada_W("ClassRoom already exists","top-center",1500,'dark');
+                        } else {
+                            try 
+                                {
+                                    const response = await axios.post(`${REACT_APP_API}/classRoom`,newClassRoom, {
+                                        headers: {
+                                            "authorization": `Bearer ${userLogged.userToken}`,
+                                        }
+                                    });
                             
-                            if (response.data.message==='El token NO es valido!') {
-                                navigate('/login' );    
-                                tostada_W(response.data.message,"top-center",1500,'dark');
-                                return false
-                            } 
+                                    if (response.data.message==='El token NO es valido!') {
+                                        navigate('/login' );    
+                                        tostada_W(response.data.message,"top-center",1500,'dark');
+                                        return false
+                                    } 
 
-                            if (response) {
-                                // aviso de la mision fue un exito
-                                dispatch(addNewClassRoom(newClassRoom)); 
-                                tostada_S('New ClassRoom DONE!',"top-center",1500,'colored');
+                                    if (response) {
+                                        // aviso de la mision fue un exito
+                                        dispatch(addNewClassRoom(newClassRoom)); 
+                                        tostada_S('New ClassRoom DONE!',"top-center",1500,'colored');
+                                    }
+                                    navigate('/dashboard/viewerclassrooms', { replace: true });    
+                            } catch (error) {
+                                console.log(error.message);
                             }
-                            navigate('/dashboard/viewerclassrooms', { replace: true });    
-                        } catch (error) {
-                            console.log(error.message);
                         }
                     } else {
                         //falta seleccionar el floor
@@ -137,10 +160,24 @@ useEffect(() => {
     dispatch(createListClassRooms());
 },[])
 
-  return (
+  return (   
     <Container className = "container-fluid py-2">      
+        <motion.div 
+            variants={animations} 
+            initial="initial" 
+            animate="animate" 
+            exit="exit" 
+            transition={{ 
+                duration : 0.25,
+                ease: "easeInOut",
+                delay: 0.2,
+            }} 
+        >
+    
          <Row  className = "text-center">
+         
             <h5> ADD NEW CLASSROOM</h5>
+         
         </Row>
         <Row className = "mb-4">
             <div id = "imagenCR"> </div>
@@ -241,7 +278,8 @@ useEffect(() => {
                 
 
             </Form>
+        </motion.div>
     </Container>
-
+  
   )
 };

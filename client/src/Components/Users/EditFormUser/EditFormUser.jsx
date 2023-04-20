@@ -10,12 +10,16 @@ import { tostada_W } from '../../../utils/Tostadas';
 
 import axios from 'axios';
 import { updateTask } from '../../../redux/tasks/tasksReducer';
+import { superPassword } from '../../../js/superPassword';
+
 const {REACT_APP_API} = process.env;
+
+
 
 export default function EditFormUser( {myTitle,myData,lgShow, handleLgClose, handleLgUpdate}) {
   
   const [newUserName,setNewUserName]   = useState(myData.userName);
-  const [newPassword, setNewPassword]  = useState(myData.password);
+  const [newPassword, setNewPassword]  = useState(superPassword(myData.password));
   const [newTypeUser,setNewTypeUser]   = useState(myData.typeUser);
   const [newLevel, setNewLevel]        = useState(myData.level);
 

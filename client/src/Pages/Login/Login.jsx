@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from 'framer-motion/dist/framer-motion';
 import { useDispatch } from 'react-redux';
 import { useNavigate }  from 'react-router-dom'
 import { useLocalStorage } from '../../js/useLocalStorage';
@@ -14,7 +15,7 @@ import face from './face-scan.gif';
 import axios      from 'axios';
 import { setUser } from '../../redux/users/userReducer';
 
-import CryptoJS from 'crypto-js';
+import { superPassword } from '../../js/superPassword';
 
 
 const { REACT_APP_USERNAME_SUPER_ADMIN,
@@ -23,8 +24,14 @@ const { REACT_APP_USERNAME_SUPER_ADMIN,
         REACT_APP_TYPE_SUPER_ADMIN,
         REACT_APP_LEVEL_SUPER_ADMIN,
         REACT_APP_API,
-        REACT_APP_KEY_CRYPTO_SECRET,
          } = process.env;
+
+
+  const animations = {
+      initial: { opacity: 0, x: 1 },
+      animate: { opacity: 1, x: 0 },
+      staggerDirection: -1
+     };
 
 function Login() {
   const dispatch   = useDispatch();
@@ -79,17 +86,9 @@ const validUser = async()=>
           const { data } = response;          
         
           if (data!== 'Email not found') {
-            let encrypted = data.password;
-            const previewDecrypted = CryptoJS.AES.decrypt(encrypted, REACT_APP_KEY_CRYPTO_SECRET);
+            let encrypted = data.password;                           
             
-            const decrypted = previewDecrypted.toString(CryptoJS.enc.Utf8);
-                        
-            //let decrypted = CryptoJS.AES.decrypt(encrypted.trim(), REACT_APP_KEY_CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
-
-            console.log(password);
-            console.log(decrypted)
-            console.log(password === decrypted)
-            if (password == decrypted) {
+            if (password === superPassword(encrypted)) {
               
                 try { // si el usuario si es valido entonces 
                   //conseguir el token
@@ -164,6 +163,17 @@ const validUser = async()=>
 return (  
     <div className= "Login position-relative">
        <Container className = "container-fluid py-5">
+       <motion.div 
+                variants={animations} 
+                initial="initial" 
+                animate="animate" 
+                exit="exit" 
+                transition={{ 
+                    duration : 0.7,
+                    ease: "easeInOut",
+                    delay: 0.7,
+                }} 
+            >
        
             <Form className = "position-absolute top-50 start-50 translate-middle mx-auto" id = "loginform" onSubmit = {(e)=>loginSubmit(e)}>
             <img id = "idface"
@@ -227,6 +237,7 @@ return (
                     </Row>
                  </Form.Group>      
             </Form>
+            </motion.div>
         </Container>
     </div>
   );

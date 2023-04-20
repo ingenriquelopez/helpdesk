@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { motion } from 'framer-motion/dist/framer-motion';
 import { useNavigate  }     from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
@@ -28,10 +29,30 @@ function NewUser() {
 
     const [userLogged, setUserLogged] = useLocalStorage('userLogged');
 
+
+    const animations = {
+      initial: { opacity: 0, x: 0 },
+      animate: { opacity: 1, x: 0 },
+      
+  };
+  
+    const yaExisteEmail = async()=> {
+      /* buscamos el email en db */
+      const response = await axios.get(`${REACT_APP_API}/user/${txtNewEmail}`, {
+         headers: {
+             "authorization": `Bearer ${userLogged.userToken}`,
+         }
+         });
+      
+      if (response.data === 'User not found') return false;
+      else return true;  
+    }
+
     function validateForm() {
       
       if (txtPassword && txtUserName && txtNewEmail) setdisabledAdd(false)
       else setdisabledAdd(true)
+      
     }
 
     function handleUserName(e) {
@@ -48,6 +69,7 @@ function NewUser() {
          }
       } 
       validateForm();
+      
    }
 
    const handlePassword = (e) => {
@@ -81,29 +103,37 @@ function NewUser() {
                   typeUser  : txtTypeUser,
                   level     : txtLevel,
                }
-               try {
-                  const response = await axios.post(`${REACT_APP_API}/user`,newUser, {
-                     headers: {
-                         "authorization": `Bearer ${userLogged.userToken}`,
+
+               if ( await yaExisteEmail(txtNewEmail) ) {
+                  tostada_W(`Email: ${txtNewEmail} already exists`,"top-center",1500,'dark');
+               } else 
+                  {
+                  try {
+                     const response = await axios.post(`${REACT_APP_API}/user`,newUser, {
+                        headers: {
+                            "authorization": `Bearer ${userLogged.userToken}`,
+                        }
+                        });
+                        console.log(response)
+                     if (response) {
+                        if (response.data.message==='El token NO es valido!') {
+                           navigate('/login' );    
+                           tostada_W(response.data.message,"top-center",1500,'dark');
+                           return
+                     
+                        } else {
+                           // aviso de la mision fue un exito
+                           tostada_S('New User DONE!',"top-center",1500,'light');
+                        } 
                      }
-                     });
-                     console.log(response)
-                  if (response) {
-                     if (response.data.message==='El token NO es valido!') {
-                        navigate('/login' );    
-                        tostada_W(response.data.message,"top-center",1500,'dark');
-                        return
-                  
-                     } else {
-                        // aviso de la mision fue un exito
-                        tostada_S('New User DONE!',"top-center",1500,'light');
+                     navigate('/dashboard/viewerusers', { replace: true });    
+                  } catch (error) {
+                     console.log("ERROR:" ,error.message);
+                     return 
                      } 
-                  }
-                  navigate('/dashboard/viewerusers', { replace: true });    
-               } catch (error) {
-                  console.log("ERROR:" ,error.message);
-                  return 
-                  } 
+               }
+               
+
             } else {
                //mensaje de que no se ha caoturado el level
                tostada_W('missing Level!',"bottom-right",1500,'light');
@@ -121,119 +151,129 @@ function NewUser() {
    }
 
   return (
-    <Container className = "container-fluid position-relative py-1">
-      <Row  className = "text-center">
-         <h5> ADD NEW USER</h5>
-      </Row>
-      <Row>
-         <div id ="image">
-         </div>
-      </Row>        
-      <Form  id ="form" 
-             className = "position-absolute col-5 top-50 start-50 translate-middle" 
-             autoComplete= 'off'
-             onSubmit={(e) => handleSubmitForm(e)}
-      >
-         <Form.Group className = "mb-3 mx-auto" >
-            <Row >
-               <Col className="text-center">
-                  <Form.Label>UserName</Form.Label>
-               </Col>
-            </Row>
-            <Row>
-               <Col className = "d-grid justify-content-center">
-                  <Form.Control 
-                     type        = "username" 
-                     placeholder = "Enter UserName" 
-                     value       = {txtUserName}
-                     onChange    = {(e)=> handleUserName(e)}       
-                  />
-               </Col>
-            </Row>
-         </Form.Group>
-         <Form.Group className="mb-3 mx-auto" controlId = "formEmail">   
-            <Row>
-               <Col className="text-center">
-                  <Form.Label>Email address</Form.Label>
-               </Col>
-            </Row>
-            <Row className = "d-md-flex justify-content-center py-2">
-               <Col xl = {10} lg = {10} md = {10} sm className = "text-center" >            
-                  <Form.Control 
-                     type         = "email" 
-                     placeholder  = "Enter email" 
-                     autoComplete = "off"
-                     value        = {txtNewEmail}
-                     onChange     = { (e)=> handleNewEmail(e)}
-                  />
-               </Col>
-            </Row>    
-         </Form.Group>
-         <Form.Group controlId="formPassword">
-            <Row className = "mt-4">
-               <Col className="text-center">
-                  <Form.Label>Password</Form.Label>
-               </Col>
-            </Row>
-            <Row>
-               <Col className = "d-grid justify-content-center">
-                  <Form.Control 
-                     type        = "password"                     
-                     placeholder = "Password" 
-                     value       = {txtPassword}
-                     onKeyUp     = { (e)=> handlePassword(e.target.value) }
-                     onChange    = { (e) => handlePassword(e.target.value)}
-                  />
-               </Col>
-            </Row>
-         </Form.Group>
-
+      <Container className = "container  mt-1 justify-content-center" >
+        
+          <div className="titleUser">
+              <div id ="image">
+            </div> 
+            <div className = "text-center">
+               <h5> ADD NEW USER</h5>
+            </div>           
+         </div> 
          
-         <Row className = "mt-4 d-md-flex justify-content-center">
-            <Col className="text-center  col-5">
-               <Form.Group controlId="formTypeUser">
-                  <Form.Label>Type User</Form.Label>
-                  <Form.Control as = "select"
-                     aria-label="Type user"  
-                     onChange ={ (e)=> handleTypeUser(e)}
-                  >
-                     <option>Choose...</option>
-                     <option value = "User">User</option>
-                     <option value = "superUser">superUser</option>
-                     <option value = "Admin">Admin</option>
-                     <option value = "superAdmin">superAdmin</option>
-                  </Form.Control>                    
-               </Form.Group>
-            </Col>
-            <Col className="text-center col-5 ">
-               <Form.Group controlId = "formLevel">
-                  <Form.Label>Level</Form.Label>
-                  <Form.Control as = "select" 
-                     aria-label="Level" 
-                     
-                     onChange ={handleLevel}
-                  >
-                     <option>Choose...</option>
-                     <option value = "PreSchool">PreSchool</option>
-                     <option value = "Elementary">Elementary</option>
-                     <option value = "HighSchool">HighSchool</option>
-                     <option value = "College">College</option>
-                     <option value = "Global">Global</option>
-                     <option value = "Absolute">Absolute</option>
-                  </Form.Control>
-               </Form.Group>         
-            </Col>
-         </Row> 
-
-         <Row >
-            <Form.Group className = "col mt-5 mb-3 d-md-flex justify-content-md-center gap-3">
-               <Button className = "customButton" variant = "danger" onClick = {handleCloseNewUser}>Cancel</Button>
-               <Button className = "customButton" type    = "submit" variant = "success" disabled = {disabledAdd}>Add</Button>
-               
-            </Form.Group>    
-         </Row>
+          
+         <div className="d-flex" id = "containerUser">        
+            <Col>
             
-      </Form>
+               <Form className="mx-auto"  id ="form"  autoComplete= 'off' onSubmit={(e) => handleSubmitForm(e)} >   
+                     <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
+                        <Col xl = {4} lg = {4} md = {4} sm  className = "text-center"> 
+               
+                           <Form.Group className = "mb-3 mx-auto" >
+                              <Row >
+                                 <Col className="text-center">
+                                    <Form.Label>UserName</Form.Label>
+                                 </Col>
+                              </Row>
+                              <Row>
+                                 <Col className = "d-grid justify-content-center">
+                                    <Form.Control 
+                                       type        = "username" 
+                                       placeholder = "Enter UserName" 
+                                       value       = {txtUserName}
+                                       onChange    = {(e)=> handleUserName(e)}       
+                                    />
+                                 </Col>
+                              </Row>
+                           </Form.Group>
+                        </Col>
+                     </Row>
+                     <Row className = "justify-content-center py-2 mt-4">
+                        <Col xxl = {4} xl = {6} lg = {6} md = {8} sm = {10}  className = "text-center">
+                           <Row className = "mt-4 d-md-flex justify-content-center">   
+                              {/* < Col className = "d-grid justify-content-center"> */}
+                                    <Form.Group className="mb-3 mx-auto" controlId="formEmail" >
+                                       <Form.Label>Email address</Form.Label>
+                                       <Form.Control 
+                                          type         = "email" 
+                                          placeholder  = "Enter email" 
+                                          autoComplete = "off"
+                                          value        = {txtNewEmail}
+                                          
+                                          onChange     = { (e)=> handleNewEmail(e)}
+                                       />
+                                    </Form.Group>
+                                 {/* </Col> */}
+                           </Row>
+
+                        </Col>
+                     </Row>    
+                  
+                  <Form.Group controlId="formPassword">
+                     <Row className = "mt-4">
+                        <Col className="text-center">
+                           <Form.Label>Password</Form.Label>
+                        </Col>
+                     </Row>
+                     <Row>
+                        <Col className = "d-grid justify-content-center">
+                           <Form.Control 
+                              type        = "password"                     
+                              placeholder = "Password" 
+                              value       = {txtPassword}
+                              onKeyUp     = { (e)=> handlePassword(e.target.value) }
+                              onChange    = { (e) => handlePassword(e.target.value)}
+                           />
+                        </Col>
+                     </Row>
+                  </Form.Group>
+
+                  
+                  <Row className = "mt-4 d-md-flex justify-content-center">
+                     <Col xl = {4} lg = {4} md = {4} sm  className = "text-center">
+                        <Form.Group className="mb-3 mx-auto" controlId="formTypeUser" >
+                           <Form.Label>Type User</Form.Label>
+                           <Form.Control as = "select"
+                              aria-label="Type user"  
+                              onChange ={ (e)=> handleTypeUser(e)}
+                           >
+                              <option>Choose...</option>
+                              <option value = "User">User</option>
+                              <option value = "superUser">superUser</option>
+                              <option value = "Admin">Admin</option>
+                              <option value = "superAdmin">superAdmin</option>
+                           </Form.Control>                    
+                        </Form.Group>
+                     </Col>
+                     <Col xl = {4} lg = {4} md = {4} sm  className = "text-center">
+                           <Form.Group className="mb-3 mx-auto" controlId = "formLevel">
+                                 <Form.Label>Level</Form.Label>
+                                 <Form.Control as = "select" 
+                                    aria-label="Level" 
+                                    onChange ={handleLevel}
+                                 >
+                                    <option>Choose...</option>
+                                    <option value = "PreSchool">PreSchool</option>
+                                    <option value = "Elementary">Elementary</option>
+                                    <option value = "HighSchool">HighSchool</option>
+                                    <option value = "College">College</option>
+                                    <option value = "Global">Global</option>
+                                    <option value = "Absolute">Absolute</option>
+                                 </Form.Control>
+                           </Form.Group>         
+                     </Col>
+                  </Row> 
+
+                  <Row >
+                     <Form.Group className = "col mt-5 mb-3 d-md-flex justify-content-md-center gap-3">
+                        <Button className = "customButton" variant = "danger" onClick = {handleCloseNewUser}>Cancel</Button>
+                        <Button className = "customButton" type    = "submit" variant = "success" disabled = {disabledAdd}>Add</Button>
+                     </Form.Group>    
+                  </Row>
+                     
+               </Form> 
+            </Col>
+         </div> 
    </Container>
   );
 }
