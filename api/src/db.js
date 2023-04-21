@@ -1,11 +1,14 @@
 require('dotenv').config();
 const { DB_DIALECT, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST,DB_PORT} = process.env;
+
 const {Sequelize }            = require('sequelize');
 const modelTask               = require('./models/Task.js');
 const modelUser               = require('./models/User.js');
 const modelClassRoom          = require('./models/ClassRoom.js');
-const modelConfigServiceOrder = require('./models/ConfigServiceOrder');
 const modelService            = require('./models/Service');
+const modelInventory          = require('./models/Inventory.js');
+const modelConfigServiceOrder = require('./models/ConfigServiceOrder');
+
 
 const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, 
   { 
@@ -28,12 +31,14 @@ authentication();
 modelTask(sequelize);
 modelUser(sequelize);
 modelClassRoom(sequelize);
-modelConfigServiceOrder(sequelize);
 modelService(sequelize);
-const { Task, User, ClassRoom, ConfigServiceOrder, Service } = sequelize.models;
+modelInventory(sequelize);
+modelConfigServiceOrder(sequelize);
+const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder } = sequelize.models;
 //-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*----*
 
+
 module.exports = {
-  Task,User,ClassRoom,ConfigServiceOrder,Service,
+  Task,User,ClassRoom,Service, Inventory, ConfigServiceOrder,
   db: sequelize,
 }

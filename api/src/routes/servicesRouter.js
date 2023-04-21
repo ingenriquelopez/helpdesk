@@ -1,7 +1,8 @@
 const {Router } = require('express');
+const serviceRouter = Router();
+
 const { postService, getServices, deleteService, putService, getService } = require('../controllers/serviceController.js');
 
-const serviceRouter = Router();
 
 serviceRouter.post('/',postService);
 serviceRouter.get('/number/:number',getService);

@@ -106,9 +106,9 @@ const putStatus = async (req,res) => {
             ); 
         return res.status(200).send(response);
         
-    } catch (error) {
-        console.log("ERROR: ",error.message)
-        return res.send(error.message);
+        } catch (error) {
+            console.log("ERROR: ",error.message)
+            return res.send(error.message);
     }
 }
 

@@ -10,13 +10,12 @@ const fileToUpload =async (req,res)=> {
 
     // Use the mv() method to place the file somewhere on your server
    fileToUpload.mv(uploadPath, function(err) {
-   if (err)
-      return res.status(500).send(err);
-    else {
-        
-        SendMail(req.files.name,uploadPath);
-        return res.status(200).send('File uploaded!');
-    }
+    if (err)
+        return res.status(500).send(err);
+      else {
+          SendMail(req.files.name,uploadPath);
+          return res.status(200).send('File uploaded!');
+      }
    });
 
 } 

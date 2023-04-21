@@ -1,7 +1,8 @@
 const {Router } = require('express');
+const userRouter = Router();
+
 const { loginByEmail,postUser, getUsers, deleteUser, putUser, getUserByEmail } = require('../controllers/userController.js');
 const { createToken, verifyToken } = require('../auth/auth.js');
-const userRouter = Router();
 
 
 userRouter.get('/login/:email',loginByEmail);
