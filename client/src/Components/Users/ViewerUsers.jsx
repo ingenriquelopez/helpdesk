@@ -20,6 +20,7 @@ function ViewerUsers() {
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
       
    //----------------------------------------------------------
+
   const getAllUsers =async()=> {
     try {
       const response = await axios.get(`${REACT_APP_API}/user`, {

@@ -191,7 +191,6 @@ function NewUser() {
                      <Row className = "justify-content-center py-2 mt-4">
                         <Col xxl = {4} xl = {6} lg = {6} md = {8} sm = {10}  className = "text-center">
                            <Row className = "mt-4 d-md-flex justify-content-center">   
-                              {/* < Col className = "d-grid justify-content-center"> */}
                                     <Form.Group className="mb-3 mx-auto" controlId="formEmail" >
                                        <Form.Label>Email address</Form.Label>
                                        <Form.Control 
@@ -230,7 +229,7 @@ function NewUser() {
 
                   
                   <Row className = "mt-4 d-md-flex justify-content-center">
-                     <Col xl = {4} lg = {4} md = {4} sm  className = "text-center">
+                     <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8}  className = "text-center">
                         <Form.Group className="mb-3 mx-auto" controlId="formTypeUser" >
                            <Form.Label>Type User</Form.Label>
                            <Form.Control as = "select"
@@ -245,7 +244,7 @@ function NewUser() {
                            </Form.Control>                    
                         </Form.Group>
                      </Col>
-                     <Col xl = {4} lg = {4} md = {4} sm  className = "text-center">
+                     <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center">
                            <Form.Group className="mb-3 mx-auto" controlId = "formLevel">
                                  <Form.Label>Level</Form.Label>
                                  <Form.Control as = "select" 
@@ -266,8 +265,13 @@ function NewUser() {
 
                   <Row >
                      <Form.Group className = "col mt-5 mb-3 d-md-flex justify-content-md-center gap-3">
+                     <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">
                         <Button className = "customButton" variant = "danger" onClick = {handleCloseNewUser}>Cancel</Button>
+                     </Col>
+                     <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">
                         <Button className = "customButton" type    = "submit" variant = "success" disabled = {disabledAdd}>Add</Button>
+                     </Col>
+                        
                      </Form.Group>    
                   </Row>
                      

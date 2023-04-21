@@ -6,7 +6,7 @@ import NewTask             from './Components/TaskViewer/NewTask/NewTask';
 import DashBoard           from './Pages/DashBoard/DashBoard';
 import ViewerUsers         from "./Components/Users/ViewerUsers";
 import NewUser             from './Components/Users/NewUser/NewUser';
-import Devices             from "./Components/Devices/Devices";
+import ViewerInventory     from "./Components/Inventory/ViewerInventory";
 import ViewerClassRooms    from "./Components/ClassRooms/ViewerClassRooms/ViewerClassRooms";
 import NewClassRoom        from './Components/ClassRooms/NewClassRoom/NewClassRoom';
 import PageError404        from "./Pages/PageError404/PageError404";
@@ -30,10 +30,10 @@ function App() {
         <Route path = '/newtask'     element = { <NewTask/> }/>
         <Route path = '/homeresolve/:number' element = { <HomeResolve/>}/>
           
-        <Route path  = 'dashboard/' element  = { <DashBoard/> }>
+        <Route path  = 'dashboard/'        element  = { <DashBoard/> }>
           <Route path = 'viewerusers'      element = { <ViewerUsers/> }/>  
           <Route path = 'newuser'          element = { <NewUser/>  }/>
-          <Route path = 'devices'          element = { <Devices/> }/> 
+          <Route path = 'viewerinventory'  element = { <ViewerInventory/> }/> 
           <Route path = 'viewerclassrooms' element = { <ViewerClassRooms/> }/>  
           <Route path = 'newclassroom'     element = { <NewClassRoom/>}/>
           <Route path = 'serviceOrders'    element = { <ServiceOrdersViewer/>}/>

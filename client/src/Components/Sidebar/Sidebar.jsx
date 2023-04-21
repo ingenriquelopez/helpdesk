@@ -27,27 +27,24 @@ const Sidebar = () => {
 
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
+            
             <NavLink to="viewerusers" activeclassname="activeClicked">
               <CDBSidebarMenuItem icon="columns">Users</CDBSidebarMenuItem>
-            </NavLink>
-            
-            <NavLink to="/tables" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="table">Devices</CDBSidebarMenuItem>
             </NavLink>
 
             <NavLink to="viewerclassrooms" activeclassname="activeClicked">
               <CDBSidebarMenuItem icon="table">ClassRooms</CDBSidebarMenuItem>
             </NavLink>
 
-            <NavLink to="/profile" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="user">Inventary</CDBSidebarMenuItem>
+            <NavLink to="viewerinventory" activeclassname="activeClicked">
+              <CDBSidebarMenuItem icon="table">Inventory</CDBSidebarMenuItem>
             </NavLink>
-
+           
             <NavLink to="serviceorders" activeclassname="activeClicked">
               <CDBSidebarMenuItem icon="chart-line">Service Orders</CDBSidebarMenuItem>
             </NavLink>
 
-            <NavLink to="devices" activeclassname="activeClicked">
+            <NavLink to="reportes" activeclassname="activeClicked">
               <CDBSidebarMenuItem icon="chart-line">Reports</CDBSidebarMenuItem>
             </NavLink>
 
