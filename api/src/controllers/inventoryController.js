@@ -16,8 +16,6 @@ const getOneInventory = async (req,res) => {
 }
 
 const getDeviceInventory = async (req,res) => {
-    
-
     return res.send('holi4')
 }
 

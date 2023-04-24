@@ -8,7 +8,7 @@ const { postDeviceInventory      , getOneInventory,
 
 const { createToken, verifyToken } = require('../auth/auth.js');
 
-inventoryRouter.use( verifyToken ); 
+/* inventoryRouter.use( verifyToken );  */
 
 inventoryRouter.post('/',postDeviceInventory);
 inventoryRouter.put('/',putDeviceInventory);
