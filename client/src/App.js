@@ -6,9 +6,10 @@ import NewTask             from './Components/TaskViewer/NewTask/NewTask';
 import DashBoard           from './Pages/DashBoard/DashBoard';
 import ViewerUsers         from "./Components/Users/ViewerUsers";
 import NewUser             from './Components/Users/NewUser/NewUser';
-import ViewerInventory     from "./Components/Inventory/ViewerInventory";
+import InventoryViewer     from "./Components/Inventory/InventoryViewer";
 import ViewerClassRooms    from "./Components/ClassRooms/ViewerClassRooms/ViewerClassRooms";
 import NewClassRoom        from './Components/ClassRooms/NewClassRoom/NewClassRoom';
+import NewDeviceInventory from "./Components/Inventory/NewDeviceInventory/NewDeviceInventory";
 import PageError404        from "./Pages/PageError404/PageError404";
 import HomeResolve         from "./Pages/HomeResolve/HomeResolve";
 import Settings            from "./Components/Settings/Settings";
@@ -30,14 +31,17 @@ function App() {
         <Route path = '/newtask'     element = { <NewTask/> }/>
         <Route path = '/homeresolve/:number' element = { <HomeResolve/>}/>
           
-        <Route path  = 'dashboard/'        element  = { <DashBoard/> }>
-          <Route path = 'viewerusers'      element = { <ViewerUsers/> }/>  
-          <Route path = 'newuser'          element = { <NewUser/>  }/>
-          <Route path = 'viewerinventory'  element = { <ViewerInventory/> }/> 
-          <Route path = 'viewerclassrooms' element = { <ViewerClassRooms/> }/>  
-          <Route path = 'newclassroom'     element = { <NewClassRoom/>}/>
-          <Route path = 'serviceOrders'    element = { <ServiceOrdersViewer/>}/>
-          <Route path = "settings"         element = { <Settings/>}/>
+        <Route path  = 'dashboard/'          element  = { <DashBoard/> }>
+          <Route path = 'viewerusers'        element = { <ViewerUsers/> }/>  
+          <Route path = 'newuser'            element = { <NewUser/>  }/>
+          <Route path = 'viewerclassrooms'   element = { <ViewerClassRooms/> }/>  
+          <Route path = 'newclassroom'       element = { <NewClassRoom/>}/>
+          
+          <Route path = 'viewerinventory'    element = { <InventoryViewer/> }/> 
+          <Route path = 'newdeviceinventory' element = { <NewDeviceInventory/>}/>
+          
+          <Route path = 'serviceOrders'      element = { <ServiceOrdersViewer/>}/>
+          <Route path = "settings"           element = { <Settings/>}/>
         </Route>
       </Routes>  
       <ToastContainer/>
