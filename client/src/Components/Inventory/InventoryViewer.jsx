@@ -85,7 +85,7 @@ createTheme('solarized', {
     {
         name: 'SERIAL',
         selector: row => row.serial,
-        sorteable: true,
+        sortable: true,
     },
     {
       name: 'DEVICE',
@@ -100,12 +100,13 @@ createTheme('solarized', {
     {
       name: 'MODEL',
       selector: row => row.model,
-      
+      sortable: true,
       //wrap: true,
     },
     {
       name: 'UBICATION',
       selector: row => row.room,
+      sortable:true,
     },
     {
       name: 'STATUS',
@@ -119,7 +120,8 @@ createTheme('solarized', {
                                       }
                         > 
                           {row.status}  
-                        </Button>  
+                        </Button>  ,
+      sortable: true
     },
     {
       name: 'DELETE',
@@ -169,7 +171,7 @@ async function handleClickDelete() {
   //primero lo eliminamos de la base de datos
   
   try {
-    const response = await axios.delete(`${REACT_APP_API}/task/${currentRecord.id}`, {
+    const response = await axios.delete(`${REACT_APP_API}/inventory/code/${1}`, {
       headers: {
           "authorization": `Bearer ${userLogged.userToken}`,
       }
@@ -183,9 +185,6 @@ async function handleClickDelete() {
      } 
 
       if (response.data === 'RequestDeleted') {
-        //lo quitaremos del store
-        /* dispatch(deleteTask(currentRecord.id)); */
-        
         setShow(false);
         navigate('/home', { replace: true });
       }
@@ -247,10 +246,29 @@ let myData = {
   return (
     <Container className = "container-fluid py-5 mb-2" >
        <Link to='/dashboard/newdeviceinventory'>
-        <button>Add Inventory</button>  
+        <button className ="btn btn-primary mx-1">Add New Device</button>  
       </Link>
+      <Link to='/dashboard/exportinventory'>
+        <button className="btn btn-primary">Export Inventory</button>  
+      </Link>
+      
+      <div className="btn-group">
+        <button type="button" className="btn btn-primary ml-1">Filter By</button>
+        <button type="button" className="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span className="sr-only">Toggle Dropdown</span>
+        </button>
+        <div className="dropdown-menu">
+          <a className="dropdown-item" href="#">Device</a>
+          <a className="dropdown-item" href="#">Trade</a>
+          <a className="dropdown-item" href="#">Status</a>
+          <div className="dropdown-divider"></div>
+          <a className="dropdown-item" href="#">Floor</a>
+          <a className="dropdown-item" href="#">Campus</a>
+        </div>
+      </div>
+     
       <DataTable columns      = { columns }  
-                 data         = { DATA }  
+                 data         = { DATA }   
                  customStyles = {customStyles} 
                   /*  selecttableRows  */
                    fixedHeader 
@@ -261,7 +279,7 @@ let myData = {
 
       <Confirmation  
         titulo       = "Warning!"     
-        mensaje      = "Do you want Delete this Request?"   
+        mensaje      = "Do you want Delete this Device?"   
         textBtn      = "Delete"
         show         = { show }    
         handleClose  = { handleClose } 

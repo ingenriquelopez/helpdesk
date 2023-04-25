@@ -409,13 +409,12 @@ function FormResolve( {propNumber}) {
                            <Row className = "d-md-flex justify-content-center py-1">
                               <Col>
                                  
-                      <button className = {newDateReview ? "btn-info" : "btn-light"}
-                           onClick = { (e) => handleClickDateReview(e) } 
-
-                                 > 
-                                  {newDateReview ? moment(newDateReview).format("dddd DD/MMMM/YYYY"): 'Date...?' }
-                                  </button> 
-                                  {isOpenDR && (<DatePicker selected={newDateReview} onChange={ (date) => handleChangeDateReview(date)} inline />  )}  
+                                 <button className = {newDateReview ? "btn-info" : "btn-light"}
+                                       onClick = { (e) => handleClickDateReview(e) } 
+                                             > 
+                                             {newDateReview ? moment(newDateReview).format("dddd DD/MMMM/YYYY"): 'Date...?' }
+                                 </button> 
+                                             {isOpenDR && (<DatePicker selected={newDateReview} onChange={ (date) => handleChangeDateReview(date)} inline />  )}  
                               </Col>
                            </Row>
                         </Col> 
