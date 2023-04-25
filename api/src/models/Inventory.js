@@ -20,6 +20,9 @@ module.exports = (sequelize) => {
             model: {
                 type: DataTypes.STRING,
             },
+            color: {
+                type: DataTypes.STRING,
+            },
             room: {
                 type: DataTypes.STRING,
             },
@@ -40,8 +43,11 @@ module.exports = (sequelize) => {
             },
             checkedBy: {
                 type: DataTypes.STRING
-            }
+            },
+            lastRevision: {
+                type: DataTypes.DATE
+            },
             
-        }, {timestamps: false},
+        }, {timestamps: true},
     )
 }

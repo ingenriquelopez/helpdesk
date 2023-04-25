@@ -3,8 +3,28 @@
 const { Inventory } = require('../db.js');
 
 const postDeviceInventory = async (req,res) => {
-    
-    res.send('holi1')
+    const newDeviceToInventory = {
+        internalCode: req.body.internalCode ,
+        serial      : req.body.serial,
+        device      : req.body.device,
+        trade       : req.body.trade,
+        model       : req.body.model,
+        color       : req.body.color,
+        room        : req.body.room,
+        userDevice  : req.body.userDevice,
+        docRes      : req.body.docRes,
+        docCom      : req.body.docCom,
+        lastRevision: req.body.lastRevision,
+        note        : req.body.note,
+        checkedBy   : req.body.checkedBy,
+        status      : req.body.status,
+    }
+    try {
+        const response = await Inventory.create ( newDeviceToInventory );
+        return res.satus(200).send(response);
+    } catch (error) {
+        return res.send(error.message)
+    }
 }
 
 const putDeviceInventory = async (req,res) => {
@@ -12,7 +32,14 @@ const putDeviceInventory = async (req,res) => {
 }
 
 const getOneInventory = async (req,res) => {
-    return res.send('holi3')
+    const codeToSearch = req.params.internalCode;
+    try {
+        const response = await Inventory.findByPk(codeToSearch);
+        return res.send(response)
+    }  catch(error) {
+        console.log(error.message);
+        return res.send(error.message);
+    }
 }
 
 const getDeviceInventory = async (req,res) => {
