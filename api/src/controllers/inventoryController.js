@@ -1,6 +1,6 @@
 'use strict';
-
 const { Inventory } = require('../db.js');
+
 
 const postDeviceInventory = async (req,res) => {
     const newDeviceToInventory = {
@@ -27,9 +27,36 @@ const postDeviceInventory = async (req,res) => {
     }
 }
 
+
+
 const putDeviceInventory = async (req,res) => {
-    return res.send('holi2')
+        const internalCode = req.body.internalCode;
+        const trade       = req.body.trade;
+        const model       = req.body.model;
+        const color       = req.body.color;
+        const userDevice  = req.body.userDevice;
+        const docRes      = req.body.docRes;
+        const note        = req.body.note;
+    
+    try {
+        const response = await Inventory.update (
+            {
+                trade,       
+                model,      
+                color,      
+                userDevice,
+                docRes, 
+                note
+            }, { where : { internalCode } }
+        )    
+        return res.send(response);
+    } catch (error) {
+        return res.send(error.message);
+    }
+    
 }
+
+
 
 const getOneInventory = async (req,res) => {
     const codeToSearch = req.params.internalCode;
@@ -43,7 +70,9 @@ const getOneInventory = async (req,res) => {
 }
 
 const getDeviceInventory = async (req,res) => {
-    return res.send('holi4')
+
+
+    
 }
 
 const getAllInventory = async (req,res) => {
@@ -56,7 +85,19 @@ const getAllInventory = async (req,res) => {
 }
 
 const deleteDeviceInventory = async (req,res) => {
-    return res.send('holi5')
+    const internalCode = req.params.internalCode;
+    if (internalCode) {
+        try {
+            const response = await Inventory.destroy( 
+                { 
+                    where: { internalCode } 
+                }
+            )
+                return res(response);
+        } catch (error) {
+            return res.send(error.message);
+        }
+    }
 }
 
 const putStatusDeviceInventory = async (req,res) => {
