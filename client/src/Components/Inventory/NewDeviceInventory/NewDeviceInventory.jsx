@@ -270,7 +270,7 @@ function NewDeviceInventory() {
 
                     {/* ----SEGUNDA FILA  */}
                     <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
-                        <Col xxl = {2} xl = {2} lg = {3} md = {6} sm = {12} className = "text-center"> 
+                        <Col xxl = {2} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                            <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>Trade</Form.Label>
                                     <Form.Control 
@@ -281,7 +281,7 @@ function NewDeviceInventory() {
                                     />
                             </Form.Group>
                         </Col>
-                        <Col xxl = {2} xl = {2} lg = {3} md = {6} sm = {12} className = "text-center"> 
+                        <Col xxl = {2} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                             <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>Model</Form.Label>
                                     <Form.Control 
@@ -292,7 +292,7 @@ function NewDeviceInventory() {
                             </Form.Group>
                         </Col>
 
-                        <Col xxl = {2} xl = {2} lg = {3} md = {6} sm = {12} className = "text-center"> 
+                        <Col xxl = {2} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                             <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>Color</Form.Label>
                                     <Form.Control 
@@ -306,7 +306,7 @@ function NewDeviceInventory() {
     
                     {/* --- TERCERA FILA ---- */}
                     <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
-                        <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center"> 
+                        <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center"> 
                            <Form.Group className="mb-3 mx-auto" >
                               <Form.Label className="text-center">Room</Form.Label>
                               <Form.Select options = {listOfClassRooms} 
@@ -323,7 +323,7 @@ function NewDeviceInventory() {
                         </Col>
 
 
-                        <Col xxl = {2} xl = {2} lg = {3} md = {6} sm = {12} className = "text-center"> 
+                        <Col xxl = {2} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                             <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>level</Form.Label>
                                     <Form.Control 
@@ -334,7 +334,7 @@ function NewDeviceInventory() {
                             </Form.Group>
                         </Col>
 
-                        <Col xxl = {2} xl = {2} lg = {3} md = {6} sm = {12} className = "text-center"> 
+                        <Col xxl = {2} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                             <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>campus</Form.Label>
                                     <Form.Control 
@@ -348,7 +348,7 @@ function NewDeviceInventory() {
                         
                     {/* --- CUARTA FILA ---- */}
                     <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
-                        <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center"> 
+                        <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center"> 
                            <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>User Assigned</Form.Label>
                                     <Form.Control 
@@ -358,7 +358,7 @@ function NewDeviceInventory() {
                                     />
                             </Form.Group>
                         </Col>
-                        <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center"> 
+                        <Col xxl = {3} xl = {4} lg = {4} md = {8} sm = {12} className = "text-center"> 
                             <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>Document Responsability</Form.Label>
                                     <Form.Control 
@@ -369,7 +369,7 @@ function NewDeviceInventory() {
                             </Form.Group>
                         </Col>
 
-                        <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center"> 
+                        <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center"> 
                             <Form.Group className = "mb-3 mx-auto" >
                                     <Form.Label>Document Purchase</Form.Label>
                                     <Form.Control 
@@ -383,7 +383,7 @@ function NewDeviceInventory() {
 
                 {/* --- QUINTA  FILA ---- */}
                 <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
-                  <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center"> 
+                  <Col xxl = {3} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                      <Form.Group className = "mb-3 mx-auto" >                  
                         <button className = "btn btn-light" onClick = { (e) => handleClickDateReview(e) } > 
                            Date Last Revision ...
@@ -397,7 +397,7 @@ function NewDeviceInventory() {
                      </Form.Group>
                   </Col>
                   
-                  <Col xxl = {4} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center"> 
+                  <Col xxl = {4} xl = {4} lg = {4} md = {12} sm = {12} className = "text-center"> 
                      <Form.Group className = "mb-3 mx-auto" >
                         <Form.Label>Notes</Form.Label>
                         <Form.Control 
@@ -409,7 +409,7 @@ function NewDeviceInventory() {
                       </Form.Group>
                   </Col>
 
-                  <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {8} className = "text-center"> 
+                  <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center"> 
                      <Form.Group className = "mb-3 mx-auto" >
                         <Form.Label>Checked By</Form.Label>
                         <Form.Control 

@@ -1,25 +1,25 @@
-import React, { useEffect, useState }     from 'react'
-import {Link} from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate }     from 'react-router-dom';
-import { useLocalStorage } from '../../js/useLocalStorage';
+import React, { useEffect, useState }  from 'react'
+import {Link}                          from 'react-router-dom';
+import { useSelector, useDispatch }    from 'react-redux';
+import { useNavigate }                 from 'react-router-dom';
+import { useLocalStorage }             from '../../js/useLocalStorage';
 import './InventoryViewer.css';
 
 import DataTable, { createTheme } from 'react-data-table-component';
-import Container from 'react-bootstrap/Container';
-import Button        from 'react-bootstrap/Button';
-import { FcCancel }  from "react-icons/fc";
-import { BiEditAlt } from "react-icons/bi";
-import Confirmation from '../Alerts/Confirmation/Confirmation';
-import Annoument     from '../Alerts/Annoument/Annoument';
-/* import EditFormTask  from './EditFormTask/EditFormTask'; */
-import moment        from 'moment';
+import Container                  from 'react-bootstrap/Container';
+import Button                     from 'react-bootstrap/Button';
+import { FcCancel }               from "react-icons/fc";
+import { BiEditAlt }              from "react-icons/bi";
+import Confirmation               from '../Alerts/Confirmation/Confirmation';
+import Annoument                  from '../Alerts/Annoument/Annoument';
+ import EditFormInventory         from './EditFormInventory/EditFormInventory';
+import moment                     from 'moment';
+import { tostada_W }              from '../../utils/Tostadas';
+import axios                      from 'axios';
 
 import { loadAllInventory, loadInventory } from '../../redux/inventory/inventoryReducer';
-import { createListClassRooms } from '../../redux/classRooms/classRoomsReducer';
+import { createListClassRooms }            from '../../redux/classRooms/classRoomsReducer';
 /* import { deleteTask }      from '../../redux/tasks/tasksReducer'; */
-import { tostada_W } from '../../utils/Tostadas';
-import axios         from 'axios';
 
 
 const {REACT_APP_API} = process.env;
@@ -169,9 +169,8 @@ const DATA = listOfInventory;
 
 async function handleClickDelete() { 
   //primero lo eliminamos de la base de datos
-  
   try {
-    const response = await axios.delete(`${REACT_APP_API}/inventory/code/${1}`, {
+    const response = await axios.delete(`${REACT_APP_API}/inventory/code/${currentRecord.internalCode}`, {
       headers: {
           "authorization": `Bearer ${userLogged.userToken}`,
       }
@@ -231,15 +230,22 @@ const handleResolve =(row)=> {
 }
 
 let myData = {
-  id        : currentRecord.id,
-  number    : currentRecord.number,
-  dateTask  : currentRecord.dateTask,    
-  classRoom : currentRecord.classRoom,
-  level     : currentRecord.level,
-  gyg       : currentRecord.gyg,
-  teacher   : currentRecord.teacher,
-  device    : currentRecord.device,
-  problem   : currentRecord.problem
+  internalCode  : currentRecord.internalCode,
+  serial        : currentRecord.serial,
+  device        : currentRecord.device,
+  trade         : currentRecord.trade,
+  model         : currentRecord.model,
+  color         : currentRecord.color,
+  room          : currentRecord.room,
+  level         : currentRecord.level,
+  campus        : currentRecord.campus,
+  userDevice    : currentRecord.userDevice,
+  docRes        : currentRecord.docRes,
+  docPur        : currentRecord.docPur, 
+  lastRevision  : currentRecord.lastRevision,
+  note          : currentRecord.note,
+  checkedBy     : currentRecord.checkedBy,
+  status        : currentRecord.statusDefault,
 }
 
 
@@ -290,13 +296,13 @@ let myData = {
                     smShow        = { smShow }  
                     handleSmClose = { handleSmClose }
       /> 
-  {/*     <EditFormTask myTitle        = "Edit Request" 
+       <EditFormInventory myTitle        = "Edit Device" 
                     myData         = { currentRecord }    
                     lgShow         = { lgShow }             
                     handleLgClose  = { handleLgClose }     
                     handleLgUpdate = { handleLgUpdate }
       />
-   */}  </Container>    
+     </Container>    
   );
 }
 
