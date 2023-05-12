@@ -1,7 +1,7 @@
 {
-  "name": "client",
   "version": "0.1.0",
   "private": true,
+  "main": "snippet.html",
   "dependencies": {
     "@auth0/auth0-react": "^2.0.0",
     "@reduxjs/toolkit": "^1.9.1",
@@ -17,6 +17,7 @@
     "jspdf": "^2.5.1",
     "moment": "^2.29.4",
     "nodemon": "^2.0.20",
+    "nw": "~0.66.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-chartjs-2": "^4.3.1",
@@ -24,6 +25,7 @@
     "react-datepicker": "^4.8.0",
     "react-devtools": "^4.26.1",
     "react-dom": "^18.2.0",
+    "react-export-excel": "^0.5.3",
     "react-icons": "^4.6.0",
     "react-redux": "^8.0.5",
     "react-router": "^6.4.3",

@@ -19,6 +19,12 @@ import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-toastify/dist/ReactToastify.css";
+import HomeTrainings from "./Pages/HomeTrainings/HomeTrainings";
+import NewTraining from "./Components/Trainings/NewTraining/NewTraining";
+import ViewerTrainings from './Components/Trainings/ViewerTrainings/ViewerTrainings';
+import NewEmployee from "./Components/Employees/NewEmployee/NewEmployee";
+import ViewerEmployees from './Components/Employees/ViewerEmployees/ViewerEmployees';
+
 
 
 function App() {
@@ -30,7 +36,14 @@ function App() {
         <Route path = '/home'        element = { <Home/> } />
         <Route path = '/newtask'     element = { <NewTask/> }/>
         <Route path = '/homeresolve/:number' element = { <HomeResolve/>}/>
-          
+
+        <Route path  = '/trainings/'          element  = { <HomeTrainings/> }>
+          <Route path = 'viewertrainings'        element = { <ViewerTrainings/> }/>  
+          <Route path = 'newtraining'            element = { <NewTraining/>  }/>
+          <Route path = 'newemployee'            element = { <NewEmployee/> }/>
+          <Route path = 'vieweremployees'        element = { <ViewerEmployees/> }/>  
+        </Route>
+
         <Route path  = 'dashboard/'          element  = { <DashBoard/> }>
           <Route path = 'viewerusers'        element = { <ViewerUsers/> }/>  
           <Route path = 'newuser'            element = { <NewUser/>  }/>

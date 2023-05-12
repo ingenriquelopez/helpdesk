@@ -16,10 +16,8 @@ export default function NavBarHD( { buttonEnabled }) {
   return (    
     <nav className="navbar fixed-top navbar-light gradientNavBar">
         <div className="container-fluid">
-          
           <div>
             <ButtonBack enabled = {buttonEnabled}/>
-            
           </div>
           {
                 (listCR.length > 0) 
@@ -35,25 +33,15 @@ export default function NavBarHD( { buttonEnabled }) {
                     <NavLink className = "dropdown-item" to='/querys'> Querys </NavLink>  
                   </NavDropdown>
                 : null
-              }
-              
-         
-          {
-            (userLogged.typeUser.includes('Admin') || userLogged.typeUser.includes('superAdmin'))
-           ? 
-          <NavDropdown
-              id = "styleLinks"
-              title="Events"
-              menuVariant="light"
-            >
-              <NavDropdown.Item href="#action/3.2">Reserve</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.1">EventsViewer</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Cancel</NavDropdown.Item>
-          </NavDropdown>
-          : null
           }
-          
+
+          {
+              (userLogged.typeUser.includes('Admin') || userLogged.typeUser.includes('superAdmin') ||  userLogged.typeUser.includes('superUser'))
+              ?
+                (<Link className = "navbar-brand fs-6" to = "/trainings" id = "styleLinks">Trainings <i className='bx bxs-right-arrow-alt bx-fade-right-hover'></i></Link>)
+                : null    
+            }  
+        
           {
               (userLogged.typeUser.includes('Admin') || userLogged.typeUser.includes('superAdmin'))
               ?

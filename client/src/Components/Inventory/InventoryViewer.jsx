@@ -7,20 +7,24 @@ import './InventoryViewer.css';
 
 import DataTable, { createTheme } from 'react-data-table-component';
 import Container                  from 'react-bootstrap/Container';
+import Form                       from 'react-bootstrap/Form';
 import Button                     from 'react-bootstrap/Button';
+import Row                        from 'react-bootstrap/Row';
+import Col                        from 'react-bootstrap/Col';
+
 import { FcCancel }               from "react-icons/fc";
 import { BiEditAlt }              from "react-icons/bi";
 import Confirmation               from '../Alerts/Confirmation/Confirmation';
 import Annoument                  from '../Alerts/Annoument/Annoument';
  import EditFormInventory         from './EditFormInventory/EditFormInventory';
-import moment                     from 'moment';
+
 import { tostada_W }              from '../../utils/Tostadas';
 import axios                      from 'axios';
 
 import { loadAllInventory, loadInventory } from '../../redux/inventory/inventoryReducer';
 import { createListClassRooms }            from '../../redux/classRooms/classRoomsReducer';
-/* import { deleteTask }      from '../../redux/tasks/tasksReducer'; */
 
+import ExportToXLS from '../ExportToXLS/ExportToXLS';
 
 const {REACT_APP_API} = process.env;
 
@@ -36,6 +40,8 @@ function InventoryViewer() {
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
   const [currentRecord, setcurrentRecord] = useState('');
+
+
 
 //styles of datatables
 const customStyles = {
@@ -152,6 +158,9 @@ createTheme('solarized', {
     }
 ];
 
+
+
+
 const DATA = listOfInventory;
 
   useEffect(() => {
@@ -224,6 +233,7 @@ const handleShowEdit  = (row) => {
   setLgShow(true);   
 };
 
+
   
 const handleResolve =(row)=> {
   navigate(`/homeresolve/${row.number}`);
@@ -250,28 +260,21 @@ let myData = {
 
 
   return (
-    <Container className = "container-fluid py-5 mb-2" >
-       <Link to='/dashboard/newdeviceinventory'>
-        <button className ="btn btn-primary mx-1">Add New Device</button>  
-      </Link>
-      <Link to='/dashboard/exportinventory'>
-        <button className="btn btn-primary">Export Inventory</button>  
-      </Link>
+    <Container className = "container-fluid py-5 mb-2">
+      <Row>
+        <Col xxl = {3} xl = {3} lg = {4} md = {6} sm = {12} className = "text-center"> 
+          <Link to='/dashboard/newdeviceinventory'>
+            <button className ="btn btn-primary mx-1">Add New Device</button>  
+          </Link>
+        </Col>
+
+        <Col xxl = {3} xl = {3} lg = {4} md = {6} sm = {12} className = "text-center"> 
+            <ExportToXLS DATA = {DATA}/>
+        </Col>
+
+      </Row>
+    
       
-      <div className="btn-group">
-        <button type="button" className="btn btn-primary ml-1">Filter By</button>
-        <button type="button" className="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span className="sr-only">Toggle Dropdown</span>
-        </button>
-        <div className="dropdown-menu">
-          <a className="dropdown-item" href="#">Device</a>
-          <a className="dropdown-item" href="#">Trade</a>
-          <a className="dropdown-item" href="#">Status</a>
-          <div className="dropdown-divider"></div>
-          <a className="dropdown-item" href="#">Floor</a>
-          <a className="dropdown-item" href="#">Campus</a>
-        </div>
-      </div>
      
       <DataTable columns      = { columns }  
                  data         = { DATA }   
@@ -281,6 +284,7 @@ let myData = {
                    pagination 
                    striped
                    /* theme="solarized" */
+                   id = "tablaDeInventario"
       />
 
       <Confirmation  

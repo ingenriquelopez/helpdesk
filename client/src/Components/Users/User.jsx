@@ -73,6 +73,7 @@ export default function User( {u}) {
   const handleLgClose =()=> {
     setLgShow(false);
   }
+  
   const handleLgUpdate = ()=> {
     setLgShow(false);
     window.location.replace('/dashboard/viewerusers');
