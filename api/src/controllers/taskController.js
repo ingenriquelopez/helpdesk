@@ -1,5 +1,4 @@
 const { Task } = require('../db.js');
-const { op } = require('sequelize');
 
 const postTask = async (req,res) => {
     const newTask = { 

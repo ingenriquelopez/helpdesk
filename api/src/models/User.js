@@ -4,7 +4,7 @@ module.exports = (sequelize) => {
         "User",
         {
             userName: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(48),
             },
             email: {
                 type: DataTypes.STRING(50),

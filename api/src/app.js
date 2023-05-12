@@ -2,7 +2,6 @@ const cors         = require('cors');
 const express      = require('express');
 const fileUpload   = require('express-fileupload')
 
-
 const taskRouter                = require('./routes/tasksRouter');
 const userRouter                = require('./routes/usersRouter');
 const classRoomRouter           = require('./routes/classRoomsRouter');
@@ -10,8 +9,11 @@ const configServiceOrderRouter  = require('./routes/configServiceOrderRouter');
 const servicesRouter            = require('./routes/servicesRouter');
 const filesRouter               = require('./routes/filesRouter');
 const inventoryRouter           = require('./routes/inventoryRouter');
+const trainingRouter            = require('./routes/trainingRouter');
+const employeesRouter            = require('./routes/employeesRouter');
 
 const server = express();
+
 server.use(cors());
 server.use(express.json());
 server.use(fileUpload( {
@@ -27,5 +29,8 @@ server.use('/services',servicesRouter);
 
 server.use('/configServiceOrder',configServiceOrderRouter);
 server.use('/serviceUpload',filesRouter);
+
+server.use('/trainings',trainingRouter);
+server.use('/employees',employeesRouter);
 
 module.exports = server;

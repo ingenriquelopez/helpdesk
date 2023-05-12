@@ -18,7 +18,7 @@ const loginByEmail = async(req,res)=> {
         const response = await User.findOne( { 
             where: { email : email_user}
         });
-        if (response)  return  res.status(201).send(response);
+        if (response)  return  res.status(200).send(response);
         else 
             res.send('Email not found');
     } catch(error) { res.send( { message: error.message })}

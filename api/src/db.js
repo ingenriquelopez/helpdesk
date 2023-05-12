@@ -8,6 +8,8 @@ const modelClassRoom          = require('./models/ClassRoom.js');
 const modelService            = require('./models/Service');
 const modelInventory          = require('./models/Inventory.js');
 const modelConfigServiceOrder = require('./models/ConfigServiceOrder');
+const modelTraning            = require('./models/Training.js');
+const modelEmployees           = require('./models/Employees.js');
 
 
 const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, 
@@ -34,11 +36,13 @@ modelClassRoom(sequelize);
 modelService(sequelize);
 modelInventory(sequelize);
 modelConfigServiceOrder(sequelize);
-const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder } = sequelize.models;
+modelTraning(sequelize);
+modelEmployees(sequelize);
+const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder , Training, Employees} = sequelize.models;
 //-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*----*
 
 
 module.exports = {
-  Task,User,ClassRoom,Service, Inventory, ConfigServiceOrder,
+  Task,User,ClassRoom,Service, Inventory, ConfigServiceOrder,Training,Employees,
   db: sequelize,
 }
