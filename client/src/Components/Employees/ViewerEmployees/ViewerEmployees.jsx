@@ -15,7 +15,7 @@ import { BiEditAlt } from "react-icons/bi";
 import Confirmation  from '../../Alerts/Confirmation/Confirmation';
 import Annoument     from '../../Alerts/Annoument/Annoument';
 
-import {loadAllEmployees, deleteEmployee} from '../../../redux/employees/employeesReducer';
+/* import {loadAllEmployees, deleteEmployee} from '../../../redux/employees/employeesReducer'; */
 
 import axios from 'axios';
 /* import EditFormTraining from '../EditFormTraining/EditFormTraining'; */
@@ -34,7 +34,7 @@ function ViewerEmployees() {
 
     const navigate= useNavigate();
     const dispatch  = useDispatch();
-    const { listOfEmployees } = useSelector( state=> state.employees);
+    /* const { listOfEmployees } = useSelector( state=> state.employees); */
 
     const [userLogged, setUserLogged] = useLocalStorage('userLogged');
     const [listEmployees, setListEmployees] = useState(null);
@@ -161,6 +161,7 @@ createTheme('solarized', {
             "authorization": `Bearer ${userLogged.userToken}`,
         }
         });
+
         if (response) {
           if (response.data.message==='El token NO es valido!') {
              navigate('/login' );    
@@ -184,12 +185,11 @@ createTheme('solarized', {
     //primero lo eliminamos de la base de datos
     
     try {
-      const response = await axios.delete(`${REACT_APP_API}/employees/${currentRecord.numEmployee}`, {
+      const response = await axios.delete(`${REACT_APP_API}/employees/${currentRecord.email}`, {
         headers: {
             "authorization": `Bearer ${userLogged.userToken}`,
         }
       });
-      console.log(response)
       
       if (response.status === 200) {
         if (response.data.message==='El token NO es valido!') {
@@ -198,12 +198,10 @@ createTheme('solarized', {
           return
        } 
   
-        if (response.data === 'EmployeeDeleted') {
-          //lo quitaremos del store
-          dispatch(deleteEmployee(currentRecord.numEmployee));
-          
+        if (response.data === 'Employee Deleted') {
           setShow(false);
-          navigate('/trainings', { replace: true });
+          window.location.reload();
+          navigate('/trainings/vieweremployees', { replace: true });
         }
       }
     } catch (error) {
@@ -245,16 +243,13 @@ const handleLgUpdate = ()=> {
 }
 
 //----------------------------------------------------------
-const DATA = listOfEmployees;
+
   useEffect(()=> {  
     getAllEmployees();
   },[])
 
-  useEffect(() => {
-    dispatch(loadAllEmployees());
-},[listOfEmployees]);
-
-
+  const DATA = listEmployees;  
+  
   return (
     <Container className = "container-fluid py-5">
         <motion.div 
@@ -269,7 +264,7 @@ const DATA = listOfEmployees;
                 }} 
             >
        <DataTable columns      = { columns }  
-                 data         = { DATA }  
+                  data         = { DATA ? DATA:'' }   
                  customStyles = {customStyles} 
                   /*  selecttableRows  */
                    fixedHeader 

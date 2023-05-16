@@ -10,7 +10,6 @@ import Modal     from 'react-bootstrap/Modal'
 import { Container } from 'react-bootstrap';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 import { tostada_W } from '../../../utils/Tostadas';
-import {updateTraining} from '../../../redux/trainings/trainingsReducer';
 
 import axios from 'axios';
 import moment        from 'moment';
@@ -21,9 +20,9 @@ const {REACT_APP_API} = process.env;
 const LEVELS = ['PreSchool','Elementary','HighSchool','College', 'Global'];
 
 
-export default function EditFormTraining( {myTitle,myData,lgShow, handleLgClose, handleLgUpdate}) {
-    const dispatch = useDispatch();
-  const navigate= useNavigate();
+export default function EditFormTraining( {myTitle,myData,lgShow, handleLgClose, handleLgUpdateTraining}) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   
   const [newTraining,setNewTraining]            = useState(myData.training);
   const [newSpeaker, setNewSpeaker]             = useState(myData.speaker);
@@ -43,32 +42,24 @@ export default function EditFormTraining( {myTitle,myData,lgShow, handleLgClose,
       training     : newTraining,
       speaker      : newSpeaker,
       level        : newLevel,
-      dateTraining : newDateTraining,
+      dateTraining : newDateTraining, 
       mode         : newMode,
     }
-    console.log(dataToChange)
-
     try {
-      const response = await axios.put(`${REACT_APP_API}/trainings`,dataToChange, {
+       const response = await axios.put(`${REACT_APP_API}/trainings`,dataToChange, {
         headers: {
             "authorization": `Bearer ${userLogged.userToken}`,
         }
         }
-      );
+      ); 
       if (response) {
         if (response.data.message==='El token NO es valido!') {
           navigate('/login' );    
           tostada_W(response.data.message,"top-center",1500,'dark');
           return
         }
-
-        try {
-          dispatch(updateTraining(dataToChange));  
-        } catch (error) {
-          console.log(error.message);
-        }
       }
-      handleLgUpdate();
+      handleLgUpdateTraining();
     } catch(error) {
       console.log(error.message);
     }   
@@ -81,7 +72,7 @@ export default function EditFormTraining( {myTitle,myData,lgShow, handleLgClose,
 
   function handleSpeaker(e) {  
     let nt = e.target.value;
-    setNewTraining(nt);
+    setNewSpeaker(nt);
  }
 
  function handleLevel(e) {  
@@ -94,9 +85,10 @@ export default function EditFormTraining( {myTitle,myData,lgShow, handleLgClose,
     e.preventDefault();
     setIsOpenDR(!isOpenDR);
   }
-  const handleChangeDateTraining   = (date) => {
+  const handleChangeDateTraining   = (e) => {
     setIsOpenDR(!isOpenDR);
-    setTxtDateTraining(date);
+    setTxtDateTraining(e);
+    setNewDateTraining(e);
   };
 
  function handleMode(e) {  
@@ -135,32 +127,37 @@ export default function EditFormTraining( {myTitle,myData,lgShow, handleLgClose,
       <Modal.Body>
         <Container className = "container-fluid py-3">
             <Form>
+
                 <Row className = "d-grid- d-md-flex justify-content-center">
-                    <Col md = {12} className = "text-center">
+                  
+                      <Col md = {12} className = "text-center">
                         <Form.Group className="mb-3 mx-auto" >
                             <Form.Label >TRAINING</Form.Label>
-                            <Form.Control 
+                            * <Form.Control 
                                 type         = "text" 
                                 name         = "training" 
-                                value        = {newTraining} 
-                                onChange     = { ev=> setNewTraining(ev.target.value)}  
-                            />
+                                defaultValue        = {newTraining} 
+                                onChange     = { ev=> handleTraining(ev)}  
+                            /> 
                         </Form.Group>
-                    </Col>
+                    </Col>  
                 </Row>
+
                 <Row className = "d-grid- d-md-flex justify-content-between">
-                    <Col md ={12} className = "text-center">
+
+                      <Col md ={12} className = "text-center">
                         <Form.Group className="mb-3 mx-auto">
                             <Form.Label>SPEAKER</Form.Label>
-                            <Form.Control 
+                              <Form.Control 
                                 type         = "text" 
                                 name         = "speaker" 
-                                value        = {newSpeaker} 
-                                onChange     = { ev=> setNewSpeaker(ev.target.value)}  
-                            />
+                                defaultValue = {newSpeaker} 
+                                onChange     = { ev=> handleSpeaker(ev) }  
+                            /> 
                         </Form.Group>
-                    </Col >    
-                    <Col md = {6} className = "text-center">
+                    </Col >     
+
+                     <Col md = {6} className = "text-center">
                         <Form.Group className   = "mb-3 mx-auto ">             
                         <Form.Label className = "text-center">LEVEL</Form.Label>
                         <Form.Select defaultValue="Choose Level..." onChange ={ (e)=> handleLevel(e)}>
@@ -188,14 +185,15 @@ export default function EditFormTraining( {myTitle,myData,lgShow, handleLgClose,
                                 <option>OnLine</option>
                             </Form.Select>
                         </Form.Group>
-                    </Col>
+                    </Col> 
+
                 </Row>
                 <Row>
                     
                     <Col md = {12} className = "text-center">
-                        
-                            <Form.Label className = "mb-3">DATE TRAINING</Form.Label>
+                      <Form.Label className = "mb-3">DATE TRAINING</Form.Label>
                     </Col>
+                    
                     <Col md = {12} className = "text-center">
                         <button className = {txtdateTraining ? "btn-info" : "btn-light"}
                                             onClick = { (e) => handleClickDateTraining(e) } 

@@ -15,7 +15,7 @@ import { BiEditAlt } from "react-icons/bi";
 import Confirmation from '../../Alerts/Confirmation/Confirmation';
 import Annoument from '../../Alerts/Annoument/Annoument';
 
-import {loadAllTrainings,deleteTraining} from '../../../redux/trainings/trainingsReducer';
+/* import {loadAllTrainings,deleteTraining} from '../../../redux/trainings/trainingsReducer'; */
 
 import axios from 'axios';
 import moment        from 'moment';
@@ -34,9 +34,7 @@ const animations = {
 function ViewerTrainings() {
 
     const navigate= useNavigate();
-    const dispatch  = useDispatch();
-    const { listOfTrainings } = useSelector( state=> state.trainings);
-
+    
     const [userLogged, setUserLogged] = useLocalStorage('userLogged');
     const [listTrainings, setListTrainings] = useState(null);
 
@@ -163,7 +161,6 @@ createTheme('solarized', {
              return
           } 
         }
-
       const { data } = response;
       
       if (data) {
@@ -191,13 +188,13 @@ createTheme('solarized', {
           tostada_W(response.data.message,"top-center",1500,'dark');
           return
        } 
-  
+
+       console.log(response)
+
         if (response.data === 'TrainingDeleted') {
-          //lo quitaremos del store
-          dispatch(deleteTraining(currentRecord.id));
-          
           setShow(false);
-          navigate('/home', { replace: true });
+          window.location.reload();
+          navigate('/trainings', { replace: true });
         }
       }
     } catch (error) {
@@ -234,37 +231,35 @@ const handleLgClose =()=> {
   setLgShow(false);
 }
 
-const handleLgUpdate = ()=> {
+const handleLgUpdateTraining = ()=> {
   setLgShow(false);
+  window.location.reload();
+  navigate('/trainings', { replace: true });
 }
 
 //----------------------------------------------------------
-const DATA = listOfTrainings;
+const DATA = listTrainings;
   useEffect(()=> {  
     getAllTrainings();
   },[])
-
-  useEffect(() => {
-    dispatch(loadAllTrainings(userLogged.levelUser));
-},[listOfTrainings]);
 
 
   return (
     <Container className = "container-fluid py-5">
         <motion.div 
-                variants={animations} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit" 
-                transition={{ 
+                variants   = {animations} 
+                initial    = "initial" 
+                animate    = "animate" 
+                exit       = "exit" 
+                transition = {{ 
                     duration : 0.3,
                     ease: "easeInOut",
                     delay: 0.3,
                 }} 
             >
        <DataTable columns      = { columns }  
-                 data         = { DATA }  
-                 customStyles = {customStyles} 
+                 data          = { DATA ? DATA:'' }  
+                 customStyles  = {customStyles} 
                   /*  selecttableRows  */
                    fixedHeader 
                    pagination 
@@ -289,7 +284,7 @@ const DATA = listOfTrainings;
                     myData         = { currentRecord }    
                     lgShow         = { lgShow }             
                     handleLgClose  = { handleLgClose }     
-                    handleLgUpdate = { handleLgUpdate }
+                    handleLgUpdateTraining = { handleLgUpdateTraining }
       /> 
       </motion.div>
   </Container>    

@@ -53,7 +53,6 @@ export default function EditFormTask( {myTitle,myData,lgShow, handleLgClose, han
           tostada_W(response.data.message,"top-center",1500,'dark');
           return
         }
-
         try {
           dispatch(updateTask(dataToChange));  
         } catch (error) {

@@ -114,7 +114,6 @@ function NewTraining() {
                  }
 
                 newTraining.dateTraning = newTraining.dateTraining.toJSON();
-                /* dispatch(addTraining(newTraning)); */
             }
           } catch (error) {
                 console.log(error.message);

@@ -1,3 +1,7 @@
+//ESTE REDUCER YA NO SE ESTA USANDO
+//PERO SE DEJA POR SI SE DESEA USAR MAS ADELANTE EN EL TRASCURSO DEL PROYEXCTO
+//SINO AL COBCLUIR YA SE PUEDE ELIMINAR
+
 import { createSlice } from '@reduxjs/toolkit';
 import axios from "axios";
 const {REACT_APP_API} = process.env;
