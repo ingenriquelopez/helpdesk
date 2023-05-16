@@ -50,8 +50,6 @@ const postEmployees = async (req,res) => {
 const getEmployees = async(req,res)=> {
     try {
         const employee = await Employees.findAll(); 
-        console.log(employee)
-
         return res.status(200).send(employee);
     } catch (error) {
         return res.send(error.message);
@@ -61,9 +59,11 @@ const getEmployees = async(req,res)=> {
 const deleteEmployees = async(req,res)=> {
     const email_employee = req.params.email;
     try {
-        const response = await Employees.destroy( {
-            where: {email: email_employee}, force: true
-        });
+        const response = await Employees.destroy( 
+            { 
+                where: {email: email_employee}, force: true
+            }
+        );
         return res.status(200).send('Employee Deleted');
     } catch (error) {
         return res.send(error.message);

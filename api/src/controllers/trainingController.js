@@ -26,7 +26,7 @@ const deleteTraining = async(req, res)=> {
         const training = await Training.destroy(
             {where : {id:id}, force:true}
         )
-        return res.status(200).send('TraningDeleted');
+        return res.status(200).send('TrainingDeleted');
     } catch (error) {
         return res.send(error.message);
     }
@@ -54,16 +54,18 @@ const putTraining = async(req, res)=> {
         dateTraining,
         mode,
     } = req.body;
-
+    
+    console.log(newTraining);
 
     try {
         const training = await Training.update (
            newTraining,{ where: {id}}
         );
-        return res.status(200)
+        return res.status(200).send("Update-Successful");
 
     } catch (error) {
         console.log(error.message);
+        return res.send(error.message);
     }
 }
 

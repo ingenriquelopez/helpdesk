@@ -2,7 +2,7 @@ const {Router } = require('express');
 const taskRouter = Router();
 
 const { postTask, getTasks, deleteTask, putTask, getTask , putStatus, getStatus} = require('../controllers/taskController.js');
-const { createToken, verifyToken } = require('../auth/auth.js');
+const { verifyToken } = require('../auth/auth.js');
 
 
 taskRouter.get('/:levelReq',getTasks);
