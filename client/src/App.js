@@ -24,6 +24,7 @@ import NewTraining from "./Components/Trainings/NewTraining/NewTraining";
 import ViewerTrainings from './Components/Trainings/ViewerTrainings/ViewerTrainings';
 import NewEmployee from "./Components/Employees/NewEmployee/NewEmployee";
 import ViewerEmployees from './Components/Employees/ViewerEmployees/ViewerEmployees';
+import RecordAttendance from "./Components/Trainings/RecordAttendance/RecordAttendance";
 
 
 
@@ -38,8 +39,10 @@ function App() {
         <Route path = '/homeresolve/:number' element = { <HomeResolve/>}/>
 
         <Route path  = '/trainings/'          element  = { <HomeTrainings/> }>
-          <Route path = 'viewertrainings'        element = { <ViewerTrainings/> }/>  
-          <Route path = 'newtraining'            element = { <NewTraining/>  }/>
+          <Route path = 'newtraining'            element = { <NewTraining/>  }/>  
+          <Route path = 'viewertrainings'         element = { <ViewerTrainings/> }/>  
+          <Route path = 'recordattendance'        element = { <RecordAttendance/> }/>  
+          
           <Route path = 'newemployee'            element = { <NewEmployee/> }/>
           <Route path = 'vieweremployees'        element = { <ViewerEmployees/> }/>  
         </Route>

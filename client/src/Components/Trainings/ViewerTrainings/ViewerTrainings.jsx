@@ -5,7 +5,6 @@ import { motion } from 'framer-motion/dist/framer-motion';
 
 import { useLocalStorage } from '../../../js/useLocalStorage';
 import { tostada_W } from '../../../utils/Tostadas';
-import Training from '../Training/Training';
 import DataTable, { createTheme } from 'react-data-table-component';
 
 import Container     from 'react-bootstrap/Container';
@@ -14,8 +13,6 @@ import { FcCancel }  from "react-icons/fc";
 import { BiEditAlt } from "react-icons/bi";
 import Confirmation from '../../Alerts/Confirmation/Confirmation';
 import Annoument from '../../Alerts/Annoument/Annoument';
-
-/* import {loadAllTrainings,deleteTraining} from '../../../redux/trainings/trainingsReducer'; */
 
 import axios from 'axios';
 import moment        from 'moment';
