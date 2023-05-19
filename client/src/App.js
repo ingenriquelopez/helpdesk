@@ -25,6 +25,7 @@ import ViewerTrainings from './Components/Trainings/ViewerTrainings/ViewerTraini
 import NewEmployee from "./Components/Employees/NewEmployee/NewEmployee";
 import ViewerEmployees from './Components/Employees/ViewerEmployees/ViewerEmployees';
 import RecordAttendance from "./Components/Trainings/RecordAttendance/RecordAttendance";
+import AttendanceEmployee from "./Components/Trainings/AttendanceEmployee/AttendanceEmployee";
 
 
 
@@ -40,8 +41,9 @@ function App() {
 
         <Route path  = '/trainings/'          element  = { <HomeTrainings/> }>
           <Route path = 'newtraining'            element = { <NewTraining/>  }/>  
-          <Route path = 'viewertrainings'         element = { <ViewerTrainings/> }/>  
-          <Route path = 'recordattendance'        element = { <RecordAttendance/> }/>  
+          <Route path = 'viewertrainings'        element = { <ViewerTrainings/> }/>  
+          <Route path = 'recordattendance'       element = { <RecordAttendance/> }/>  
+          <Route path = "attendanceemployee/:idt"     element =  { <AttendanceEmployee/>}/> 
           
           <Route path = 'newemployee'            element = { <NewEmployee/> }/>
           <Route path = 'vieweremployees'        element = { <ViewerEmployees/> }/>  

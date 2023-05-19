@@ -1,6 +1,6 @@
 import React, { useEffect, useState }     from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate  }     from 'react-router-dom';
+import { useNavigate, NavLink  }     from 'react-router-dom';
 import { motion } from 'framer-motion/dist/framer-motion';
 
 import { useLocalStorage } from '../../../js/useLocalStorage';
@@ -18,6 +18,7 @@ import moment        from 'moment';
 import './RecordAttendance.css';
 
 import EditFormTraining from '../EditFormTraining/EditFormTraining';
+import AttedanceEmployee from '../AttendanceEmployee/AttendanceEmployee';
 
 
 const {REACT_APP_API} = process.env;
@@ -105,13 +106,15 @@ createTheme('solarized', {
       name  : 'ATTENDANCE',
       width : "10rem",
       cell  : (row) =>(
-                      <Button className = 'btn-sm' id = "btn_register"
-                        disabled  = { userLogged.typeUser === 'User' ? true: false }
-                        
-                        variant   = "success"
-                        onClick   = { ()=>handleShowPreview(row) } 
-                      >Register Attendance
-                      </Button>
+                      <NavLink to = {`/trainings/attendanceemployee/${row.id}`}>
+                          <Button className = 'btn-sm' id = "btn_register"
+                                  disabled  = { userLogged.typeUser === 'User' ? true: false }
+                                  variant   = "success"
+                                  onClick   = { ()=>handleShowPreview(row) } 
+                            >Record Attendance
+                          </Button>
+                      </NavLink>
+                      
                    )
     },
 ];
@@ -204,13 +207,7 @@ const DATA = listTrainings;
                       theme="solarized" 
           />
           
-          <EditFormTraining
-                        myTitle        = "Edit Training" 
-                        myData         = { currentRecord }    
-                        lgShow         = { lgShow }             
-                        handleLgClose  = { handleLgClose }     
-                        handleLgUpdateTraining = { handleLgUpdateTraining }
-          /> 
+          
           </motion.div>
 
 
