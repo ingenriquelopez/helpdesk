@@ -3,7 +3,7 @@ const trainingRouter = Router();
 const { verifyToken } = require('../auth/auth.js');
 const { postTraining, deleteTraining, getTraining, getTrainings, putTraining} = require('../controllers/trainingController.js');
 
-trainingRouter.use( verifyToken ); 
+trainingRouter.use( verifyToken );   
 
 trainingRouter.post('/',postTraining);
 trainingRouter.put('/',putTraining);

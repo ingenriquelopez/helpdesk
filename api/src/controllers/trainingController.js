@@ -33,7 +33,13 @@ const deleteTraining = async(req, res)=> {
 }
 
 const getTraining = async(req, res)=> {
-
+    const {id} = req.params;
+   try {
+        const training = await Training.findByPk( id )
+        return res.send(training) 
+   } catch (error) {
+        return res.send(error.message);
+   }
 }
 
 const getTrainings = async(req, res)=> {
@@ -54,8 +60,6 @@ const putTraining = async(req, res)=> {
         dateTraining,
         mode,
     } = req.body;
-    
-    console.log(newTraining);
 
     try {
         const training = await Training.update (

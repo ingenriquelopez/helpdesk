@@ -94,6 +94,20 @@ const putEmployees = async(req, res)=> {
     }
 }
 
+const getEmployeeByNumber = async(req,res)=> {
+    const number_employee = req.params.number;
+    try {
+        const employee = await Employees.findOne( { 
+            where: { numEmployee : number_employee}
+        });
+        return res.status(200).send(employee)
+    } catch (error) 
+        { 
+            return res.send(error.message);
+        }
+}
+
+
 const getEmployeeByEmail = async(req,res)=> {
     const email_employee = req.params.email;
     try {
@@ -116,5 +130,6 @@ module.exports = {
     getEmployees,
     deleteEmployees,
     putEmployees,
+    getEmployeeByNumber,
     getEmployeeByEmail,
 }
