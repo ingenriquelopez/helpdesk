@@ -1,25 +1,20 @@
-import React, { useState , useEffect} from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion/dist/framer-motion';
 import { useNavigate  }     from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
+import Footer from '../../Footer/Footer';
 
-import bsCustomFileInput from "bs-custom-file-input";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/Container';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
 
 import "./NewEmployee.css";
 import axios from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
-
-import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
-import {Cloudinary} from "@cloudinary/url-gen";
-
-
-const {REACT_APP_API, REACT_APP_RUTA_FOTOS } = process.env;
-
+const {REACT_APP_API} = process.env;
 
 // de momento no se esta utilizando
 //const arrayLevels = [ "PreSchool", "Elementary", "HighSchool", "College","Global","Absolute"];
@@ -39,9 +34,7 @@ function NewEmployee() {
     const [userLogged, setUserLogged] = useLocalStorage('userLogged');
 
     const [genere, setGenere] = useState('');
-    const [currentPicture, setCurrentPicture] = useState('');
 
-    
     /* const { genere } = item; */
 
 
@@ -163,32 +156,9 @@ function NewEmployee() {
    }
          
 
-const handleEmployeePicture = (e)=> {
-   const newPicture = `${REACT_APP_RUTA_FOTOS}\\${e.target.files[0].name}`;   
-   
-   alert(newPicture)
-
-   setCurrentPicture([...currentPicture, newPicture]);
-   var myWidget = cloudinary.createUploadWidget({
-      cloudName: 'my_cloud_name', 
-      uploadPreset: 'my_preset'}, (error, result) => { 
-        if (!error && result && result.event === "success") { 
-          console.log('Done! Here is the image info: ', result.info); 
-        }
-      }
-    )
-
-
-}
-
-const handleCloseNewEmployee =()=> {
-   navigate('/trainings', { replace: true});
-}
-
-
-   useEffect(() => {
-      bsCustomFileInput.init();
-    }, []);
+   const handleCloseNewEmployee =()=> {
+      navigate('/trainings', { replace: true});
+   }
 
   return (   
    <div className="d-flex mb-0 d-md-flex justify-content-center"  id = "containerEmployee">
@@ -199,39 +169,52 @@ const handleCloseNewEmployee =()=> {
          </div>           
       </div> 
       
-      <form className = "row d-md-flex justify-content-center" onSubmit={(e) => handleSubmitForm(e)} id = "form">
-         
+      <Form className="mx-auto mt-1"  onSubmit={(e) => handleSubmitForm(e)} id = "form" >
          <div className="row">
-            <div className="col-2 ">
-                  <Form.Label className = "font-weight-bold">Num Employee</Form.Label>
-                  <Form.Control 
-                           type        = "text" 
-                           placeholder = "#" 
-                           value       = {txtNumEmployee}
-                           onChange    = {(e)=> handleNumEmployee(e)}       
-                  />
+            <div className="col-3">
+
             </div>
-            <div className="col-6">
-               <Form.Label >Employee Name</Form.Label>
+         </div>
+         <Row className = "d-grid d-md-flex justify-content-center py-1">
+            <Col xl = {3} lg = {3} md = {3} sm = {3}  className = "text-center"> 
+               <Form.Label className = "font-weight-bold">Num Employee</Form.Label>
+            </Col>
+         </Row>
+         <Row className = "d-grid d-md-flex justify-content-center py-2">
+            <Col xl = {2} lg = {2} md = {3} sm = {6} xs= {6}  className = "text-center"> 
+               <Form.Control 
+                        type        = "text" 
+                        placeholder = "#" 
+                        value       = {txtNumEmployee}
+                        onChange    = {(e)=> handleNumEmployee(e)}       
+               />
+            </Col>
+
+         </Row>
+
+         <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
+            <Col xl = {7} lg = {7} md = {12} sm  = {12} xs = {12}  className = "text-center"> 
+                  <Form.Label className = "font-weight-bold">Employee Name</Form.Label>
                   <Form.Control 
                      type        = "name" 
-                     id          = "nameEmployee"
+                     id          = "name"
                      placeholder = "Enter Name" 
                      value       = {txtName}
                      onChange    = { (e)=> handleName(e)}       
                   />
-            </div>
-            <div className="col-4">
-                <Form.Label className = "font-weight-bold">Genere</Form.Label>
+            </Col>
+            
+            <Col xl = {4} lg = {4} md = {4} sm  className = "text-center"> 
+               <Form.Label className = "font-weight-bold">Genere</Form.Label>
 
                <Form.Group controlId="genere">
                   <Form.Check
                      value = "Female"
                      type  = "radio"
                      
-                     label    = "Female"
+                     label = "Female"
                      onChange = {handleChangeGenere} 
-                     checked  = {genere === "Female"}
+                     checked = {genere === "Female"}
                   />
                   <Form.Check
                      value = "Male"
@@ -241,64 +224,64 @@ const handleCloseNewEmployee =()=> {
                      onChange={handleChangeGenere} 
                      checked = {genere === "Male"}
                   />
-               </Form.Group>
-            </div>
-         </div>
-         <div className="row">
-            <div className="col-6">
-               <Form.Label className = "font-weight-bold mt-3">Employee Email</Form.Label>
-                  <Form.Control 
-                     type        = "email" 
-                     placeholder = "Enter email" 
-                     value       = {txtEmail}
-                     onChange    = {(e)=> handleEmail(e)}       
-                  />
-            </div>
-            <div className="col-2">
-               <Form.Label className = "font-weight-bold mt-3">Level</Form.Label>
-                  <Form.Control as = "select"
-                     
-                     onChange ={ (e)=> handleLevel(e)}
-                  >
-                     <option>Choose...</option>
-                     <option value = "PreSchool">PreSchool</option>
-                     <option value = "Elementary">Elementary</option>
-                     <option value = "HighSchool">HighSchool</option>
-                     <option value = "College">College</option>
-                  </Form.Control>     
-            </div>
-            <div className="col">
-               <Form.Label className = "font-weight-bold mt-3">Department</Form.Label>
-                  <Form.Control as = "select"
-                     onChange ={ (e)=> handleDepartment(e)}
-                  >
-                     <option>Choose...</option>
-                     <option value = "Administrative">Administrative</option>
-                     <option value = "Academic">Academic</option>
-                     <option value = "Direction">Direction</option>
-                     <option value = "Support Assistance">Support Assistance</option>
-                     <option value = "Sports">Sports</option>
-                     <option value = "General Services">General Services</option>
-                  </Form.Control> 
-            </div>
-         </div>
-         <div className="row mt-5" id ="pathPicture">
-            <div className="col-6 text-center mt-2">
-              <Form.Group controlId="formFile" className="mb-3">
-
-                <Form.Label>Employee Picture</Form.Label>
-
-                <button id="upload_widget" class="cloudinary-button" onClick = {()=> handleEmployeePicture}>Upload files</button>
-              </Form.Group>
+                  </Form.Group>
                
-            </div>
-            <div className="col-6" id ="spacePicture">    
-               <img src={currentPicture} id ="employeePicture"/> 
-             </div>
-         </div>
-         
+            </Col>
 
+            <Col>
+               <input id="input-b3" name="input-b3[]" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."></input>
+            </Col>
+
+         </Row> {/* FIN DE Row de nombre y genero */}
+         <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
+            <Col xl = {7} lg = {7} md = {12} sm  = {12} xs = {12}  className = "text-center"> 
+               <Form.Label className = "font-weight-bold">Employee Email</Form.Label>
+               <Form.Control 
+                  type        = "email" 
+                  placeholder = "Enter email" 
+                  value       = {txtEmail}
+                  onChange    = {(e)=> handleEmail(e)}       
+               />
+            </Col>
+         </Row>
+
+         <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
          
+            <Col xxl = {4} xl = {6} lg = {6} md = {8} sm = {12}  className = "text-center">
+               <Form.Label className = "font-weight-bold">Level</Form.Label>
+               <Form.Control as = "select"
+                  
+                  onChange ={ (e)=> handleLevel(e)}
+               >
+                  <option>Choose...</option>
+                  <option value = "PreSchool">PreSchool</option>
+                  <option value = "Elementary">Elementary</option>
+                  <option value = "HighSchool">HighSchool</option>
+                  <option value = "College">College</option>
+               </Form.Control>     
+            </Col>
+
+            <Col xxl = {4} xl = {6} lg = {6} md = {8} sm = {10}  className = "text-center">
+               <Form.Label className = "font-weight-bold">Department</Form.Label>
+               <Form.Control as = "select"
+                  onChange ={ (e)=> handleDepartment(e)}
+               >
+                  <option>Choose...</option>
+                  <option value = "Administrative">Administrative</option>
+                  <option value = "Academic">Academic</option>
+                  <option value = "Direction">Direction</option>
+                  <option value = "Support Assistance">Support Assistance</option>
+                  <option value = "Sports">Sports</option>
+                  <option value = "General Services">General Services</option>
+               </Form.Control> 
+            </Col>
+
+         </Row>   {/* row de nivel y departamento    */}
+         <Row>
+         <input id="input-b3" name="input-b3[]" type="file" class="file" multiple 
+            data-show-upload="false" data-show-caption="true" data-msg-placeholder="Select {files} for upload..."></input>
+         </Row>
+      
 
          <Row >
             <Form.Group className = "col mt-5 mb-3 d-md-flex justify-content-md-center gap-3">
@@ -311,8 +294,8 @@ const handleCloseNewEmployee =()=> {
             
             </Form.Group>    
          </Row>
-      </form>
-      
+         
+      </Form> 
                
    </div> 
          
