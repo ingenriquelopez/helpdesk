@@ -14,9 +14,9 @@ import "./NewEmployee.css";
 import axios from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 
-import CloudinaryUploadWidget from "./CloudinaryUploadWidget";
-import {Cloudinary} from "@cloudinary/url-gen";
 
+import {Cloudinary} from "@cloudinary/url-gen";
+import Widget from './Widget';
 
 const {REACT_APP_API, REACT_APP_RUTA_FOTOS } = process.env;
 
@@ -40,6 +40,16 @@ function NewEmployee() {
 
     const [genere, setGenere] = useState('');
     const [currentPicture, setCurrentPicture] = useState('');
+
+    /* var myWidget = cloudinary.createUploadWidget({
+      cloudName: 'my_cloud_name', 
+      uploadPreset: 'my_preset'}, (error, result) => { 
+        if (!error && result && result.event === "success") { 
+          console.log('Done! Here is the image info: ', result.info); 
+        }
+      }
+    )
+ */
 
     
     /* const { genere } = item; */
@@ -169,7 +179,7 @@ const handleEmployeePicture = (e)=> {
    alert(newPicture)
 
    setCurrentPicture([...currentPicture, newPicture]);
-   var myWidget = cloudinary.createUploadWidget({
+/*    var myWidget = cloudinary.createUploadWidget({
       cloudName: 'my_cloud_name', 
       uploadPreset: 'my_preset'}, (error, result) => { 
         if (!error && result && result.event === "success") { 
@@ -177,7 +187,7 @@ const handleEmployeePicture = (e)=> {
         }
       }
     )
-
+ */
 
 }
 
@@ -288,10 +298,11 @@ const handleCloseNewEmployee =()=> {
 
                 <Form.Label>Employee Picture</Form.Label>
 
-                <button id="upload_widget" class="cloudinary-button" onClick = {()=> handleEmployeePicture}>Upload files</button>
+                <button id="upload_widget" className="cloudinary-button">Upload file</button>
               </Form.Group>
                
             </div>
+            
             <div className="col-6" id ="spacePicture">    
                <img src={currentPicture} id ="employeePicture"/> 
              </div>
