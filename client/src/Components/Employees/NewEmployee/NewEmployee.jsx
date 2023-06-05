@@ -1,22 +1,17 @@
 import React, { useState , useEffect} from 'react'
-import { motion } from 'framer-motion/dist/framer-motion';
 import { useNavigate  }     from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
-
 
 import bsCustomFileInput from "bs-custom-file-input";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
-
 import "./NewEmployee.css";
 import axios from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 
-
-import {Cloudinary} from "@cloudinary/url-gen";
-import Widget from './Widget';
+import UploadWidget from './cloudinary/UploadWidget';
 
 const {REACT_APP_API, REACT_APP_RUTA_FOTOS } = process.env;
 
@@ -41,18 +36,20 @@ function NewEmployee() {
     const [genere, setGenere] = useState('');
     const [currentPicture, setCurrentPicture] = useState('');
 
-    /* var myWidget = cloudinary.createUploadWidget({
-      cloudName: 'my_cloud_name', 
-      uploadPreset: 'my_preset'}, (error, result) => { 
-        if (!error && result && result.event === "success") { 
-          console.log('Done! Here is the image info: ', result.info); 
-        }
-      }
-    )
- */
+    const [url, updateUrl] = useState();
+  const [error, updateError] = useState();
 
-    
-    /* const { genere } = item; */
+  
+  function handleOnUpload(error, result, widget) {
+    if ( error ) {
+      updateError(error);
+      widget.close(
+         { quiet: true }
+      );
+      return;
+    }
+    /* updateUrl(result?.info?.secure_url); */
+  }
 
 
     const animations = {
@@ -179,16 +176,6 @@ const handleEmployeePicture = (e)=> {
    alert(newPicture)
 
    setCurrentPicture([...currentPicture, newPicture]);
-/*    var myWidget = cloudinary.createUploadWidget({
-      cloudName: 'my_cloud_name', 
-      uploadPreset: 'my_preset'}, (error, result) => { 
-        if (!error && result && result.event === "success") { 
-          console.log('Done! Here is the image info: ', result.info); 
-        }
-      }
-    )
- */
-
 }
 
 const handleCloseNewEmployee =()=> {
@@ -297,8 +284,28 @@ const handleCloseNewEmployee =()=> {
               <Form.Group controlId="formFile" className="mb-3">
 
                 <Form.Label>Employee Picture</Form.Label>
-
-                <button id="upload_widget" className="cloudinary-button">Upload file</button>
+                <UploadWidget onUpload={handleOnUpload}>
+                  {({ open }) => {
+                     function handleOnClick(e) {
+                     e.preventDefault();
+                     open();
+                     }
+                     return (
+                     <button onClick={handleOnClick}>
+                        Upload an Image
+                     </button>
+                     )
+                  }}
+                </UploadWidget>
+                  {error && <p>{ error }</p>}
+                  {alert(url)}
+                  {url && (
+                     <>
+                        <p><img src={ url } alt="Uploaded resource" /></p>
+                        <h1>{ url }</h1>
+                     </>
+                  )}
+               
               </Form.Group>
                
             </div>

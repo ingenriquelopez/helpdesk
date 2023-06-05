@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { motion }                      from 'framer-motion/dist/framer-motion';
 import { useNavigate  }                from 'react-router-dom';
 import { useLocalStorage }             from '../../../js/useLocalStorage';
 import DatePicker               from "react-datepicker";
@@ -45,12 +44,6 @@ function NewDeviceInventory() {
     const statusDefault = "Operating";
 
     
-   
-
-    const animations = {
-      initial: { opacity: 0, x: 0 },
-      animate: { opacity: 1, x: 0 },
-  };
   
     const yaExisteInternalCode = async()=> {
       try {

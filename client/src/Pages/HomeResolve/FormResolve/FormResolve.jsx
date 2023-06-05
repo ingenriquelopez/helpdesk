@@ -1,5 +1,4 @@
 import React, { useState, useEffect }        from 'react'
-import { motion } from 'framer-motion/dist/framer-motion';
 import { Container, Form, Row, Col, Button } from 'react-bootstrap'
 import "react-datepicker/dist/react-datepicker.css";
 import { useLocalStorage } from '../../../js/useLocalStorage';
@@ -15,11 +14,6 @@ import DatePicker               from "react-datepicker";
 
 import axios from 'axios'
 
-const animations = {
-   initial: { opacity: 0, x: 0 },
-   animate: { opacity: 1, x: 0 },
-   
-};
 
 function FormResolve( {propNumber}) {
    const navigate = useNavigate();
@@ -300,17 +294,7 @@ function FormResolve( {propNumber}) {
     <Container fluid className ="d-md-flex">
        
       <div className ="dataOfRequest mt-5 container-fluid">
-      <motion.div 
-                variants={animations} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit" 
-                transition={{ 
-                    duration : 0.3,
-                    ease: "easeInOut",
-                    delay: 0.3,
-                }} 
-            >
+   
          <Row className = "d-md-flex justify-content-center py-2">
             <Col xl = {4} lg = {4} md = {4} sm className = "text-center" >
                <Form.Label className ="text-center font-weight-bold" htmlFor='number'>NUMBER REQUEST</Form.Label>   
@@ -372,22 +356,12 @@ function FormResolve( {propNumber}) {
             </Col>
          </Row>
          
-         </motion.div>
+         
       </div>
    {/* -----------------RIGHT CONTAINER FORM FOR TO RESOLVE ------------------------ */}
    <Container>
       <div className ="dataOfSolution mt-5 container-fluid d-grid">
-      <motion.div 
-                variants={animations} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit" 
-                transition={{ 
-                    duration : 0.3,
-                    ease: "easeInOut",
-                    delay: 0.3,
-                }} 
-            >
+     
          <Form onSubmit = { (e) => handleFormResolve(e)}>
             <Row className = "d-md-flex justify-content-center py-2">
                <Col xl = {4} lg = {4} md = {4} sm className = "text-center" >
@@ -533,8 +507,7 @@ function FormResolve( {propNumber}) {
                </Col>
             </Row>
          </Form>
-         </motion.div>
-      </div>
+         </div>
       
    </Container>
    <NewService  numrequest         = { taskState.number }    

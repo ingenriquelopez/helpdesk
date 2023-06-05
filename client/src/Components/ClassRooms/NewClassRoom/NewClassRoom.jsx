@@ -1,5 +1,4 @@
 import React, { useState, useEffect }  from 'react';
-import { motion } from 'framer-motion/dist/framer-motion';
 
 import { useDispatch, useSelector }     from 'react-redux';
 import { useNavigate }     from 'react-router-dom';
@@ -23,11 +22,6 @@ const {REACT_APP_API} = process.env;
 
 moment.locale('us');
 
-const animations = {
-    initial: { opacity: 0, x: 0 },
-    animate: { opacity: 1, x: 0 },
-    
-};
 
 export default function NewClassRoom() {
     const dispatch = useDispatch();
@@ -162,17 +156,7 @@ useEffect(() => {
 
   return (   
     <Container className = "container-fluid py-2">      
-        <motion.div 
-            variants={animations} 
-            initial="initial" 
-            animate="animate" 
-            exit="exit" 
-            transition={{ 
-                duration : 0.25,
-                ease: "easeInOut",
-                delay: 0.2,
-            }} 
-        >
+        <div>
     
          <Row  className = "text-center">
          
@@ -278,7 +262,7 @@ useEffect(() => {
                 
 
             </Form>
-        </motion.div>
+        </div>
     </Container>
   
   )

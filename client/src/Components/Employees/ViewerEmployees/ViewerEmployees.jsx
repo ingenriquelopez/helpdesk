@@ -1,7 +1,6 @@
 import React, { useEffect, useState }     from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate  }     from 'react-router-dom';
-import { motion } from 'framer-motion/dist/framer-motion';
 
 import { useLocalStorage } from '../../../js/useLocalStorage';
 import { tostada_W } from '../../../utils/Tostadas';
@@ -23,12 +22,6 @@ import axios from 'axios';
 
 const {REACT_APP_API} = process.env;
 
-const animations = {
-  initial: { opacity: 0, x: 0 },
-  animate: { opacity: 1, x: 0 },
-  staggerDirection: -1
-  
-};
 
 function ViewerEmployees() {
 
@@ -252,49 +245,31 @@ const handleLgUpdate = ()=> {
   
   return (
     <Container className = "container-fluid py-5">
-        <motion.div 
-                variants={animations} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit" 
-                transition={{ 
-                    duration : 0.3,
-                    ease: "easeInOut",
-                    delay: 0.3,
-                }} 
-            >
-       <DataTable columns      = { columns }  
+      <div>
+      <DataTable columns      = { columns }  
                   data         = { DATA ? DATA:'' }   
-                 customStyles = {customStyles} 
-                  /*  selecttableRows  */
-                   fixedHeader 
-                   pagination 
-                   striped
-                   /* theme="solarized" */
-      />
-       <Confirmation  
-        titulo       = "Warning!"     
-        mensaje      = "Do you want Delete this Employee?"   
-        textBtn      = "Delete"
-        show         = { show }    
-        handleClose  = { handleClose } 
-        handleDelete = { handleDelete }
-      />
-      <Annoument     titulo       = "Annoument"    
-                    mensaje       = "Employee deleted susscesfull ✅ " 
-                    smShow        = { smShow }  
-                    handleSmClose = { handleSmClose }
-      /> 
-      {/* <EditFormTraining
-                    myTitle        = "Edit Employee" 
-                    myData         = { currentRecord }    
-                    lgShow         = { lgShow }             
-                    handleLgClose  = { handleLgClose }     
-                    handleLgUpdate = { handleLgUpdate }
-      />  */}
-      </motion.div>
-  </Container>    
+                  customStyles = {customStyles} 
+                  fixedHeader 
+                  pagination 
+                  striped
+      
+          />  
+          <Confirmation  
+            titulo       = "Warning!"     
+            mensaje      = "Do you want Delete this Employee?"   
+            textBtn      = "Delete"
+            show         = { show }    
+            handleClose  = { handleClose } 
+            handleDelete = { handleDelete }
+          />
+          <Annoument     titulo       = "Annoument"    
+                        mensaje       = "Employee deleted susscesfull ✅ " 
+                        smShow        = { smShow }  
+                        handleSmClose = { handleSmClose }
+          /> 
+      </div>
+    </Container>    
   )
 }
 
-export default ViewerEmployees
+export default ViewerEmployees;

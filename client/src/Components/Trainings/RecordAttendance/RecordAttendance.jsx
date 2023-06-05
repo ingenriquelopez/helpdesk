@@ -1,7 +1,6 @@
 import React, { useEffect, useState }     from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, NavLink  }     from 'react-router-dom';
-import { motion } from 'framer-motion/dist/framer-motion';
 
 import { useLocalStorage } from '../../../js/useLocalStorage';
 import { tostada_W } from '../../../utils/Tostadas';
@@ -23,12 +22,6 @@ import AttedanceEmployee from '../AttendanceEmployee/AttendanceEmployee';
 
 const {REACT_APP_API} = process.env;
 
-const animations = {
-  initial: { opacity: 0, x: 0 },
-  animate: { opacity: 1, x: 0 },
-  staggerDirection: -1
-  
-};
 
 function RecordAttendance() {
 
@@ -186,17 +179,6 @@ const DATA = listTrainings;
   return (
     <Container className = "container-fluid optionTrainings">
       <section>
-          <motion.div 
-                    variants   = {animations} 
-                    initial    = "initial" 
-                    animate    = "animate" 
-                    exit       = "exit" 
-                    transition = {{ 
-                        duration : 0.3,
-                        ease     : "easeInOut",
-                        delay    : 0.3,
-                    }} 
-                >
           <DataTable columns      = { columns }  
                     data          = { DATA ? DATA:'' }  
                     customStyles  = {customStyles} 
@@ -206,9 +188,6 @@ const DATA = listTrainings;
                       striped
                       theme="solarized" 
           />
-          
-          
-          </motion.div>
 
 
       </section>

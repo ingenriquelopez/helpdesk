@@ -1,5 +1,4 @@
 import React, {useState, useEffect}  from 'react';
-import { motion } from 'framer-motion/dist/framer-motion';
 import { useDispatch, useSelector }     from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
@@ -27,12 +26,6 @@ const {REACT_APP_API} = process.env;
 moment.locale('us');
 
 
-const animations = {
-  initial: { opacity: 0, x: 0 },
-  animate: { opacity: 1, x: 0 },
-  staggerDirection: -1
-  
-};
 const LEVELS = ['PreSchool','Elementary','HighSchool','College', 'Global'];
 
 
@@ -145,17 +138,6 @@ function NewTraining() {
     }
   return (
         <div className="d-flex mt-1 d-md-flex justify-content-center"  id = "containerTraining">
-        <motion.div 
-                variants = {animations} 
-                initial  = "initial" 
-                animate  = "animate" 
-                exit     = "exit" 
-                transition={{ 
-                    duration : 0.3,
-                    ease: "easeInOut",
-                    delay: 0.3,
-                }} 
-            >
          <Form className="mx-auto "  onSubmit={(e) => handleSubmitForm(e)} id = "formTraining" >   
             <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
                 <Col xl = {12} lg = {12} md = {12} sm = {12} xs = {12}  className = "text-center"> 
@@ -239,7 +221,6 @@ function NewTraining() {
                   </Col>
             </Row>    
         </Form>
-        </motion.div>
         </div>
     
   )

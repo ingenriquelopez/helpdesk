@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { motion } from 'framer-motion/dist/framer-motion';
 import { useNavigate  }     from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
 
@@ -29,12 +28,6 @@ function NewUser() {
 
     const [userLogged, setUserLogged] = useLocalStorage('userLogged');
 
-
-    const animations = {
-      initial: { opacity: 0, x: 0 },
-      animate: { opacity: 1, x: 0 },
-      
-  };
   
     const yaExisteEmail = async()=> {
       /* buscamos el email en db */

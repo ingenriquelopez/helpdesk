@@ -1,5 +1,4 @@
 import React, {useState, useEffect}  from 'react';
-import { motion } from 'framer-motion/dist/framer-motion';
 import { useDispatch, useSelector }     from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../../../js/useLocalStorage';
@@ -27,12 +26,6 @@ const {REACT_APP_API} = process.env;
 
 moment.locale('us');
 
-const animations = {
-    initial: { opacity: 0, x: 0 },
-    animate: { opacity: 1, x: 0 },
-    staggerDirection: -1
-    
-};
 
 export default function NewTask() {
     const { listCR:listOfClassRooms }   = useSelector ( (state) => state.classRooms);
@@ -163,17 +156,7 @@ export default function NewTask() {
     <Container className = "container-fluid d-md-flex mt-1 justify-content-center" >
         
         <div className="d-flex mb-0"  id = "containerTask">
-        <motion.div 
-                variants={animations} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit" 
-                transition={{ 
-                    duration : 0.3,
-                    ease: "easeInOut",
-                    delay: 0.3,
-                }} 
-            >
+             
          <Form className="mx-auto" onSubmit={(e) => handleSubmitForm(e)} >   
             <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
                 <Col xl = {4} lg = {4} md = {4} sm  className = "text-center"> 
@@ -272,7 +255,7 @@ export default function NewTask() {
                   </Col>
             </Row>    
         </Form>
-        </motion.div>
+        
         </div>
         
         <Footer/> 

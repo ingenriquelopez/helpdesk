@@ -21,10 +21,10 @@ import Annoument                  from '../Alerts/Annoument/Annoument';
 import { tostada_W }              from '../../utils/Tostadas';
 import axios                      from 'axios';
 
-import { loadAllInventory, loadInventory } from '../../redux/inventory/inventoryReducer';
+import { loadAllInventory, loadInventory } from '../../redux/Inventory/inventoryReducer';
 import { createListClassRooms }            from '../../redux/classRooms/classRoomsReducer';
 
-import ExportToXLS from '../ExportToXLS/ExportToXLS';
+/* import ExportToXLS from '../ExportToXLS/ExportToXLS'; */
 
 const {REACT_APP_API} = process.env;
 
@@ -269,7 +269,7 @@ let myData = {
         </Col>
 
         <Col xxl = {3} xl = {3} lg = {4} md = {6} sm = {12} className = "text-center"> 
-            <ExportToXLS DATA = {DATA}/>
+            {/* <ExportToXLS DATA = {DATA}/> */}
         </Col>
 
       </Row>

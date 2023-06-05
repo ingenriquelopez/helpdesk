@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from 'framer-motion/dist/framer-motion';
 import { useDispatch } from 'react-redux';
 import { useNavigate }  from 'react-router-dom'
 import { useLocalStorage } from '../../js/useLocalStorage';
@@ -27,11 +26,6 @@ const { REACT_APP_USERNAME_SUPER_ADMIN,
          } = process.env;
 
 
-  const animations = {
-      initial: { opacity: 0, x: 1 },
-      animate: { opacity: 1, x: 0 },
-      staggerDirection: -1
-     };
 
 function Login() {
   const dispatch   = useDispatch();
@@ -163,18 +157,7 @@ const validUser = async()=>
 return (  
     <div className= "Login position-relative">
        <Container className = "container-fluid py-5">
-       <motion.div 
-                variants={animations} 
-                initial="initial" 
-                animate="animate" 
-                exit="exit" 
-                transition={{ 
-                    duration : 0.7,
-                    ease: "easeInOut",
-                    delay: 0.7,
-                }} 
-            >
-       
+        <div> 
             <Form className = "position-absolute top-50 start-50 translate-middle mx-auto" id = "loginform" onSubmit = {(e)=>loginSubmit(e)}>
             <img id = "idface"
           src= {face}
@@ -237,7 +220,7 @@ return (
                     </Row>
                  </Form.Group>      
             </Form>
-            </motion.div>
+            </div>
         </Container>
     </div>
   );
