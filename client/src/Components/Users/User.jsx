@@ -31,6 +31,8 @@ export default function User( {u}) {
     level     : u.level
   }
 
+  console.log(myData);
+  
   async function handleClickDelete() { 
     //primero lo eliminamos de la base de datos
     try {

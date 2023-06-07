@@ -49,7 +49,7 @@ function ViewerUsers() {
   useEffect(()=> {  
     getAllUsers();
   },[])
-
+  
   return (
     <Container className = "container-fluid py-5">
       <Link to='/dashboard/newuser'>

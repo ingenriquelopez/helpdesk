@@ -1,72 +1,111 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './Sidebar.css'; // Archivo de estilos personalizados
+import {NavLink } from 'react-router-dom';
 
-import {
-  CDBSidebar,
-  CDBSidebarContent,
-  CDBSidebarFooter,
-  CDBSidebarHeader,
-  CDBSidebarMenu,
-  CDBSidebarMenuItem,
-} from 'cdbreact';
-
-import { NavLink } from 'react-router-dom';
 
 
 
 const Sidebar = () => {
-
   return (
+    
     <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
-      <CDBSidebar textColor="#fff" backgroundColor="#000080">
-        <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-          <NavLink to ="/home" className="text-decoration-none" style={{ color: 'inherit' }}>
-            HOME
-          </NavLink>
-          
-        </CDBSidebarHeader>
+            <nav className="main-menu">
+                <ul>
+                    <li>
+                        {/* <a href="https://jbfarrow.com"> */}
+                        <NavLink to ="/home" className="text-decoration-none" style={{ color: '#999' }}>
+                            <i className="fa fa-home fa-2x"></i>
+                            <span className="nav-text">
+                            HOME
+                            </span>
+                        </NavLink>
+                        {/* </a> */}
+                    
+                    </li>
+                    <li className="has-subnav">
+                        <NavLink to="viewerusers" activeclassname="activeClicked">
+                            <i className="fa fa-globe fa-2x"></i>
+                            <span className="nav-text">
+                                Users
+                            </span>
+                        </NavLink>
+                        
+                    </li>
+                    <li className="has-subnav">
+                        <NavLink to="viewerclassrooms" activeclassname="activeClicked">
+                            <i className="fa fa-comments fa-2x"></i>
+                                <span className="nav-text">
+                                    ClassRooms
+                                </span>
+                        </NavLink>
+                        
+                    </li>
+                    <li className="has-subnav">
+                        <NavLink to="viewerinventory" activeclassname="activeClicked">
+                            <i className="fa fa-camera-retro fa-2x"></i>
+                                <span className="nav-text">
+                                    Inventory
+                                </span>
+                        </NavLink>
+                    
+                    </li>
+                    <li>
+                        <NavLink to="serviceorders" activeclassname="activeClicked">
+                            <i className="fa fa-film fa-2x"></i>
+                            <span className="nav-text">
+                                Service Orders
+                            </span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="reportes" activeclassname="activeClicked">
+                            <i className="fa fa-book fa-2x"></i>
+                            <span className="nav-text">
+                            Reports
+                            </span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="settings" activeclassname="activeClicked">
+                            <i className="fa fa-cogs fa-2x"></i>
+                                <span className="nav-text">
+                                    Settings
+                                </span>
+                        </NavLink>
+                    </li>
+                    <li>
+                    <a href="#">
+                            <i className="fa fa-map-marker fa-2x"></i>
+                            <span className="nav-text">
+                                Member Map
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                        <i className="fa fa-info fa-2x"></i>
+                            <span className="nav-text">
+                                Documentation
+                            </span>
+                        </a>
+                    </li>
+                </ul>
 
-        <CDBSidebarContent className="sidebar-content">
-          <CDBSidebarMenu>
-            
-            <NavLink to="viewerusers" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="columns">Users</CDBSidebarMenuItem>
-            </NavLink>
-
-            <NavLink to="viewerclassrooms" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="table">ClassRooms</CDBSidebarMenuItem>
-            </NavLink>
-
-            <NavLink to="viewerinventory" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="table">Inventory</CDBSidebarMenuItem>
-            </NavLink>
+                <ul className="logout">
+                    <li>
+                    <a href="#">
+                            <i className="fa fa-power-off fa-2x"></i>
+                            <span className="nav-text">
+                                Logout
+                            </span>
+                        </a>
+                    </li>  
+                </ul>
+            </nav>
            
-            <NavLink to="serviceorders" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="chart-line">Service Orders</CDBSidebarMenuItem>
-            </NavLink>
-
-            <NavLink to="reportes" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="chart-line">Reports</CDBSidebarMenuItem>
-            </NavLink>
-
-            <NavLink to="settings" activeclassname="activeClicked">
-              <CDBSidebarMenuItem icon="exclamation-circle">Settings</CDBSidebarMenuItem>
-            </NavLink>
-          </CDBSidebarMenu>
-        </CDBSidebarContent>
-
-        <CDBSidebarFooter style={{ textAlign: 'center' }}>
-          <div
-            style={{
-              padding: '20px 5px',
-            }}
-          >
-            Sidebar Footer
-          </div>
-        </CDBSidebarFooter>
-      </CDBSidebar>
-    
+            
+        
     </div>
-    
   );
 };
 

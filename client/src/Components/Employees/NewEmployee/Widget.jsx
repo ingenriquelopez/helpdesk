@@ -18,12 +18,13 @@ import {compass} from "@cloudinary/url-gen/qualifiers/gravity";
 import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 
+const { REACT_APP_CLOUDINARY_CLOUD_NAME } = process.env;
 const Widget = () => {
 
   // Create and configure your Cloudinary instance.
   const cld = new Cloudinary({
     cloud: {
-      cloudName: 'demo'
+      cloudName: REACT_APP_CLOUDINARY_CLOUD_NAME
     }
   }); 
 

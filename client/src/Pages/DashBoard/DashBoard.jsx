@@ -1,16 +1,21 @@
 import React from 'react';
+import Sidebar from '../../Components/Sidebar/Sidebar';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Outlet } from "react-router-dom" ;
 
-/* import Sidebar from '../../Components/Sidebar/Sidebar'; */
 
-const Dashboard = () => {
-  
+
+
+const DashBoard = () => {
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
-     {/*  <Sidebar/>   */}
-      <Outlet/>
+      <Sidebar/>   
+       <Outlet/>  
     </div>
   );
 };
 
-export default Dashboard;
+export default DashBoard;
+
+
+

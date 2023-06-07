@@ -4,16 +4,9 @@ import Login               from './Pages/Login/Login';
 import Home                from './Pages/Home/Home';
 import NewTask             from './Components/TaskViewer/NewTask/NewTask';
 import DashBoard           from './Pages/DashBoard/DashBoard';
-import ViewerUsers         from "./Components/Users/ViewerUsers";
-import NewUser             from './Components/Users/NewUser/NewUser';
-import InventoryViewer     from "./Components/Inventory/InventoryViewer";
-import ViewerClassRooms    from "./Components/ClassRooms/ViewerClassRooms/ViewerClassRooms";
-import NewClassRoom        from './Components/ClassRooms/NewClassRoom/NewClassRoom';
-import NewDeviceInventory from "./Components/Inventory/NewDeviceInventory/NewDeviceInventory";
 import PageError404        from "./Pages/PageError404/PageError404";
 import HomeResolve         from "./Pages/HomeResolve/HomeResolve";
-import Settings            from "./Components/Settings/Settings";
-import ServiceOrdersViewer from "./Components/ServiceOrders/ServiceOrdersViewer/ServiceOrdersViewer";
+
 import { ToastContainer }  from 'react-toastify';
 import './App.css';
 
@@ -27,6 +20,15 @@ import ViewerEmployees from './Components/Employees/ViewerEmployees/ViewerEmploy
 import RecordAttendance from "./Components/Trainings/RecordAttendance/RecordAttendance";
 import AttendanceEmployee from "./Components/Trainings/AttendanceEmployee/AttendanceEmployee";
 
+import ViewerUsers         from './Components/Users/ViewerUsers';
+
+import NewUser             from './Components/Users/NewUser/NewUser';
+import InventoryViewer     from "./Components/Inventory/InventoryViewer";
+import ViewerClassRooms    from "./Components/ClassRooms/ViewerClassRooms/ViewerClassRooms";
+import NewClassRoom        from './Components/ClassRooms/NewClassRoom/NewClassRoom';
+import NewDeviceInventory  from "./Components/Inventory/NewDeviceInventory/NewDeviceInventory";
+import Settings            from "./Components/Settings/Settings";
+import ServiceOrdersViewer from "./Components/ServiceOrders/ServiceOrdersViewer/ServiceOrdersViewer";
 
 
 function App() {
@@ -37,21 +39,23 @@ function App() {
         <Route path = '/login'  exact   element = { <Login/> }/>
         <Route path = '/home'        element = { <Home/> } />
         <Route path = '/newtask'     element = { <NewTask/> }/>
+        
         <Route path = '/homeresolve/:number' element = { <HomeResolve/>}/>
 
-        <Route path  = '/trainings/'          element  = { <HomeTrainings/> }>
+        <Route path  = '/trainings/*'          element  = { <HomeTrainings/> }>
           <Route path = 'newtraining'            element = { <NewTraining/>  }/>  
           <Route path = 'viewertrainings'        element = { <ViewerTrainings/> }/>  
           <Route path = 'recordattendance'       element = { <RecordAttendance/> }/>  
           <Route path = "attendanceemployee/:idt"     element =  { <AttendanceEmployee/>}/> 
           
           <Route path = 'newemployee'            element = { <NewEmployee/> }/>
-          <Route path = 'vieweremployees'        element = { <ViewerEmployees/> }/>  
+          <Route path = 'dashboard/vieweremployees'        element = { <ViewerEmployees/> }/>  
         </Route>
 
-        <Route path  = 'dashboard/'          element  = { <DashBoard/> }>
-          <Route path = 'viewerusers'        element = { <ViewerUsers/> }/>  
+        <Route path="/dashboard/*" element={<DashBoard />}>
+          <Route path="viewerusers"          element={<ViewerUsers/>} />
           <Route path = 'newuser'            element = { <NewUser/>  }/>
+        
           <Route path = 'viewerclassrooms'   element = { <ViewerClassRooms/> }/>  
           <Route path = 'newclassroom'       element = { <NewClassRoom/>}/>
           
@@ -60,7 +64,16 @@ function App() {
           
           <Route path = 'serviceOrders'      element = { <ServiceOrdersViewer/>}/>
           <Route path = "settings"           element = { <Settings/>}/>
+
+
+
+
+          {/* <Route path="/detalles" element={<DetallesUsuario />} /> */}
         </Route>
+
+
+        
+        
       </Routes>  
       <ToastContainer/>
     </div>

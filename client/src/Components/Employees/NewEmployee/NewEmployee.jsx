@@ -13,7 +13,7 @@ import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 
 import UploadWidget from './cloudinary/UploadWidget';
 
-const {REACT_APP_API, REACT_APP_RUTA_FOTOS } = process.env;
+const {REACT_APP_API  } = process.env;
 
 
 // de momento no se esta utilizando
@@ -171,11 +171,11 @@ function NewEmployee() {
          
 
 const handleEmployeePicture = (e)=> {
-   const newPicture = `${REACT_APP_RUTA_FOTOS}\\${e.target.files[0].name}`;   
+   /* const newPicture = `${REACT_APP_RUTA_FOTOS}\\${e.target.files[0].name}`;   
    
    alert(newPicture)
 
-   setCurrentPicture([...currentPicture, newPicture]);
+   setCurrentPicture([...currentPicture, newPicture]); */
 }
 
 const handleCloseNewEmployee =()=> {
