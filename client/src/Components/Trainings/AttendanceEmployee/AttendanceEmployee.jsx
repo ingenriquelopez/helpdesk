@@ -8,7 +8,7 @@ import moment        from 'moment';
 import Button        from 'react-bootstrap/Button';
 import { FcCancel }  from "react-icons/fc";
 import './AttendanceEmployee.css';
-import Pinga from 'D:/HDFotosPersonal/Pinga.jpg'
+import Pinga from 'E:/HDFotosPersonal/Pinga.jpg'
 const {REACT_APP_API} = process.env;
 
 function AttendanceEmployee() {
@@ -20,9 +20,7 @@ function AttendanceEmployee() {
   const [lgShow, setLgShow] = useState(false);
   const [currentRecord, setcurrentRecord]     = useState('');
   const [employeeFounded, setEmployeeFounded] = useState('');
-  const [listPersonal, setListPersonal]       = useState( [
-    {}
-  ])
+  const [listPersonal, setListPersonal]       = useState( [ {} ])
   const [numEmployeeState, setNumEmployeeState] = useState('');
 
   const navigate = useNavigate();

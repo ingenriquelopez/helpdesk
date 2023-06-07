@@ -39,7 +39,7 @@ export const inventoryReducer = createSlice({
 })
 
 export const { loadInventory, addInventory, updateInventory,deleteInventory} = inventoryReducer.actions;
-export default inventoryReducer;
+export default inventoryReducer.reducer;
 
 export const loadAllInventory = () => (dispatch) => {
         axios.get(`${REACT_APP_API}/inventory`) 

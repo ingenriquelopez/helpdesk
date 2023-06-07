@@ -167,7 +167,7 @@ async function saveDocument() {
 
   return (
     <>
-    <Container fluid>
+    <Container className = "container-fluid py-5">
         <h3>Settings</h3>
         <hr/>
         <Accordion>
