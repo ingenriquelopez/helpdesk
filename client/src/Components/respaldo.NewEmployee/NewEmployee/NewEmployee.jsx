@@ -11,6 +11,7 @@ import "./NewEmployee.css";
 import axios from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 
+import UploadWidget from './cloudinary/UploadWidget';
 
 const {REACT_APP_API  } = process.env;
 
@@ -23,7 +24,8 @@ function NewEmployee() {
     
     const [txtNumEmployee , setTxtNumEmployee]  = useState('');
     const [txtName        , setTxtName]         = useState('');
-        const [txtEmail   , setTxtEmail]        = useState('');
+    /* const [txtGenere      , setTxtGenere]       = useState(''); */
+    const [txtEmail       , setTxtEmail]        = useState('');
     const [txtLevel       , setTxtLevel]        = useState('');
     const [txtDepartment  , setTxtDepartment]   = useState('');
 
@@ -31,36 +33,29 @@ function NewEmployee() {
 
     const [userLogged, setUserLogged] = useLocalStorage('userLogged');
 
-    const [genere         , setGenere] = useState('');
-    const [currentPicture , setCurrentPicture] = useState('');
+    const [genere, setGenere] = useState('');
+    const [currentPicture, setCurrentPicture] = useState('');
 
-       
-
-    
-    const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg';
-
-    
-
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [previewImage, setPreviewImage] = useState('');
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file)
-    setSelectedImage(file);
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      console.log(e)
-      setPreviewImage(e.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-
-    
-    
+    const [url, updateUrl] = useState();
+  const [error, updateError] = useState();
   
+  
+  
+  
+  
+  function handleOnUpload(error, result, widget) {
+    if ( error ) {
+      updateError(error);
+      widget.close(
+         { quiet: true }
+      );
+      return;
+    }
+    console.log(result)
+    updateUrl(result?.info?.secure_url); 
+    /* setCurrentPicture([...currentPicture, ]);  */
+  }
+
 
   const animations = {
      initial: { opacity: 0, x: 0 },
@@ -188,7 +183,6 @@ const handleCloseNewEmployee =()=> {
 
    useEffect(() => {
       bsCustomFileInput.init();
-      
     }, []);
 
   return (   
@@ -283,32 +277,48 @@ const handleCloseNewEmployee =()=> {
                   </Form.Control> 
             </div>
          </div>
-         
+         <div className="row mt-5" id ="pathPicture">
             <div className="col-6 text-center mt-2">
               <Form.Group controlId="formFile" className="mb-3">
                   <div className="row">
                      <Form.Label>Employee Picture</Form.Label>
-                     <div>
-                        <input  type      = "file"
-                                className = "form-control"
-                                id        = "imageInput"
-                                accept    = "image/*"
-                               onChange   = {handleImageChange}
-                        />
-                        {selectedImage && (
-                           <img
-                              src={previewImage}
-                              alt="Preview"
-                              className="mt-2 img-thumbnail"
-                              style={{ maxWidth: '300px' }}
-                           />
-                        )}
-                     </div>
                   </div>
-              </Form.Group>
-            </div>  
+                  <div className="row">
+                     <UploadWidget onUpload={handleOnUpload}>
+                     {({ open }) => {
+                        function handleOnClick(e) {
+                        e.preventDefault();
+                        open();
+                        }
+                        return (
+                        <button onClick={handleOnClick}>
+                           Upload an Image
+                        </button>
+                        )
+                     }}
+                     </UploadWidget>
+                     {error && <p>{ error }</p>}
+                  </div>
+                
+                
                   
+                  
+              </Form.Group>
                
+            </div>
+            
+            {url && (
+                     <div id="spacePicture" className = "col-6">
+                        <img src={ url } alt="Uploaded resource" id = "employeePicture"/>
+                     </div>
+                     
+                  )}
+               
+         </div>
+         
+
+         
+
          <Row >
             <Form.Group className = "col mt-5 mb-3 d-md-flex justify-content-md-center gap-3">
                <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">

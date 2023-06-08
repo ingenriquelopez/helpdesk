@@ -34,30 +34,18 @@
           width:70%;
 }
 
-
-#spacePicture{
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-/* #spacePicture {
+#spacePicture {
   display:flex;
   justify-content: center;
   align-items: center;
   
 }
- */
-
 #employeePicture{
-  width: 200px;
-  border-radius: 50%;
-  border: 6px solid #AAA;
-  /* width            : 7rem;
+  width            : 7rem;
   height           : 8rem;
   border-radius: 5%;
   box-shadow:
   inset 0 -3em 3em rgba(0,0,0,0.1),
         0 0  0 2px rgb(255,255,255),
-        0.3em 0.3em 1em rgba(0,0,0,0.3); */
+        0.3em 0.3em 1em rgba(0,0,0,0.3);
 }
