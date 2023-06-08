@@ -38,7 +38,10 @@ function NewEmployee() {
 
     const [url, updateUrl] = useState();
   const [error, updateError] = useState();
-
+  
+  
+  
+  
   
   function handleOnUpload(error, result, widget) {
     if ( error ) {
@@ -48,51 +51,53 @@ function NewEmployee() {
       );
       return;
     }
-    /* updateUrl(result?.info?.secure_url); */
+    console.log(result)
+    updateUrl(result?.info?.secure_url); 
+    /* setCurrentPicture([...currentPicture, ]);  */
   }
 
 
-    const animations = {
-      initial: { opacity: 0, x: 0 },
-      animate: { opacity: 1, x: 0 },
-      
-  };
-  
-  const handleChangeGenere = e => {
-   e.persist();
+  const animations = {
+     initial: { opacity: 0, x: 0 },
+     animate: { opacity: 1, x: 0 },
+     
+   };
    
-   setGenere(e.target.value);
- };
-
-    const yaExisteEmail = async()=> {
+   const handleChangeGenere = e => {
+      e.persist();
+      
+      setGenere(e.target.value);
+   };
+   
+   const yaExisteEmail = async()=> {
       /* buscamos el email en db */
       const response = await axios.get(`${REACT_APP_API}/employees/${txtEmail}`, {
          headers: {
-             "authorization": `Bearer ${userLogged.userToken}`,
+            "authorization": `Bearer ${userLogged.userToken}`,
          }
-         });
+      });
       
       if (response.data === 'Employee not found') return false;
       else return true;  
-    }
-
-    function validateForm() {
+   }
+   
+   function validateForm() {
       if (txtNumEmployee && txtName && txtEmail ) { 
          setdisabledAdd(false)
       }  else setdisabledAdd(true)
-    }
-
-    function handleNumEmployee(e) {
-        setTxtNumEmployee(e.target.value.toLowerCase());
-        validateForm();
-    }
-
-    function handleName(e) {
+   }
+   
+   function handleNumEmployee(e) {
+      setTxtNumEmployee(e.target.value.toLowerCase());
+      validateForm();
+   }
+   
+   function handleName(e) {
       
-        setTxtName(e.target.value.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) );
-        validateForm();
-    }
-
+      setTxtName(e.target.value.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) );
+      validateForm();
+   }
+   
    function handleEmail(e) {
       setTxtEmail(e.target.value.toLowerCase());
       let lastchar = e.target.value[e.target.value.length-1]
@@ -103,8 +108,8 @@ function NewEmployee() {
       } 
       validateForm();
    }
-
-
+   
+   
    function handleLevel(e) {
       setTxtLevel(e.target.value);
       validateForm();
@@ -170,13 +175,6 @@ function NewEmployee() {
    }
          
 
-const handleEmployeePicture = (e)=> {
-   /* const newPicture = `${REACT_APP_RUTA_FOTOS}\\${e.target.files[0].name}`;   
-   
-   alert(newPicture)
-
-   setCurrentPicture([...currentPicture, newPicture]); */
-}
 
 const handleCloseNewEmployee =()=> {
    navigate('/trainings', { replace: true});
@@ -282,37 +280,40 @@ const handleCloseNewEmployee =()=> {
          <div className="row mt-5" id ="pathPicture">
             <div className="col-6 text-center mt-2">
               <Form.Group controlId="formFile" className="mb-3">
-
-                <Form.Label>Employee Picture</Form.Label>
-                <UploadWidget onUpload={handleOnUpload}>
-                  {({ open }) => {
-                     function handleOnClick(e) {
-                     e.preventDefault();
-                     open();
-                     }
-                     return (
-                     <button onClick={handleOnClick}>
-                        Upload an Image
-                     </button>
-                     )
-                  }}
-                </UploadWidget>
-                  {error && <p>{ error }</p>}
-                  {alert(url)}
-                  {url && (
-                     <>
-                        <p><img src={ url } alt="Uploaded resource" /></p>
-                        <h1>{ url }</h1>
-                     </>
-                  )}
-               
+                  <div className="row">
+                     <Form.Label>Employee Picture</Form.Label>
+                  </div>
+                  <div className="row">
+                     <UploadWidget onUpload={handleOnUpload}>
+                     {({ open }) => {
+                        function handleOnClick(e) {
+                        e.preventDefault();
+                        open();
+                        }
+                        return (
+                        <button onClick={handleOnClick}>
+                           Upload an Image
+                        </button>
+                        )
+                     }}
+                     </UploadWidget>
+                     {error && <p>{ error }</p>}
+                  </div>
+                
+                
+                  
+                  
               </Form.Group>
                
             </div>
             
-            <div className="col-6" id ="spacePicture">    
-               <img src={currentPicture} id ="employeePicture"/> 
-             </div>
+            {url && (
+                     <div id="spacePicture" className = "col-6">
+                        <img src={ url } alt="Uploaded resource" id = "employeePicture"/>
+                     </div>
+                     
+                  )}
+               
          </div>
          
 

@@ -15,7 +15,7 @@
     align-self : center;
   }
 
-.t1itleEmployee {
+.titleEmployee {
     display         : block;
     width           : 100%;
     height          : 5%;
@@ -38,8 +38,14 @@
   display:flex;
   justify-content: center;
   align-items: center;
+  
 }
 #employeePicture{
-  width            : 6rem;
-  height           : 7rem;
+  width            : 7rem;
+  height           : 8rem;
+  border-radius: 5%;
+  box-shadow:
+  inset 0 -3em 3em rgba(0,0,0,0.1),
+        0 0  0 2px rgb(255,255,255),
+        0.3em 0.3em 1em rgba(0,0,0,0.3);
 }

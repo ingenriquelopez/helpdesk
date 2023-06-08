@@ -8,7 +8,7 @@ import moment        from 'moment';
 import Button        from 'react-bootstrap/Button';
 import { FcCancel }  from "react-icons/fc";
 import './AttendanceEmployee.css';
-import Pinga from 'E:/HDFotosPersonal/Pinga.jpg'
+import Pinga from 'D:/HDFotosPersonal/Pinga.jpg'
 const {REACT_APP_API} = process.env;
 
 function AttendanceEmployee() {
