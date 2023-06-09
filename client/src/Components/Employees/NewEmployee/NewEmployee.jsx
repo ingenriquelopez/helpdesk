@@ -12,7 +12,11 @@ import axios from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 
 
-const {REACT_APP_API  } = process.env;
+const { REACT_APP_API, 
+        REACT_APP_CLOUDINARY_CLOUD_NAME, 
+        REACT_APP_CLOUDINARY_PRESET,
+        REACT_APP_CLOUDINARY_HELPDESK,
+      } = process.env;
 
 
 // de momento no se esta utilizando
@@ -34,32 +38,53 @@ function NewEmployee() {
     const [genere         , setGenere] = useState('');
     const [currentPicture , setCurrentPicture] = useState('');
 
-       
-
     
     const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg';
 
-    
+    const [selectedImage , setSelectedImage] = useState(null);
+    const [previewImage  , setPreviewImage] = useState('');
+    const [urlImg        , setUrlImg] = useState('');
 
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [previewImage, setPreviewImage] = useState('');
+   const upLoadImage = async()=> {
+      const data  = new FormData();
+      data.append("file",previewImage);
+      data.append("upload_preset",REACT_APP_CLOUDINARY_PRESET);
+   /* data.append("api_key",REACT_APP_CLOUDINARY_API_KEY);
+   data.append("api_secret",REACT_APP_CLOUDINARY_API_SECRET); */
+   
+   try {
+      const URL_API_COMPLETA = `${REACT_APP_CLOUDINARY_HELPDESK}/${REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`;
+      console.log('aqui va el post')
+      const response = await axios.post(URL_API_COMPLETA,data);   
+      
+      console.log(response.data)
+      console.log(response.data.url)
+      console.log(response.data.secure_url)
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file)
-    setSelectedImage(file);
+      setUrlImg(response.data.url);
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      console.log(e)
-      setPreviewImage(e.target.result);
-    };
-    reader.readAsDataURL(file);
+      return true;
+
+   } catch (error) {
+      console.log("este es"+error.message)
+   }
+   
+}
+
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      console.log(file)
+      setSelectedImage(file);
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        console.log(e)
+        setPreviewImage(...previewImage,e.target.result);
+      };
+
+      reader.readAsDataURL(file);
   };
 
-
-    
-    
   
 
   const animations = {
@@ -126,6 +151,7 @@ function NewEmployee() {
    }
 
    async function handleSubmitForm(e) {
+      
       e.preventDefault();
       
       if (!disabledAdd) {
@@ -143,7 +169,13 @@ function NewEmployee() {
                   tostada_W(`Email: ${txtEmail} already exists`,"top-center",1500,'dark');
                } else 
                   {
+                     
                   try {
+                     upLoadImage();
+                     
+                     console.log(urlImg);
+                     newEmployee.picture = urlImg;
+                     console.log(urlImg);
                      const response = await axios.post(`${REACT_APP_API}/employees`,newEmployee, {
                         headers: {
                             "authorization": `Bearer ${userLogged.userToken}`,
@@ -159,6 +191,7 @@ function NewEmployee() {
                                  
                                  if (response.data ==='successfull') {
                                     // aviso de la mision fue un exito
+                                    
                                     tostada_S('New User DONE!',"top-center",1500,'light');
                                  } else {
                                     tostada_W(response.data,"top-center",1500,'dark');
