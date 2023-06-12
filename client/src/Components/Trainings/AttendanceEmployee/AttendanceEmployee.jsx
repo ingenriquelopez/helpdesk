@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useLocalStorage }  from '../../../js/useLocalStorage';
-import { useParams }        from 'react-router-dom';
-import axios                from 'axios';
-import DataTable, { createTheme } from 'react-data-table-component';
-import moment        from 'moment';
-import Button        from 'react-bootstrap/Button';
-import { FcCancel }  from "react-icons/fc";
+import { NavLink, useNavigate }       from 'react-router-dom';
+import { useLocalStorage }            from '../../../js/useLocalStorage';
+import { useParams }                  from 'react-router-dom';
+import axios                          from 'axios';
+import DataTable, { createTheme }     from 'react-data-table-component';
+import moment                         from 'moment';
+import Button                         from 'react-bootstrap/Button';
+import { FcCancel }                   from "react-icons/fc";
+import Pinga                          from 'e:/HDFotosPersonal/Pinga.jpg'
 import './AttendanceEmployee.css';
-import Pinga from 'd:/HDFotosPersonal/Pinga.jpg'
+
 const {REACT_APP_API} = process.env;
+
 
 function AttendanceEmployee() {
 

@@ -51,12 +51,13 @@ function NewEmployee() {
          setBackColorEmail('1px solid #D87A66');
          setUrlPicture('');
          setSelectedImage('');
+         fileInputRef.current.value = ''; // Resetea el valor del campo de entrada de archivo a una cadena vacía
       } else setBackColorEmail('1px solid #ccc');
     }
 
     
 
-    const handleImageSelected = (event) => {
+    const handleImageUpload = (event) => {
       validPreviewImage(event); //VALIDA X EMAIL FALTA VALIDA EL NUME DE EMPLOYEE
 
 
@@ -338,7 +339,7 @@ const handleCloseNewEmployee =()=> {
                      id        = "imageInput"
                      accept    = "image/*"
                      onChange  = { (event) => {
-                                               handleImageSelected(event);
+                                               handleImageUpload(event);
                                               }}
                   />
                </div>
