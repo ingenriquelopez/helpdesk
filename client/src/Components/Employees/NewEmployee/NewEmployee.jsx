@@ -1,15 +1,16 @@
 import React, { useState , useEffect} from 'react'
-import { useNavigate  }     from 'react-router-dom';
-import { useLocalStorage } from '../../../js/useLocalStorage';
+import { useNavigate  }         from 'react-router-dom';
+import { useLocalStorage }      from '../../../js/useLocalStorage';
+import bsCustomFileInput        from "bs-custom-file-input";
+import Button                   from 'react-bootstrap/Button';
+import Form                     from 'react-bootstrap/Form';
+import Row                      from 'react-bootstrap/Row';
+import Col                      from 'react-bootstrap/Col';
 
-import bsCustomFileInput from "bs-custom-file-input";
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Row       from 'react-bootstrap/Row';
-import Col       from 'react-bootstrap/Col';
-import "./NewEmployee.css";
-import axios from 'axios';
+import axios                    from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
+import "./NewEmployee.css";
+/* import axiosInstanceCloudinary from '../../../js/axiosInstanceCloudinary'; */
 
 
 const { REACT_APP_API, 
@@ -24,74 +25,74 @@ const { REACT_APP_API,
 
 function NewEmployee() {
     const navigate= useNavigate();
+    const animations = {
+      initial: { opacity: 0, x: 0 },
+      animate: { opacity: 1, x: 0 },
+    };
     
     const [txtNumEmployee , setTxtNumEmployee]  = useState('');
     const [txtName        , setTxtName]         = useState('');
-        const [txtEmail   , setTxtEmail]        = useState('');
+    const [txtEmail       , setTxtEmail]        = useState('');
     const [txtLevel       , setTxtLevel]        = useState('');
     const [txtDepartment  , setTxtDepartment]   = useState('');
-
-    const [disabledAdd, setdisabledAdd]    = useState(true);
-
-    const [userLogged, setUserLogged] = useLocalStorage('userLogged');
-
-    const [genere         , setGenere] = useState('');
-    const [currentPicture , setCurrentPicture] = useState('');
+    const [disabledAdd    , setdisabledAdd]     = useState(true);
+    const [userLogged     , setUserLogged]      = useLocalStorage('userLogged');
+    const [genere         , setGenere]          = useState('');
 
     
-    const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg';
+     const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
+    
+    const [selectedImage , setSelectedImage] = useState('');
 
-    const [selectedImage , setSelectedImage] = useState(null);
-    const [previewImage  , setPreviewImage] = useState('');
-    const [urlImg        , setUrlImg] = useState('');
-
-   const upLoadImage = async()=> {
-      const data  = new FormData();
-      data.append("file",previewImage);
-      data.append("upload_preset",REACT_APP_CLOUDINARY_PRESET);
-   /* data.append("api_key",REACT_APP_CLOUDINARY_API_KEY);
-   data.append("api_secret",REACT_APP_CLOUDINARY_API_SECRET); */
-   
-   try {
-      const URL_API_COMPLETA = `${REACT_APP_CLOUDINARY_HELPDESK}/${REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`;
-      console.log('aqui va el post')
-      const response = await axios.post(URL_API_COMPLETA,data);   
       
-      console.log(response.data)
-      console.log(response.data.url)
-      console.log(response.data.secure_url)
+    const setFiletoBase = (file)=> {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);      
 
-      setUrlImg(response.data.url);
-
-      return true;
-
-   } catch (error) {
-      console.log("este es"+error.message)
-   }
-   
-}
-
-    const handleImageChange = (event) => {
-      const file = event.target.files[0];
-      console.log(file)
-      setSelectedImage(file);
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        console.log(e)
-        setPreviewImage(...previewImage,e.target.result);
+      fileReader.onload = (event)=> {
+         setUrlPicture(fileReader.result)
       };
+    }
 
-      reader.readAsDataURL(file);
-  };
 
+    const handleImageUpload = async (event) => {
+      const file = event.target.files[0];
+      setFiletoBase(file);
+      console.log(file);
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', REACT_APP_CLOUDINARY_PRESET);
+      formData.append('cloud_name',REACT_APP_CLOUDINARY_CLOUD_NAME);
   
+      try {
+         
+        const response = await axios.post('https://api.cloudinary.com/v1_1/cloudhenry/image/upload', formData );
+  
+        console.log('URL de la imagen subida:', response.data.url);
+        const file2 = response.json();
+        console.log(file2);
+      } catch (error) {
+        console.error('Error al subir la imagen:', error);
+      }
+    }
 
-  const animations = {
-     initial: { opacity: 0, x: 0 },
-     animate: { opacity: 1, x: 0 },
-     
-   };
+      const handleImagePreview = (event) => {
+         const file = event.target.files[0];
+         const fileReader = new FileReader();
+               
+         fileReader.onload = function(event) {
+           const dataURL = event.target.result;
+           setSelectedImage(dataURL)
+           console.log(file)
+           console.log(dataURL)
+
+         };
+       
+         fileReader.readAsDataURL(file);
+
+         
+       };
    
    const handleChangeGenere = e => {
       e.persist();
@@ -171,11 +172,7 @@ function NewEmployee() {
                   {
                      
                   try {
-                     upLoadImage();
                      
-                     console.log(urlImg);
-                     newEmployee.picture = urlImg;
-                     console.log(urlImg);
                      const response = await axios.post(`${REACT_APP_API}/employees`,newEmployee, {
                         headers: {
                             "authorization": `Bearer ${userLogged.userToken}`,
@@ -317,33 +314,29 @@ const handleCloseNewEmployee =()=> {
             </div>
          </div>
          
-            <div className="col-6 text-center mt-2">
-              <Form.Group controlId="formFile" className="mb-3">
-                  <div className="row">
-                     <Form.Label>Employee Picture</Form.Label>
-                     <div>
-                        <input  type      = "file"
-                                className = "form-control"
-                                id        = "imageInput"
-                                accept    = "image/*"
-                               onChange   = {handleImageChange}
-                        />
-                        {selectedImage && (
-                           <img
-                              src={previewImage}
-                              alt="Preview"
-                              className="mt-2 img-thumbnail"
-                              style={{ maxWidth: '300px' }}
-                           />
-                        )}
-                     </div>
+            <div className = "formImage mt-4 mb-0">
+               <div id = "formLeftImage">
+                  <input  
+                     type      = "file"
+                     className = "form-control"
+                     id        = "imageInput"
+                     accept    = "image/*"
+                     onChange  = { (event) => {
+                                               handleImageUpload(event);
+                                               handleImagePreview(event);
+                                              }}
+                  />
+               </div>
+               <div id = "formRightImage">
+                  <div className="spacePicture">
+                     <img src={ selectedImage} alt="Preview" id="employeePicture" />
                   </div>
-              </Form.Group>
-            </div>  
+               </div>
+            </div>
                   
                
          <Row >
-            <Form.Group className = "col mt-5 mb-3 d-md-flex justify-content-md-center gap-3">
+            <Form.Group className = "col mt-2 mb-3 d-md-flex justify-content-md-center gap-3">
                <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">
                   <Button className = "customButton" variant = "danger" onClick = {handleCloseNewEmployee}>Cancel</Button>
                </Col>
