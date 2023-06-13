@@ -10,13 +10,13 @@ import Col                      from 'react-bootstrap/Col';
 import axios                    from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 import "./NewEmployee.css";
+import UploadWidget from '../../UploadWidget';
 /* import axiosInstanceCloudinary from '../../../js/axiosInstanceCloudinary'; */
 
 
 const { REACT_APP_API, 
-        REACT_APP_CLOUDINARY_CLOUD_NAME, 
         REACT_APP_CLOUDINARY_PRESET,
-        REACT_APP_CLOUDINARY_HELPDESK,
+        REACT_APP_CLOUDINARY_API_KEY
       } = process.env;
 
 
@@ -41,9 +41,21 @@ function NewEmployee() {
     const [selectedImage , setSelectedImage] = useState('');
     const [urlPicture, setUrlPicture] = useState('');
     const [backColorEmail, setBackColorEmail] = useState('1px solid #ccc');
-    
 
+    const [url, updateUrl] = useState();
+    const [error, updateError] = useState();
+      
 
+    function handleOnUpload(error, result, widget) {
+      if ( error ) {
+        updateError(error);
+        widget.close({
+          quiet: true
+        });
+        return;
+      }
+      updateUrl(result?.info?.secure_url);
+    }
 
     const validPreviewImage =async (event) => {
       
@@ -59,56 +71,40 @@ function NewEmployee() {
     const handleImageSelected = (event) => {
       validPreviewImage(event); //VALIDA X EMAIL FALTA VALIDA EL NUME DE EMPLOYEE
 
-
       const file = event.target.files[0];
-      setSelectedImage(file);
+      setSelectedImage(file); 
       const fileReader = new FileReader();
 
       fileReader.onload = (event)=> {
-         const dataURL = event.target.result;
-         setUrlPicture(dataURL);
+         const imageAsURL = event.target.result;
+         setUrlPicture(imageAsURL); 
+         
       }
       fileReader.readAsDataURL(file);
     };
     
     
-    const handleUpload = () => {
+    const handleUpload = async() => {
       if (selectedImage) {
         const formData = new FormData();
-        formData.append('file', selectedImage);
-        formData.append('upload_preset', REACT_APP_CLOUDINARY_PRESET);
+        formData.append('file'          , selectedImage);
+        formData.append('upload_preset' , REACT_APP_CLOUDINARY_PRESET);
+        formData.append('api_key'       , REACT_APP_CLOUDINARY_API_KEY);
     
-        axios
-          .post('https://api.cloudinary.com/v1_1/cloudhenry/image/upload', formData)
-          .then((response) => {
-            console.log(response.data); // Respuesta de la subida exitosa
-            // Realiza cualquier otra acción necesaria después de la subida exitosa
-          })
-          .catch((error) => {
-            console.error(error); // Manejo de errores de subida
-            // Realiza cualquier acción necesaria en caso de error
-          });
+
+        try {
+          const response = await axios.post('https://api.cloudinary.com/v1_1/cloudhenry/image/upload', formData);
+          console.log(response.data.secure_url); // Respuesta de la subida exitosa 
+        } catch (error) {
+            console.log(error);
+        }
       }
     };
     
 
 
 
-      const handleImagePreview = (event) => {
-         /* const file = event.target.files[0];
-         const fileReader = new FileReader();
-               
-         fileReader.onload = function(event) {
-           const dataURL = event.target.result;
-           console.log('___________________');
-           console.log(dataURL)
-           setSelectedImage(dataURL)
-         };
-       
-         fileReader.readAsDataURL(file);
- */
-         
-       };
+    
    
    const handleChangeGenere = e => {
       e.persist();
@@ -330,23 +326,29 @@ const handleCloseNewEmployee =()=> {
             </div>
          </div>
          
-            <div className = "formImage mt-4 mb-0">
-               <div id = "formLeftImage">
-                  <input  
-                     type      = "file"
-                     className = "form-control"
-                     id        = "imageInput"
-                     accept    = "image/*"
-                     onChange  = { (event) => {
-                                               handleImageSelected(event);
-                                              }}
-                  />
+            <div className = "formImage mt-4 mb-0 col-12">
+               <div id = "formLeftImage" className = "col-6">
+                   <UploadWidget onUpload={handleOnUpload}>
+                     {({ open }) => {
+                        function handleOnClick(e) {
+                           e.preventDefault();
+                           open();
+                        }
+                         return ( 
+                           <button onClick={handleOnClick}>
+                              Upload an Employee Image
+                         </button>
+                         ) 
+                     }}
+                  </UploadWidget>
                </div>
-               <div id = "formRightImage">
+               <div id = "formRightImage" className = "col-6">
                   <div className="spacePicture">
-                     <img src={selectedImage? urlPicture: defaultFile} alt="Preview" id="employeePicture" />
-                  </div>
+                     <img src={url? url: defaultFile} alt="Preview" id="employeePicture" />   
+                  </div>   
                </div>
+               
+               
             </div>
                   
                

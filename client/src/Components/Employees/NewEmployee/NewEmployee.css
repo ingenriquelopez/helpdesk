@@ -36,14 +36,6 @@
 
 
 
-/* #spacePicture {
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  
-}
- */
-
 
 .formImage {
   display:flex;
@@ -52,11 +44,19 @@
   justify-content: space-around;
 }
 
+#formLeftImage, #formRightImage {
+  display         : flex;
+  flex-direction  : column;
+  justify-content : center;
+  align-items     : center;
+  height: 10rem;
+}
+
 .spacePicture{
-  margin-bottom : 20px;
   display       : flex;
   flex-direction: column;
-  gap: 3px;
+  align-items: center;
+  justify-content: center;
   width: 10rem;
   height: 10rem;
 }
