@@ -14,10 +14,7 @@ import UploadWidget from '../../UploadWidget';
 /* import axiosInstanceCloudinary from '../../../js/axiosInstanceCloudinary'; */
 
 
-const { REACT_APP_API, 
-        REACT_APP_CLOUDINARY_PRESET,
-        REACT_APP_CLOUDINARY_API_KEY
-      } = process.env;
+const { REACT_APP_API } = process.env;
 
 
 // de momento no se esta utilizando
@@ -38,15 +35,30 @@ function NewEmployee() {
     
      const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
     
-    const [selectedImage , setSelectedImage] = useState('');
-    const [urlPicture, setUrlPicture] = useState('');
+    const [selectedImage , setSelectedImage]  = useState('');
+    const [urlPicture, setUrlPicture]         = useState('');
     const [backColorEmail, setBackColorEmail] = useState('1px solid #ccc');
 
     const [url, updateUrl] = useState();
     const [error, updateError] = useState();
       
 
+    /*----------------------------------*/
+    const validPreviewImage =async () => {      
+      if ( await yaExisteEmail(txtEmail) ) {
+         setBackColorEmail('1px solid #D87A66');
+         setUrlPicture('');
+         setSelectedImage('');
+         return false; /* no deberia avanzar en el sig. paso */
+      } else  {
+         setBackColorEmail('1px solid #ccc');
+         return true;
+      }
+    }
+
+    /* -------------------*/
     function handleOnUpload(error, result, widget) {
+    
       if ( error ) {
         updateError(error);
         widget.close({
@@ -57,53 +69,9 @@ function NewEmployee() {
       updateUrl(result?.info?.secure_url);
     }
 
-    const validPreviewImage =async (event) => {
-      
-      if ( await yaExisteEmail(txtEmail) ) {
-         setBackColorEmail('1px solid #D87A66');
-         setUrlPicture('');
-         setSelectedImage('');
-      } else setBackColorEmail('1px solid #ccc');
-    }
-
     
 
-    const handleImageSelected = (event) => {
-      validPreviewImage(event); //VALIDA X EMAIL FALTA VALIDA EL NUME DE EMPLOYEE
-
-      const file = event.target.files[0];
-      setSelectedImage(file); 
-      const fileReader = new FileReader();
-
-      fileReader.onload = (event)=> {
-         const imageAsURL = event.target.result;
-         setUrlPicture(imageAsURL); 
-         
-      }
-      fileReader.readAsDataURL(file);
-    };
-    
-    
-    const handleUpload = async() => {
-      if (selectedImage) {
-        const formData = new FormData();
-        formData.append('file'          , selectedImage);
-        formData.append('upload_preset' , REACT_APP_CLOUDINARY_PRESET);
-        formData.append('api_key'       , REACT_APP_CLOUDINARY_API_KEY);
-    
-
-        try {
-          const response = await axios.post('https://api.cloudinary.com/v1_1/cloudhenry/image/upload', formData);
-          console.log(response.data.secure_url); // Respuesta de la subida exitosa 
-        } catch (error) {
-            console.log(error);
-        }
-      }
-    };
-    
-
-
-
+    /*-----------------------------------*/
     
    
    const handleChangeGenere = e => {
@@ -176,6 +144,7 @@ function NewEmployee() {
                   email       : txtEmail,
                   level       : txtLevel,
                   department  : txtDepartment,
+                  picture     : url,
                }
 
                if ( await yaExisteEmail(txtEmail) ) {
@@ -183,7 +152,6 @@ function NewEmployee() {
                } else 
                   {
                   try {
-                     handleUpload();  
                      const response = await axios.post(`${REACT_APP_API}/employees`,newEmployee, {
                         headers: {
                             "authorization": `Bearer ${userLogged.userToken}`,
@@ -332,7 +300,7 @@ const handleCloseNewEmployee =()=> {
                      {({ open }) => {
                         function handleOnClick(e) {
                            e.preventDefault();
-                           open();
+                           if (validPreviewImage())  open(); /*VALIDA X EMAIL FALTA VALIDA EL NUME DE EMPLOYEE*/
                         }
                          return ( 
                            <button onClick={handleOnClick}>
@@ -344,11 +312,9 @@ const handleCloseNewEmployee =()=> {
                </div>
                <div id = "formRightImage" className = "col-6">
                   <div className="spacePicture">
-                     <img src={url? url: defaultFile} alt="Preview" id="employeePicture" />   
+                     <img src={url? url: defaultFile} alt="Preview" id="employeePicture" />  
                   </div>   
                </div>
-               
-               
             </div>
                   
                

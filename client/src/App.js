@@ -49,7 +49,7 @@ function App() {
           <Route path = "attendanceemployee/:idt"     element =  { <AttendanceEmployee/>}/> 
           
           <Route path = 'newemployee'            element = { <NewEmployee/> }/>
-          <Route path = 'dashboard/vieweremployees'        element = { <ViewerEmployees/> }/>  
+          <Route path = 'vieweremployees'        element = { <ViewerEmployees/> }/>  
         </Route>
 
         <Route path="/dashboard/*" element={<DashBoard />}>

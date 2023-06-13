@@ -7,7 +7,7 @@ import DataTable, { createTheme }     from 'react-data-table-component';
 import moment                         from 'moment';
 import Button                         from 'react-bootstrap/Button';
 import { FcCancel }                   from "react-icons/fc";
-import Pinga                          from 'd:/HDFotosPersonal/Pinga.jpg'
+import Pinga                          from 'e:/HDFotosPersonal/Pinga.jpg'
 import './AttendanceEmployee.css';
 
 const {REACT_APP_API} = process.env;
