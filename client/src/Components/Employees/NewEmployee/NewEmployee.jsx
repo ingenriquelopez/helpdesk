@@ -1,11 +1,12 @@
 import React, { useState , useEffect} from 'react'
 import { useNavigate  }         from 'react-router-dom';
 import { useLocalStorage }      from '../../../js/useLocalStorage';
-import bsCustomFileInput        from "bs-custom-file-input";
 import Button                   from 'react-bootstrap/Button';
 import Form                     from 'react-bootstrap/Form';
 import Row                      from 'react-bootstrap/Row';
 import Col                      from 'react-bootstrap/Col';
+
+import { Image,CloudinaryContext, Transformation } from 'cloudinary-react';
 
 import axios                    from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
@@ -37,19 +38,37 @@ function NewEmployee() {
     
      const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
     
-    const [selectedImage , setSelectedImage]  = useState('');
-    const [urlPicture, setUrlPicture]         = useState('');
     const [backColorEmail, setBackColorEmail] = useState('1px solid #ccc');
 
-    const [url, updateUrl] = useState();
+    const [selectedImage , setSelectedImage]  = useState('');
+    const [urlPicture, updateUrlPicture] = useState();
+    const [public_id, updatePublic_id] = useState('');
     const [error, updateError] = useState();
-      
+    
+    
+
+
+    /* creacion del widget de cloudinary par ael upload de las imagenes posteriores*/
+    var myWidget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: REACT_APP_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: REACT_APP_CLOUDINARY_UPLOAD_PRESET,
+        
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          console.log("Done! Here is the image info: ", result.info);
+          updatePublic_id(result.info.public_id);
+          updateUrlPicture(result.info.secure_url)        }
+      }
+    );
+    /*--------------------------------------------------------------------------*/
 
     /*----------------------------------*/
     const validPreviewImage =async () => {      
       if ( await yaExisteEmail(txtEmail) ) {
          setBackColorEmail('1px solid #D87A66');
-         setUrlPicture('');
+         updateUrlPicture('');
          setSelectedImage('');
          return false; /* no deberia avanzar en el sig. paso */
       } else  {
@@ -59,37 +78,14 @@ function NewEmployee() {
     }
 
     /* -------------------*/
-    function handleOnUpload(error, result, widget) {
     
-      if ( error ) {
-        updateError(error);
-        widget.close({
-          quiet: true
-        });
-        return;
-      }
-      updateUrl(result?.info?.secure_url);
-    }
-
     
 
     /*-----------------------------------*/
     const handleOnClick = ()=> {
-      var myWidget = window.cloudinary.createUploadWidget(
-         {
-           cloudName: REACT_APP_CLOUDINARY_CLOUD_NAME,
-           uploadPreset: REACT_APP_CLOUDINARY_UPLOAD_PRESET,
-           
-         },
-         (error, result) => {
-           if (!error && result && result.event === "success") {
-             console.log("Done! Here is the image info: ", result.info);
-             setUrlPicture(result.info.secure_url);
-             
-           }
-         }
-       );
+      
        myWidget.open();
+
     }
    
    const handleChangeGenere = e => {
@@ -111,7 +107,7 @@ function NewEmployee() {
    }
    
    function validateForm() {
-      if (txtNumEmployee && txtName && txtEmail ) { 
+      if (txtNumEmployee && txtName && txtEmail && urlPicture) { 
          setdisabledAdd(false)
       }  else setdisabledAdd(true)
    }
@@ -128,6 +124,7 @@ function NewEmployee() {
    }
    
    function handleEmail(e) {
+      setdisabledAdd(true)
       setTxtEmail(e.target.value.toLowerCase());
       let lastchar = e.target.value[e.target.value.length-1]
       if (lastchar ==='@') {
@@ -135,7 +132,7 @@ function NewEmployee() {
             setTxtEmail('');
          }
       } 
-      validateForm();
+       validateForm(); 
    }
    
    
@@ -150,7 +147,6 @@ function NewEmployee() {
    }
 
    async function handleSubmitForm(e) {
-      
       e.preventDefault();
       
       if (!disabledAdd) {
@@ -162,7 +158,7 @@ function NewEmployee() {
                   email       : txtEmail,
                   level       : txtLevel,
                   department  : txtDepartment,
-                  picture     : url,
+                  picture     : urlPicture,
                }
 
                if ( await yaExisteEmail(txtEmail) ) {
@@ -212,11 +208,10 @@ const handleCloseNewEmployee =()=> {
    navigate('/trainings', { replace: true});
 }
 
-
-   useEffect(() => {
-      bsCustomFileInput.init();
-      
-    }, []);
+useEffect( ()=> {
+console.log(urlPicture)
+validateForm();
+}, [urlPicture]);
 
   return (   
    <div className="d-flex mb-0 d-md-flex justify-content-center"  id = "containerEmployee">
@@ -227,132 +222,129 @@ const handleCloseNewEmployee =()=> {
          </div>           
       </div> 
       
-      <form className = "row d-md-flex justify-content-center" onSubmit={(e) => handleSubmitForm(e)} id = "form">
-         
-         <div className="row">
-            <div className="col-2 ">
-                  <Form.Label className = "font-weight-bold">Num Employee</Form.Label>
-                  <Form.Control 
-                           type        = "text" 
-                           placeholder = "#" 
-                           value       = {txtNumEmployee}
-                           onChange    = {(e)=> handleNumEmployee(e)}       
-                  />
-            </div>
-            <div className="col-6">
-               <Form.Label >Employee Name</Form.Label>
-                  <Form.Control 
-                     type        = "name" 
-                     id          = "nameEmployee"
-                     placeholder = "Enter Name" 
-                     value       = {txtName}
-                     onChange    = { (e)=> handleName(e)}       
-                  />
-            </div>
-            <div className="col-4">
-                <Form.Label className = "font-weight-bold">Genere</Form.Label>
-
-               <Form.Group controlId="genere">
-                  <Form.Check
-                     value = "Female"
-                     type  = "radio"
-                     
-                     label    = "Female"
-                     onChange = {handleChangeGenere} 
-                     checked  = {genere === "Female"}
-                  />
-                  <Form.Check
-                     value = "Male"
-                     type = "radio"
-
-                     label = "Male"
-                     onChange={handleChangeGenere} 
-                     checked = {genere === "Male"}
-                  />
-               </Form.Group>
-            </div>
-         </div>
-         <div className="row">
-            <div className="col-6">
-               <Form.Label className = "font-weight-bold mt-3">Employee Email</Form.Label>
-                  <Form.Control 
-                     type        = "email" 
-                     placeholder = "Enter email" 
-                     value       = {txtEmail}
-                     style = {{border: backColorEmail }}   
-                     onChange    = {(e)=> handleEmail(e)}       
-                  />
-            </div>
-            <div className="col-2">
-               <Form.Label className = "font-weight-bold mt-3">Level</Form.Label>
-                  <Form.Control as = "select"
-                     
-                     onChange ={ (e)=> handleLevel(e)}
-                  >
-                     <option>Choose...</option>
-                     <option value = "PreSchool">PreSchool</option>
-                     <option value = "Elementary">Elementary</option>
-                     <option value = "HighSchool">HighSchool</option>
-                     <option value = "College">College</option>
-                  </Form.Control>     
-            </div>
-            <div className="col">
-               <Form.Label className = "font-weight-bold mt-3">Department</Form.Label>
-                  <Form.Control as = "select"
-                     onChange ={ (e)=> handleDepartment(e)}
-                  >
-                     <option>Choose...</option>
-                     <option value = "Administrative">Administrative</option>
-                     <option value = "Academic">Academic</option>
-                     <option value = "Direction">Direction</option>
-                     <option value = "Support Assistance">Support Assistance</option>
-                     <option value = "Sports">Sports</option>
-                     <option value = "General Services">General Services</option>
-                  </Form.Control> 
-            </div>
-         </div>
-         
-            <div className = "formImage mt-4 mb-0 col-12">
-               <div id = "formLeftImage" className = "col-6">
-                  <button className="cloudinary-button" onClick={handleOnClick}>
-                     Upload an Employee Image
-                  </button>
-               
-                 {/*  <img id="uploadedimage" src=""></img> */}
-                   {/* <UploadWidget onUpload={handleOnUpload}>
-                     {({ open }) => {
-                        function handleOnClick(e) {
-                           e.preventDefault();
-                           if (validPreviewImage())  open();
-                        }
-                         return ( 
-                           <button onClick={handleOnClick}>
-                              Upload an Employee Image
-                         </button>
-                         ) 
-                     }}
-                  </UploadWidget> */}
-               </div>
-               <div id = "formRightImage" className = "col-6">
-                  <div className="spacePicture">
-                    <img src={urlPicture? urlPicture: defaultFile} alt="Preview" id="employeePicture" />   
-                  </div>   
-               </div>
-            </div>
-                  
-               
-         <Row >
-            <Form.Group className = "col mt-2 mb-3 d-md-flex justify-content-md-center gap-3">
-               <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">
-                  <Button className = "customButton" variant = "danger" onClick = {handleCloseNewEmployee}>Cancel</Button>
-               </Col>
-               <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">
-                  <Button className = "customButton" type    = "submit" variant = "success" disabled = {disabledAdd}>Add</Button>
-               </Col>
+      <CloudinaryContext cloudName= {REACT_APP_CLOUDINARY_CLOUD_NAME}>
+         <form className = "row d-md-flex justify-content-center" onSubmit={(e) => handleSubmitForm(e)} id = "form">
             
-            </Form.Group>    
-         </Row>
-      </form>
+            <div className="row">
+               <div className="col-2 ">
+                     <Form.Label className = "font-weight-bold">Num Employee</Form.Label>
+                     <Form.Control 
+                              type        = "text" 
+                              placeholder = "#" 
+                              value       = {txtNumEmployee}
+                              onChange    = {(e)=> handleNumEmployee(e)}       
+                     />
+               </div>
+               <div className="col-6">
+                  <Form.Label >Employee Name</Form.Label>
+                     <Form.Control 
+                        type        = "name" 
+                        id          = "nameEmployee"
+                        placeholder = "Enter Name" 
+                        value       = {txtName}
+                        onChange    = { (e)=> handleName(e)}       
+                     />
+               </div>
+               <div className="col-4">
+                  <Form.Label className = "font-weight-bold">Genere</Form.Label>
+
+                  <Form.Group controlId="genere">
+                     <Form.Check
+                        value = "Female"
+                        type  = "radio"
+                        
+                        label    = "Female"
+                        onChange = {handleChangeGenere} 
+                        checked  = {genere === "Female"}
+                     />
+                     <Form.Check
+                        value = "Male"
+                        type = "radio"
+
+                        label = "Male"
+                        onChange={handleChangeGenere} 
+                        checked = {genere === "Male"}
+                     />
+                  </Form.Group>
+               </div>
+            </div>
+            <div className="row">
+               <div className="col-6">
+                  <Form.Label className = "font-weight-bold mt-3">Employee Email</Form.Label>
+                     <Form.Control 
+                        type        = "email" 
+                        placeholder = "Enter email" 
+                        value       = {txtEmail}
+                        style = {{border: backColorEmail }}   
+                        onChange    = {(e)=> handleEmail(e)}       
+                     />
+               </div>
+               <div className="col-2">
+                  <Form.Label className = "font-weight-bold mt-3">Level</Form.Label>
+                     <Form.Control as = "select"
+                        
+                        onChange ={ (e)=> handleLevel(e)}
+                     >
+                        <option>Choose...</option>
+                        <option value = "PreSchool">PreSchool</option>
+                        <option value = "Elementary">Elementary</option>
+                        <option value = "HighSchool">HighSchool</option>
+                        <option value = "College">College</option>
+                     </Form.Control>     
+               </div>
+               <div className="col">
+                  <Form.Label className = "font-weight-bold mt-3">Department</Form.Label>
+                     <Form.Control as = "select"
+                        onChange ={ (e)=> handleDepartment(e)}
+                     >
+                        <option>Choose...</option>
+                        <option value = "Administrative">Administrative</option>
+                        <option value = "Academic">Academic</option>
+                        <option value = "Direction">Direction</option>
+                        <option value = "Support Assistance">Support Assistance</option>
+                        <option value = "Sports">Sports</option>
+                        <option value = "General Services">General Services</option>
+                     </Form.Control>  
+               </div>
+            </div>
+            
+               <div className = "formImage mt-4 mb-0 col-12">
+                  <div id = "formLeftImage" className = "col-6">
+                     <button className="cloudinary-button" onClick={handleOnClick}>
+                        Upload an Employee Image
+                     </button>
+                  
+                  </div>
+                  <div id = "formRightImage" className = "col-6">
+                     
+                     <Image
+                        cloudName= {REACT_APP_CLOUDINARY_CLOUD_NAME}
+                        uploadPreset= {REACT_APP_CLOUDINARY_UPLOAD_PRESET}
+                        secure="true"
+                        public_id = {public_id}
+                        
+                        id = "employeePicture"
+                        >
+                        <Transformation width="100" height="120" crop="fill" />
+                     </Image>
+                  </div>
+               </div>
+                     
+                  
+            <Row >
+               <Form.Group className = "col mt-2 mb-3 d-md-flex justify-content-md-center gap-3">
+                  <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">
+                     <Button className = "customButton" variant = "danger" onClick = {handleCloseNewEmployee}>Cancel</Button>
+                  </Col>
+                  <Col xxl = {3} xl = {4} lg = {4} md = {5} sm = {12} className = "text-center">
+                     <Button className = "customButton" type    = "submit" variant = "success" disabled = {disabledAdd}>Add</Button>
+                  </Col>
+               
+               </Form.Group>    
+            </Row>
+         </form>
+      </CloudinaryContext>
+      
       
                
    </div> 
