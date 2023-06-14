@@ -10,11 +10,13 @@ import Col                      from 'react-bootstrap/Col';
 import axios                    from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 import "./NewEmployee.css";
-import UploadWidget from '../../UploadWidget';
-/* import axiosInstanceCloudinary from '../../../js/axiosInstanceCloudinary'; */
 
 
 const { REACT_APP_API } = process.env;
+
+const { REACT_APP_CLOUDINARY_CLOUD_NAME, 
+   REACT_APP_CLOUDINARY_UPLOAD_PRESET} = process.env;
+
 
 
 // de momento no se esta utilizando
@@ -72,7 +74,23 @@ function NewEmployee() {
     
 
     /*-----------------------------------*/
-    
+    const handleOnClick = ()=> {
+      var myWidget = window.cloudinary.createUploadWidget(
+         {
+           cloudName: REACT_APP_CLOUDINARY_CLOUD_NAME,
+           uploadPreset: REACT_APP_CLOUDINARY_UPLOAD_PRESET,
+           
+         },
+         (error, result) => {
+           if (!error && result && result.event === "success") {
+             console.log("Done! Here is the image info: ", result.info);
+             setUrlPicture(result.info.secure_url);
+             
+           }
+         }
+       );
+       myWidget.open();
+    }
    
    const handleChangeGenere = e => {
       e.persist();
@@ -296,11 +314,16 @@ const handleCloseNewEmployee =()=> {
          
             <div className = "formImage mt-4 mb-0 col-12">
                <div id = "formLeftImage" className = "col-6">
-                   <UploadWidget onUpload={handleOnUpload}>
+                  <button className="cloudinary-button" onClick={handleOnClick}>
+                     Upload an Employee Image
+                  </button>
+               
+                 {/*  <img id="uploadedimage" src=""></img> */}
+                   {/* <UploadWidget onUpload={handleOnUpload}>
                      {({ open }) => {
                         function handleOnClick(e) {
                            e.preventDefault();
-                           if (validPreviewImage())  open(); /*VALIDA X EMAIL FALTA VALIDA EL NUME DE EMPLOYEE*/
+                           if (validPreviewImage())  open();
                         }
                          return ( 
                            <button onClick={handleOnClick}>
@@ -308,11 +331,11 @@ const handleCloseNewEmployee =()=> {
                          </button>
                          ) 
                      }}
-                  </UploadWidget>
+                  </UploadWidget> */}
                </div>
                <div id = "formRightImage" className = "col-6">
                   <div className="spacePicture">
-                     <img src={url? url: defaultFile} alt="Preview" id="employeePicture" />  
+                    <img src={urlPicture? urlPicture: defaultFile} alt="Preview" id="employeePicture" />   
                   </div>   
                </div>
             </div>
