@@ -7,8 +7,17 @@
     flex-direction   : column;
     justify-content  : center;
     align-items      : center;
+    
+    
 }
 
+#fieldsUpper {
+  display         : flex;
+  justify-content : space-between;
+  align-items     : center;
+  flex-direction  : row;
+  
+}
 
   .center {
     margin     : 0 auto;
@@ -27,48 +36,51 @@
   
   
 #form {
-    box-shadow:
+  margin : 0 auto;
+  box-shadow:
     inset 
           0 0  0 2px rgb(255,255,255),
           0.3em 0.3em 1em rgba(0,0,0,0.3);
-          width:70%;
+  width :80%;
 }
 
-
-
-
-.formImage {
-  display:flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+#spaceCentral {
+  display    : flex;
+  flex-wrap  : nowrap;
 }
 
-#formLeftImage, #formRightImage {
+.rightSpace {
+  display          : flex;
+  justify-content  : space-evenly;
+  flex-direction   : column;
+  align-items      : center;
+}
+
+#spaceBtnUpload, #spaceImage {
   display         : flex;
   flex-direction  : column;
-  justify-content : center;
   align-items     : center;
-  height: 10rem;
 }
 
+
 .spacePicture{
-  display       : flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 10rem;
-  height: 10rem;
+  display         : flex;
+  flex-direction  : column;
+  align-items     : center;
+  justify-content : center;
+  width           : 10rem;
+  height          : 10rem;
 }
+
 #employeePicture{
   width         : 10rem;
-  max-width: 200px;
+  max-width     : 200px;
   
   border-radius : 50%;
   border        : 6px solid #AAA;
-  width            : 7rem;
-  height           : 8rem;
-  border-radius: 5%;
+  width         : 7rem;
+  height        : 8rem;
+  border-radius : 5%;
   box-shadow:
   inset 0 -3em 3em rgba(0,0,0,0.1),
         0 0  0 2px rgb(255,255,255),

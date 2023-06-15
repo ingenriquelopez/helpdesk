@@ -12,13 +12,13 @@ import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-toastify/dist/ReactToastify.css";
-import HomeTrainings from "./Pages/HomeTrainings/HomeTrainings";
-import NewTraining from "./Components/Trainings/NewTraining/NewTraining";
-import ViewerTrainings from './Components/Trainings/ViewerTrainings/ViewerTrainings';
-import NewEmployee from "./Components/Employees/NewEmployee/NewEmployee";
-import ViewerEmployees from './Components/Employees/ViewerEmployees/ViewerEmployees';
-import RecordAttendance from "./Components/Trainings/RecordAttendance/RecordAttendance";
-import AttendanceEmployee from "./Components/Trainings/AttendanceEmployee/AttendanceEmployee";
+import HomeTrainings       from "./Pages/HomeTrainings/HomeTrainings";
+import NewTraining         from "./Components/Trainings/NewTraining/NewTraining";
+import ViewerTrainings     from './Components/Trainings/ViewerTrainings/ViewerTrainings';
+import NewEmployee         from "./Components/Employees/NewEmployee/NewEmployee";
+import ViewerEmployees     from './Components/Employees/ViewerEmployees/ViewerEmployees';
+import RecordAttendance    from "./Components/Trainings/RecordAttendance/RecordAttendance";
+import AttendanceEmployee  from "./Components/Trainings/AttendanceEmployee/AttendanceEmployee";
 
 import ViewerUsers         from './Components/Users/ViewerUsers';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import { useNavigate  }     from 'react-router-dom';
 import { useDispatch,useSelector } from 'react-redux';
-import { updateTask } from '../../../redux/tasks/tasksReducer';
+
 import Form      from 'react-bootstrap/Form';
 import Button    from 'react-bootstrap/Button';
 import Row       from 'react-bootstrap/Row';
@@ -17,7 +17,7 @@ import DatePicker  from "react-datepicker";
 
 const {REACT_APP_API} = process.env;
 
-const LEVELS = ['PreSchool','Elementary','HighSchool','College', 'Global'];
+/* const LEVELS = ['PreSchool','Elementary','HighSchool','College', 'Global']; */
 
 
 export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose, handleLgUpdateEmployee}) {
@@ -32,20 +32,27 @@ export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose,
   
     const [userLogged       , setUserLogged]  = useLocalStorage('userLogged','');
     const [isOpenDR         , setIsOpenDR]    = useState(false);
+    const [disabledUpdate, setDisabledUpdate] = useState(true);
     
     
-    
+    const validaFormUpdate = ()=> {
+      if (newName && newEmail) {
+        setDisabledUpdate(false);
+      } else setDisabledUpdate(true);
+      
+    }
+
     async function handleUpdate() {
       const dataToChange = {
         numEmployee : myData.numEmployee,
-        name        : newTraining,
-        genere      : newSpeaker,
-        email       : newLevel,
-        level       : newDateTraining, 
-        department  : newMode,
+        name        : newName,
+        genere      : newGenere,
+        email       : newEmail,
+        level       : newLevel, 
+        department  : newDepartment,
       }
       try {
-         const response = await axios.put(`${REACT_APP_API}/trainings`,dataToChange, {
+         const response = await axios.put(`${REACT_APP_API}/employees`,dataToChange, {
           headers: {
               "authorization": `Bearer ${userLogged.userToken}`,
           }
@@ -58,63 +65,63 @@ export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose,
             return
           }
         }
-        handleLgUpdateTraining();
+        handleLgUpdateEmployee();
       } catch(error) {
         console.log(error.message);
       }   
     }
   
-    function handleTraining(e) {  
-       let nt = e.target.value;
-       setNewTraining(nt);
+    function handleName(e) {  
+       let name = e.target.value;
+       setNewName(name);
+       validaFormUpdate();
     }
   
-    function handleSpeaker(e) {  
-      let nt = e.target.value;
-      setNewSpeaker(nt);
+    function handleGenere(e) {  
+      let ngen = e.target.value;
+      setNewGenere(ngen);
+      validaFormUpdate();
+   }
+  
+   function handleEmail(e) {  
+      let nemail = e.target.value;
+      setNewEmail(nemail);
+      validaFormUpdate();
    }
   
    function handleLevel(e) {  
-      let nt = e.target.value;
-      setNewLevel(nt);
-   }
-  
-  
-   const handleClickDateTraining    = (e) => {
-      e.preventDefault();
-      setIsOpenDR(!isOpenDR);
-    }
-    const handleChangeDateTraining   = (e) => {
-      setIsOpenDR(!isOpenDR);
-      setTxtDateTraining(e);
-      setNewDateTraining(e);
-    };
-  
-   function handleMode(e) {  
-      let nt = e.target.value;
-      setNewMode(nt);
-   }
-  
-  
-    const clearForm = () => {
-      setNewTraining(myData.training);
-      setNewSpeaker(myData.speaker);
-      setNewLevel(myData.level);
-      setNewDateTraining(myData.training);
-      setNewMode(myData.mode);
-      
-      handleLgClose();
-    }
+    let nlevel = e.target.value;
+    setNewLevel(nlevel);
+ }
+ function handleDepartment(e) {  
+  let ndepartment = e.target.value;
+  setNewDepartment(ndepartment);
+  validaFormUpdate();
+}
+
+    
+  const clearForm = () => {
+    setNewName(myData.name);
+    setNewGenere(myData.genere);
+    setNewEmail(myData.email);
+    setNewLevel(myData.level);
+    setNewDepartment(myData.department);
+    
+    handleLgClose();
+  }
   
     useEffect( ()=> {
-      setNewTraining(myData.training);
-      setNewSpeaker(myData.speaker);
+      setNewName(myData.name);
+      setNewGenere(myData.genere);
+      setNewEmail(myData.email);
       setNewLevel(myData.level);
-      setNewMode(myData.mode);
-  
-      setNewDateTraining(myData.dateTraining); 
+      setNewDepartment(myData.department);
       
     },[myData])
+    
+    useEffect( ()=> {
+      validaFormUpdate();
+    }, [newName, newEmail]);
     
     return (
       <Modal show = {lgShow} onHide = {handleLgClose} centered>
@@ -131,13 +138,13 @@ export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose,
                     
                         <Col md = {12} className = "text-center">
                           <Form.Group className="mb-3 mx-auto" >
-                              <Form.Label >TRAINING</Form.Label>
-                              * <Form.Control 
+                              <Form.Label >Name</Form.Label>
+                                <Form.Control 
                                   type         = "text" 
-                                  name         = "training" 
-                                  defaultValue        = {newTraining} 
-                                  onChange     = { ev=> handleTraining(ev)}  
-                              /> 
+                                  name         = "name" 
+                                  defaultValue = {newName} 
+                                  onChange     = { ev=> handleName(ev)}  
+                                /> 
                           </Form.Group>
                       </Col>  
                   </Row>
@@ -146,42 +153,42 @@ export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose,
   
                         <Col md ={12} className = "text-center">
                           <Form.Group className="mb-3 mx-auto">
-                              <Form.Label>SPEAKER</Form.Label>
+                              <Form.Label>EMAIL</Form.Label>
                                 <Form.Control 
                                   type         = "text" 
-                                  name         = "speaker" 
-                                  defaultValue = {newSpeaker} 
-                                  onChange     = { ev=> handleSpeaker(ev) }  
+                                  name         = "email" 
+                                  defaultValue = {newEmail} 
+                                  onChange     = { ev=> handleEmail(ev) }  
                               /> 
                           </Form.Group>
                       </Col >     
   
                        <Col md = {6} className = "text-center">
                           <Form.Group className   = "mb-3 mx-auto ">             
-                          <Form.Label className = "text-center">LEVEL</Form.Label>
-                          <Form.Select defaultValue="Choose Level..." onChange ={ (e)=> handleLevel(e)}>
+                          <Form.Label className = "text-center">GENERE</Form.Label>
+                          <Form.Select defaultValue="Choose Genere..." onChange ={ (e)=> handleGenere(e)}>
                                           <option>Choose...</option>
-                                          <option>{LEVELS[0]}</option>
-                                          <option>{LEVELS[1]}</option>
-                                          <option>{LEVELS[2]}</option>
-                                          <option>{LEVELS[3]}</option>
-                                          <option>{LEVELS[4]}</option>
+                                          <option>Female</option>
+                                          <option>Male</option>
+                                          
                           </Form.Select>
                           </Form.Group> 
                       </Col>
   
                       <Col md = {6} className = "text-center">
                           <Form.Group className="mb-3 mx-auto" >
-                              <Form.Label>MODE</Form.Label>
+                              <Form.Label>LEVEL</Form.Label>
                               <Form.Select 
                                       as ="select" 
                                       id = "mode" 
-                                      defaultValue="Choose device..." 
-                                      onChange ={ (e)=> handleMode(e)}
+                                      defaultValue="Choose Level..." 
+                                      onChange ={ (e)=> handleLevel(e)}
                               >
-                                  <option>Choose...</option>
-                                  <option>FaceToFace</option>
-                                  <option>OnLine</option>
+                                <option>Choose...</option>
+                                <option value = "PreSchool">PreSchool</option>
+                                <option value = "Elementary">Elementary</option>
+                                <option value = "HighSchool">HighSchool</option>
+                                <option value = "College">College</option>
                               </Form.Select>
                           </Form.Group>
                       </Col> 
@@ -190,17 +197,19 @@ export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose,
                   <Row>
                       
                       <Col md = {12} className = "text-center">
-                        <Form.Label className = "mb-3">DATE TRAINING</Form.Label>
+                        <Form.Label className = "mb-3">DEPARTMENT</Form.Label>
                       </Col>
                       
                       <Col md = {12} className = "text-center">
-                          <button className = {txtdateTraining ? "btn-info" : "btn-light"}
-                                              onClick = { (e) => handleClickDateTraining(e) } 
-                          > 
-                             {txtdateTraining ? moment(txtdateTraining).format("dddd DD/MMMM/YYYY"): 'Date...?' }
-                          </button> 
-                          {isOpenDR && (<DatePicker selected={txtdateTraining} onChange={ (date) => handleChangeDateTraining(date)} inline />  )}  
-                      
+                        <Form.Control as = "select" onChange ={ (e)=> handleDepartment(e)} >
+                          <option>Choose...</option>
+                          <option value = "Administrative">Administrative</option>
+                          <option value = "Academic">Academic</option>
+                          <option value = "Direction">Direction</option>
+                          <option value = "Support Assistance">Support Assistance</option>
+                          <option value = "Sports">Sports</option>
+                          <option value = "General Services">General Services</option>
+                      </Form.Control>  
                       </Col>
                   </Row>
               </Form> 
@@ -210,7 +219,7 @@ export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose,
         <Button variant="secondary" onClick = {clearForm}>
           Close
         </Button>
-        <Button variant="primary" onClick = {handleUpdate}>
+        <Button variant="primary" onClick = {handleUpdate} disabled = {disabledUpdate}>
           Update
         </Button>
       </Modal.Footer>

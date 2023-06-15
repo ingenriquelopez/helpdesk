@@ -39,8 +39,9 @@ function NewEmployee() {
      const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
     
     const [backColorEmail, setBackColorEmail] = useState('1px solid #ccc');
+    const [backColorName, setBackColorName] = useState('1px solid #ccc');
 
-    const [selectedImage , setSelectedImage]  = useState('');
+    
     const [urlPicture, updateUrlPicture] = useState();
     const [public_id, updatePublic_id] = useState('');
     const [error, updateError] = useState();
@@ -65,17 +66,29 @@ function NewEmployee() {
     /*--------------------------------------------------------------------------*/
 
     /*----------------------------------*/
-    const validPreviewImage =async () => {      
+    const validEmailPreviewImage =async () => {      
+      
       if ( await yaExisteEmail(txtEmail) ) {
+         
          setBackColorEmail('1px solid #D87A66');
-         updateUrlPicture('');
-         setSelectedImage('');
          return false; /* no deberia avanzar en el sig. paso */
       } else  {
          setBackColorEmail('1px solid #ccc');
          return true;
       }
     }
+
+   /*----------------------------------*/
+   const validNamePreviewImage =async () => {      
+   if ( !txtName) {
+      setBackColorName('1px solid #D87A66');
+      return false; /* no deberia avanzar en el sig. paso */
+   } else  {
+      setBackColorName('1px solid #ccc');
+      return true;
+   }
+   }
+   
 
     /* -------------------*/
     
@@ -110,6 +123,9 @@ function NewEmployee() {
       if (txtNumEmployee && txtName && txtEmail && urlPicture) { 
          setdisabledAdd(false)
       }  else setdisabledAdd(true)
+
+      validEmailPreviewImage();
+      validNamePreviewImage();
    }
    
    function handleNumEmployee(e) {
@@ -123,9 +139,18 @@ function NewEmployee() {
       validateForm();
    }
    
+
+   const validateEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setIsValidEmail(emailRegex.test(email));
+    };
+
+
    function handleEmail(e) {
       setdisabledAdd(true)
+      
       setTxtEmail(e.target.value.toLowerCase());
+      
       let lastchar = e.target.value[e.target.value.length-1]
       if (lastchar ==='@') {
          if (txtEmail.includes(lastchar)) {
@@ -211,7 +236,10 @@ const handleCloseNewEmployee =()=> {
 useEffect( ()=> {
 console.log(urlPicture)
 validateForm();
-}, [urlPicture]);
+}, [urlPicture,txtName]);
+
+
+
 
   return (   
    <div className="d-flex mb-0 d-md-flex justify-content-center"  id = "containerEmployee">
@@ -225,8 +253,8 @@ validateForm();
       <CloudinaryContext cloudName= {REACT_APP_CLOUDINARY_CLOUD_NAME}>
          <form className = "row d-md-flex justify-content-center" onSubmit={(e) => handleSubmitForm(e)} id = "form">
             
-            <div className="row">
-               <div className="col-2 ">
+            <div className="row" id = "fieldsUpper">
+               <div className="col-3 ">
                      <Form.Label className = "font-weight-bold">Num Employee</Form.Label>
                      <Form.Control 
                               type        = "text" 
@@ -235,7 +263,7 @@ validateForm();
                               onChange    = {(e)=> handleNumEmployee(e)}       
                      />
                </div>
-               <div className="col-6">
+               <div className="col-7">
                   <Form.Label >Employee Name</Form.Label>
                      <Form.Control 
                         type        = "name" 
@@ -245,7 +273,7 @@ validateForm();
                         onChange    = { (e)=> handleName(e)}       
                      />
                </div>
-               <div className="col-4">
+               <div className="col-2">
                   <Form.Label className = "font-weight-bold">Genere</Form.Label>
 
                   <Form.Group controlId="genere">
@@ -268,67 +296,66 @@ validateForm();
                   </Form.Group>
                </div>
             </div>
-            <div className="row">
-               <div className="col-6">
-                  <Form.Label className = "font-weight-bold mt-3">Employee Email</Form.Label>
-                     <Form.Control 
+            <div className="row mt-3 mb-3 py-2 md-flex justify-content-start" id = "spaceCentral">
+               <div className="col-7 leftSpace">
+                  <Form.Label className = "font-weight-bold">Employee Email</Form.Label>
+                  <Form.Control 
                         type        = "email" 
                         placeholder = "Enter email" 
                         value       = {txtEmail}
                         style = {{border: backColorEmail }}   
                         onChange    = {(e)=> handleEmail(e)}       
                      />
+                     <Form.Label className = "font-weight-bold mt-3">Level</Form.Label>
+                           <Form.Control as = "select"
+                              
+                              onChange ={ (e)=> handleLevel(e)}
+                              className = "col-6"
+                           >
+                              <option>Choose...</option>
+                              <option value = "PreSchool">PreSchool</option>
+                              <option value = "Elementary">Elementary</option>
+                              <option value = "HighSchool">HighSchool</option>
+                              <option value = "College">College</option>
+                           </Form.Control>    
+                           <Form.Label className = "font-weight-bold mt-3">Department</Form.Label>
+                           <Form.Control as = "select"
+                              className = "col-8"
+                              onChange ={ (e)=> handleDepartment(e)}
+                           >
+                              <option>Choose...</option>
+                              <option value = "Administrative">Administrative</option>
+                              <option value = "Academic">Academic</option>
+                              <option value = "Direction">Direction</option>
+                              <option value = "Support Assistance">Support Assistance</option>
+                              <option value = "Sports">Sports</option>
+                              <option value = "General Services">General Services</option>
+                           </Form.Control>   
+
                </div>
-               <div className="col-2">
-                  <Form.Label className = "font-weight-bold mt-3">Level</Form.Label>
-                     <Form.Control as = "select"
-                        
-                        onChange ={ (e)=> handleLevel(e)}
-                     >
-                        <option>Choose...</option>
-                        <option value = "PreSchool">PreSchool</option>
-                        <option value = "Elementary">Elementary</option>
-                        <option value = "HighSchool">HighSchool</option>
-                        <option value = "College">College</option>
-                     </Form.Control>     
-               </div>
-               <div className="col">
-                  <Form.Label className = "font-weight-bold mt-3">Department</Form.Label>
-                     <Form.Control as = "select"
-                        onChange ={ (e)=> handleDepartment(e)}
-                     >
-                        <option>Choose...</option>
-                        <option value = "Administrative">Administrative</option>
-                        <option value = "Academic">Academic</option>
-                        <option value = "Direction">Direction</option>
-                        <option value = "Support Assistance">Support Assistance</option>
-                        <option value = "Sports">Sports</option>
-                        <option value = "General Services">General Services</option>
-                     </Form.Control>  
-               </div>
-            </div>
-            
-               <div className = "formImage mt-4 mb-0 col-12">
-                  <div id = "formLeftImage" className = "col-6">
+               <div className="rightSpace col-5">
+                  <div className="col-12" id ="spaceBtnUpload">
                      <button className="cloudinary-button" onClick={handleOnClick}>
                         Upload an Employee Image
                      </button>
-                  
-                  </div>
-                  <div id = "formRightImage" className = "col-6">
-                     
-                     <Image
-                        cloudName= {REACT_APP_CLOUDINARY_CLOUD_NAME}
-                        uploadPreset= {REACT_APP_CLOUDINARY_UPLOAD_PRESET}
-                        secure="true"
-                        public_id = {public_id}
-                        
-                        id = "employeePicture"
+
+                     <div id = "spaceImage" className = "col-12 mt-2">   
+                        <Image
+                           cloudName    = {REACT_APP_CLOUDINARY_CLOUD_NAME}
+                           uploadPreset = {REACT_APP_CLOUDINARY_UPLOAD_PRESET}
+                           secure       = "true"
+                           public_id    = {public_id}
+                           
+                           id           = "employeePicture"
                         >
                         <Transformation width="100" height="120" crop="fill" />
-                     </Image>
-                  </div>
+                        </Image>
+                     </div>
+                  </div> 
                </div>
+               
+            </div>
+            
                      
                   
             <Row >

@@ -17,7 +17,7 @@ import Annoument     from '../../Alerts/Annoument/Annoument';
 /* import {loadAllEmployees, deleteEmployee} from '../../../redux/employees/employeesReducer'; */
 
 import axios from 'axios';
-/* import EditFormTraining from '../EditFormTraining/EditFormTraining'; */
+import EditFormEmployee from '../EditFormEmployee/EditFormEmployee';
 
 
 const {REACT_APP_API} = process.env;
@@ -234,6 +234,11 @@ const handleLgClose =()=> {
 const handleLgUpdate = ()=> {
   setLgShow(false);
 }
+const handleLgUpdateEmployee = ()=> {
+  setLgShow(false);
+  window.location.reload();
+  navigate('/trainings', { replace: true });
+}
 
 //----------------------------------------------------------
 
@@ -267,6 +272,14 @@ const handleLgUpdate = ()=> {
                         smShow        = { smShow }  
                         handleSmClose = { handleSmClose }
           /> 
+          <EditFormEmployee
+                  myTitle        = "Edit Employee" 
+                  myData         = { currentRecord }    
+                  lgShow         = { lgShow }             
+                  handleLgClose  = { handleLgClose }     
+                  handleLgUpdateEmployee = { handleLgUpdateEmployee }
+          /> 
+    
       </div>
     </Container>    
   )
