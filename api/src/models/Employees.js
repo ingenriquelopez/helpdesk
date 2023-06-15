@@ -32,6 +32,9 @@ module.exports = (sequelize) => {
             department: {
                 type: DataTypes.ENUM(['Administrative','Academic','Direction','Support Assistance','Sports','General Services']),
             },
+            picture : {
+                type: DataTypes.STRING,
+            }
         }, {timestamps: false},
         )
     }

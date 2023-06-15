@@ -34,6 +34,8 @@ const postEmployees = async (req,res) => {
     /* newPersonal.password = cryptoPass; */
     newEmployee.level        = req.body.level; 
     newEmployee.department   = req.body.department; 
+    newEmployee.picture      = req.body.picture;
+    
     
      try {
         let employee = await Employees.create( newEmployee);
@@ -71,7 +73,8 @@ const deleteEmployees = async(req,res)=> {
 }
 
 const putEmployees = async(req, res)=> {
-    const { numEmployee, name, email, genere,level,department } = req.body;
+    const { numEmployee, name, email, genere,level,department, picture } = req.body;
+    
     /* let cryptoPass = CryptoJS.AES.encrypt(JSON.stringify(req.body.password.trim()), KEY_CRYPTO_SECRET).toString(); */
     try {
         const employee = await Employees.update( {
@@ -79,11 +82,11 @@ const putEmployees = async(req, res)=> {
             email,
             /* password:cryptoPass, */
             genere,
-            email,
             level,
             department,
+            picture,
         }, { 
-            where: { email }
+            where: { numEmployee }
             }
         );
         if (employee) {

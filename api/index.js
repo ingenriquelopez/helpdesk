@@ -4,7 +4,7 @@ const {PORT}= process.env;
 const server    = require('./src/app.js');
 const { db } = require('./src/db.js');
 
-db.sync({ force: false })
+db.sync({ force: true })
   .then(()=>{    
     console.log("DataBase sync");
   });
