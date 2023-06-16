@@ -7,13 +7,14 @@ import DataTable, { createTheme }     from 'react-data-table-component';
 import moment                         from 'moment';
 import Button                         from 'react-bootstrap/Button';
 import { FcCancel }                   from "react-icons/fc";
-import Pinga                          from 'e:/HDFotosPersonal/Pinga.jpg'
+
 import './AttendanceEmployee.css';
 
 const {REACT_APP_API} = process.env;
-
+const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
 
 function AttendanceEmployee() {
+
 
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
   const [currentTraining, setCurrentTraining] = useState( {} );
@@ -24,6 +25,7 @@ function AttendanceEmployee() {
   const [employeeFounded, setEmployeeFounded] = useState('');
   const [listPersonal, setListPersonal]       = useState( [ {} ])
   const [numEmployeeState, setNumEmployeeState] = useState('');
+  const [ currentPicture, updateCurrentPicture] = useState(defaultFile);
 
   const navigate = useNavigate();
   const IDT = useParams('idt').idt;
@@ -194,6 +196,7 @@ const handleGetEmployee = async(e)=> {
 
           if (response) {
             setEmployeeFounded(response.data)
+            updateCurrentPicture(response.data.picture);
           } 
       } catch (error) {
         console.log(error.message);
@@ -265,18 +268,15 @@ const handleGetEmployee = async(e)=> {
                 {employeeFounded.name}
               </div>
 
-              <div className=" row ml-1 mb-1 text-center">
-                Department...
-              </div>
 
               <div className="row ml-1 mb-4 text-center" id = "department">
                     {employeeFounded.department}
               </div>
 
 
-              <div className="row">
+              <div className="row" id = "spacePicture">
                 <div className = "col col-3 mr-2" id = "picture">    
-                      <img src = {Pinga}/>
+                      <img src = {currentPicture}/>
                 </div>
               </div>
                 
@@ -285,7 +285,7 @@ const handleGetEmployee = async(e)=> {
             <div className = "text-right">
               <button 
                   type      = "button" 
-                  className = "btn btn-success btn-lg"
+                  className = "btn btn-success btn-lg col-12 mt-2"
                   onClick = {e=>handleRecord(e)}>
                     Record
               </button>

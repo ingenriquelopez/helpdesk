@@ -24,12 +24,10 @@ const {REACT_APP_API} = process.env;
 
 
 function RecordAttendance() {
-
     const navigate= useNavigate();
     
     const [userLogged, setUserLogged] = useLocalStorage('userLogged');
     const [listTrainings, setListTrainings] = useState(null);
-
 
     const [show, setShow]     = useState(false);
     const [smShow, setSmShow] = useState(false);

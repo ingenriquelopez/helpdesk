@@ -137,7 +137,7 @@ export default function EditFormEmployee( {myTitle,myData,lgShow, handleLgClose,
                   <Row className = "d-grid- d-md-flex justify-content-center">
                     
                         <Col md = {12} className = "text-center">
-                          <Form.Group className="mb-3 mx-auto" >
+                          <Form.Group className = "mb-3 mx-auto" >
                               <Form.Label >Name</Form.Label>
                                 <Form.Control 
                                   type         = "text" 

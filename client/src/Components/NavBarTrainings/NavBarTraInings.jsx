@@ -57,7 +57,6 @@ export default function NavBarTrainings() {
         
         </div>   
     </nav>    
-        <Footer/> 
     </div>
     
   )

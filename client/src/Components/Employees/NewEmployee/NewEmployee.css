@@ -44,6 +44,11 @@
   width :80%;
 }
 
+
+.controlEmail {
+  display:flex;
+  
+}
 #spaceCentral {
   display    : flex;
   flex-wrap  : nowrap;

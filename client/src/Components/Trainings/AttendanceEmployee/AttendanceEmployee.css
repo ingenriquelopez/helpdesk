@@ -29,7 +29,7 @@
 }
 
 .personalSource {
-    width            : 60%;
+    width            : 50%;
     height           : 100%;
 }
 
@@ -63,4 +63,11 @@
     width         : 25%;
     height        : auto;
     border-radius : 5%;
+    border        : 5px solid #AAA;
+    
+    box-shadow:
+    inset 0 -3em 3em rgba(0,0,0,0.1),
+          0 0  0 3px #ccc,
+          0.3em 0.3em 1em rgba(0,0,0,0.3); 
+
 }

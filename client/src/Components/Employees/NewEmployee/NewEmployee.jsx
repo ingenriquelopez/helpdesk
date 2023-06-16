@@ -6,11 +6,15 @@ import Form                     from 'react-bootstrap/Form';
 import Row                      from 'react-bootstrap/Row';
 import Col                      from 'react-bootstrap/Col';
 
-import { Image,CloudinaryContext, Transformation } from 'cloudinary-react';
+import { Image ,
+         CloudinaryContext, 
+         Transformation 
+       } from 'cloudinary-react';
 
 import axios                    from 'axios';
 import { tostada_S, tostada_W } from '../../../utils/Tostadas';
 import "./NewEmployee.css";
+
 
 
 const { REACT_APP_API } = process.env;
@@ -25,6 +29,7 @@ const { REACT_APP_CLOUDINARY_CLOUD_NAME,
 
 function NewEmployee() {
     const navigate= useNavigate();
+    const dominioColumbia = '@colegiocolumbia.edu.mx';
     
     const [txtNumEmployee , setTxtNumEmployee]  = useState('');
     const [txtName        , setTxtName]         = useState('');
@@ -36,19 +41,22 @@ function NewEmployee() {
     const [genere         , setGenere]          = useState('');
 
     
-     const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
+    const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
     
     const [backColorEmail, setBackColorEmail] = useState('1px solid #ccc');
+
+    const [isEmailValid, setIsEmailValid] = useState('');
+
     const [backColorName, setBackColorName] = useState('1px solid #ccc');
 
-    
     const [urlPicture, updateUrlPicture] = useState();
-    const [public_id, updatePublic_id] = useState('');
-    const [error, updateError] = useState();
-    
+    const [public_id, updatePublic_id]   = useState('');
+    const [error, updateError]           = useState();
+    const [message , setMessage]         = useState(false);
     
 
-
+   /*----------------------------------*/
+    
     /* creacion del widget de cloudinary par ael upload de las imagenes posteriores*/
     var myWidget = window.cloudinary.createUploadWidget(
       {
@@ -65,18 +73,7 @@ function NewEmployee() {
     );
     /*--------------------------------------------------------------------------*/
 
-    /*----------------------------------*/
-    const validEmailPreviewImage =async () => {      
-      
-      if ( await yaExisteEmail(txtEmail) ) {
-         
-         setBackColorEmail('1px solid #D87A66');
-         return false; /* no deberia avanzar en el sig. paso */
-      } else  {
-         setBackColorEmail('1px solid #ccc');
-         return true;
-      }
-    }
+    
 
    /*----------------------------------*/
    const validNamePreviewImage =async () => {      
@@ -120,11 +117,9 @@ function NewEmployee() {
    }
    
    function validateForm() {
-      if (txtNumEmployee && txtName && txtEmail && urlPicture) { 
+      if (txtNumEmployee && txtName && txtEmail && urlPicture && isEmailValid) { 
          setdisabledAdd(false)
       }  else setdisabledAdd(true)
-
-      validEmailPreviewImage();
       validNamePreviewImage();
    }
    
@@ -133,34 +128,44 @@ function NewEmployee() {
       validateForm();
    }
    
-   function handleName(e) {
-      
+   function handleName(e) {  
       setTxtName(e.target.value.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) );
       validateForm();
    }
    
 
-   const validateEmail = (email) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      setIsValidEmail(emailRegex.test(email));
-    };
+/*---------------------VALIDACION DEL NOMBRE DE USUARIO EMAIL ------------------------------*/
+   const validEmailPreviewImage =async () => {      
+      if ( await yaExisteEmail(txtEmail) ) {
+         setBackColorEmail('1px solid #D87A66');
+         setIsEmailValid(false);
+         return false; /* no deberia avanzar en el sig. paso */
+      } else  {
+         setBackColorEmail('1px solid #ccc');
+         setIsEmailValid(true);
+         return true;
+      }
+   }
 
+   const emailValidation = (emailValue)=> {
+      const emailPattern = /^[a-zA-Z0-9._-]+$/;
+      if (emailPattern.test(emailValue)) {
+         setBackColorEmail('1px solid #ccc');
+         validEmailPreviewImage();
+      } else {
+         setBackColorEmail('1px solid #D87A66');
+         setIsEmailValid(false);
+      }
+   }
 
    function handleEmail(e) {
       setdisabledAdd(true)
       
       setTxtEmail(e.target.value.toLowerCase());
-      
-      let lastchar = e.target.value[e.target.value.length-1]
-      if (lastchar ==='@') {
-         if (txtEmail.includes(lastchar)) {
-            setTxtEmail('');
-         }
-      } 
-       validateForm(); 
+      emailValidation(e.target.value);
    }
    
-   
+   /*---------------------------*/
    function handleLevel(e) {
       setTxtLevel(e.target.value);
       validateForm();
@@ -180,7 +185,7 @@ function NewEmployee() {
                   numEmployee : txtNumEmployee,
                   name        : txtName,
                   genere      : genere,
-                  email       : txtEmail,
+                  email       : txtEmail + dominioColumbia,
                   level       : txtLevel,
                   department  : txtDepartment,
                   picture     : urlPicture,
@@ -234,9 +239,8 @@ const handleCloseNewEmployee =()=> {
 }
 
 useEffect( ()=> {
-console.log(urlPicture)
 validateForm();
-}, [urlPicture,txtName]);
+}, [urlPicture,txtName,txtEmail]);
 
 
 
@@ -299,13 +303,25 @@ validateForm();
             <div className="row mt-3 mb-3 py-2 md-flex justify-content-start" id = "spaceCentral">
                <div className="col-7 leftSpace">
                   <Form.Label className = "font-weight-bold">Employee Email</Form.Label>
-                  <Form.Control 
-                        type        = "email" 
-                        placeholder = "Enter email" 
-                        value       = {txtEmail}
-                        style = {{border: backColorEmail }}   
-                        onChange    = {(e)=> handleEmail(e)}       
+                  <div className="controlEmail">
+                     <Form.Control 
+                           className = "col-5 mr-0 px-3"
+                           type        = "text" 
+                           placeholder = "Enter email" 
+                           style       = {{ border: backColorEmail, textAlign: 'right' }}    
+                           
+                        
+                           onChange    = {(e)=> handleEmail(e)}       
+                           value       = {txtEmail}
+                           required
+                           
                      />
+                     <Form.Control className = "col-4 ml-0 px-0" value = {dominioColumbia} style = {{border: "#fff"}}/>
+                     
+                  </div>
+                  
+                        
+                     
                      <Form.Label className = "font-weight-bold mt-3">Level</Form.Label>
                            <Form.Control as = "select"
                               
@@ -318,6 +334,7 @@ validateForm();
                               <option value = "HighSchool">HighSchool</option>
                               <option value = "College">College</option>
                            </Form.Control>    
+
                            <Form.Label className = "font-weight-bold mt-3">Department</Form.Label>
                            <Form.Control as = "select"
                               className = "col-8"
@@ -333,22 +350,21 @@ validateForm();
                            </Form.Control>   
 
                </div>
-               <div className="rightSpace col-5">
-                  <div className="col-12" id ="spaceBtnUpload">
-                     <button className="cloudinary-button" onClick={handleOnClick}>
+               <div className = "rightSpace col-5">
+                  <div className = "col-12" id = "spaceBtnUpload">
+                     <button className = "cloudinary-button" onClick={handleOnClick} disabled = {!isEmailValid}>
                         Upload an Employee Image
                      </button>
 
                      <div id = "spaceImage" className = "col-12 mt-2">   
                         <Image
-                           cloudName    = {REACT_APP_CLOUDINARY_CLOUD_NAME}
-                           uploadPreset = {REACT_APP_CLOUDINARY_UPLOAD_PRESET}
-                           secure       = "true"
-                           public_id    = {public_id}
-                           
-                           id           = "employeePicture"
+                           cloudName     = {REACT_APP_CLOUDINARY_CLOUD_NAME}
+                           uploadPreset  = {REACT_APP_CLOUDINARY_UPLOAD_PRESET}
+                           secure        = "true"
+                           publicId      = {public_id ? public_id: defaultFile}
+                           id            = "employeePicture"
                         >
-                        <Transformation width="100" height="120" crop="fill" />
+                           <Transformation width="100" height="120" crop="fill" />
                         </Image>
                      </div>
                   </div> 
