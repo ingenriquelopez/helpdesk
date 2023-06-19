@@ -1,0 +1,12 @@
+.optionTrainings {
+    height           :90vh;
+    display          :flex;
+    flex-direction   : column;
+    align-items      : center;
+    justify-content  : center;
+}
+.optionTrainings section {
+    border: 1px solid #ccc;
+    box-shadow: 0 20px 20px #ccc;
+
+}

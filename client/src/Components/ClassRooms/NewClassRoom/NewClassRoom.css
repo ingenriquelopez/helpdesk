@@ -1,0 +1,22 @@
+.d-flex {
+    display: flex!important;
+    height: 100vh;
+  }
+  
+  .center {
+    margin: 0 auto;
+    align-self: center;
+  }
+  
+  .customButton{ width: 100px !important; }
+
+  #imagenCR {
+    background-image: url(https://i.pinimg.com/564x/fb/fc/8f/fbfc8fcbd8cbb513fe10f8c07c1f6d0b.jpg);
+    width: 70px;
+    height: 70px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: auto;
+  }
+
+ 

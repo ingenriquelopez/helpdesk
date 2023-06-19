@@ -1,0 +1,25 @@
+.gradientNavBar {
+   background-image: linear-gradient(59deg, #0275d8, #1622FF );
+   color: white;
+  }
+
+#styleLinks {
+  color: white;
+  padding: 5px;
+}
+#styleLinks:hover {
+  color: yellow; /*will change color of text within the element on hover */
+  font-weight: 500;
+}
+
+
+.classUserLogged {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#userIcon {
+  width: 30px;
+  height: 30px;
+}

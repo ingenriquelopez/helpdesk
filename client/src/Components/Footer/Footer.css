@@ -1,0 +1,14 @@
+/*FOOTER*/
+
+#containFooter {    
+    background: linear-gradient(59deg, #1622FF, #138df8); 
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    bottom:0px; 
+    height:80px;
+    width:100%;
+    position:absolute;    
+  }

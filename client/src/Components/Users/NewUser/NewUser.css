@@ -1,0 +1,56 @@
+
+.d-flex {
+    display: flex!important;
+    height: 100vh;
+  }
+  
+  .center {
+    margin: 0 auto;
+    align-self: center;
+  }
+
+.titleUser {
+    display: block;
+    width: 100%;
+    height:15%;
+    display: flex;
+    justify-content:flex-start;
+    padding: 0.5rem;
+}
+  
+  
+  #containerUser {
+    
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    position: relative;
+    height: 70%;
+    min-height: 80vh;
+    
+    margin-top: 1rem;
+    padding-bottom: 3rem;
+    overflow:"auto";
+    
+  }
+#image {
+    width: 100px;
+    height: 100px;
+    background-image: url('./adduser.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+
+}
+
+
+
+#form {
+    box-shadow:
+    inset 
+          0 0  0 2px rgb(255,255,255),
+          0.3em 0.3em 1em rgba(0,0,0,0.3);
+}
+
+#lolo {
+  background-color: aqua;
+}
