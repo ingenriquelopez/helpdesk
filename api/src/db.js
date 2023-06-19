@@ -9,7 +9,8 @@ const modelService            = require('./models/Service');
 const modelInventory          = require('./models/Inventory.js');
 const modelConfigServiceOrder = require('./models/ConfigServiceOrder');
 const modelTraning            = require('./models/Training.js');
-const modelEmployees           = require('./models/Employees.js');
+const modelEmployees          = require('./models/Employees.js');
+const modelTrainingsEmployees = require('./models/ManyToMany/TraningsEmployees.js');
 
 
 const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, 
@@ -38,9 +39,11 @@ modelInventory(sequelize);
 modelConfigServiceOrder(sequelize);
 modelTraning(sequelize);
 modelEmployees(sequelize);
-const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder , Training, Employees} = sequelize.models;
+modelTrainingsEmployees(sequelize);
+const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder , Training, Employees, TrainingsEmployees} = sequelize.models;
 //-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*----*
-
+Training.belongsToMany( (Employee),{ through:{TrainingsEmployees}});
+Employees.belongsToMany( Training),{ through:{TrainingsEmployees}});
 
 module.exports = {
   Task,User,ClassRoom,Service, Inventory, ConfigServiceOrder,Training,Employees,
