@@ -22,34 +22,47 @@
     justify-content: center;
 }
 
-.List {
-    width: 50%;
-    height: 90%;
-    overflow-y: scroll;
-}
-
 .personalSource {
-    width            : 50%;
-    height           : 100%;
+    width            : 25%;
+    height           : 100%;    
+    display          : flex;
+    flex-direction   : column;    
+    justify-content  : center;
+    border           : 1px solid  #ccc;
+    
 }
 
-.employee {
+#employeeWanted {
     display         : flex;
     flex-direction  : column;
     justify-content : center;
     align-items     : center;
+    text-align      : center;
 }
 
+
+#numEmployee {
+    text-align: center;
+}
 #name {
-    background-color: #FFFDE7;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 1.5rem;
-    
+    background-color : #FFFDE7;
+    font-family      : 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size        : 1.5rem;
+    justify-content  : center;
+    margin : 0 auto;
 }
 
 
 #department {
-    background-color: #FFFDE7;
+    background-color : #FFFDE7;
+    justify-content  : center;
+    margin : 0 auto;
+}
+
+
+.dataEmployee {
+    width:100%;
+    height: 8rem;
 }
 
 #picture {
@@ -60,8 +73,8 @@
 }
 
 #picture img {
-    width         : 25%;
-    height        : auto;
+    width         : 11rem;
+    height        : 13rem;
     border-radius : 5%;
     border        : 5px solid #AAA;
     
@@ -69,5 +82,24 @@
     inset 0 -3em 3em rgba(0,0,0,0.1),
           0 0  0 3px #ccc,
           0.3em 0.3em 1em rgba(0,0,0,0.3); 
+}
+.times {
+    display:flex;
+    flex-direction: column;   
+}
 
+#checkIn {
+    margin-bottom: 1rem;
+}
+.spaceButton {
+    display:flex;
+    justify-content: center;
+    
+}
+
+
+.List {
+   width: 70%;
+   height: 90%; 
+   overflow-y: scroll;
 }

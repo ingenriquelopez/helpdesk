@@ -76,7 +76,7 @@ function NewEmployee() {
     
 
    /*----------------------------------*/
-   const validNamePreviewImage =async () => {      
+   const validNamePreviewImage =() => {      
    if ( !txtName) {
       setBackColorName('1px solid #D87A66');
       return false; /* no deberia avanzar en el sig. paso */
@@ -93,9 +93,7 @@ function NewEmployee() {
 
     /*-----------------------------------*/
     const handleOnClick = ()=> {
-      
-       myWidget.open();
-
+      myWidget.open();
     }
    
    const handleChangeGenere = e => {
@@ -316,7 +314,7 @@ validateForm();
                            required
                            
                      />
-                     <Form.Control className = "col-4 ml-0 px-0" value = {dominioColumbia} style = {{border: "#fff"}}/>
+                      <Form.Control className = "col-4 ml-0 px-0" value = {dominioColumbia} style = {{border: "#fff"}} disabled/> 
                      
                   </div>
                   
@@ -352,10 +350,10 @@ validateForm();
                </div>
                <div className = "rightSpace col-5">
                   <div className = "col-12" id = "spaceBtnUpload">
-                     <button className = "cloudinary-button" onClick={handleOnClick} disabled = {!isEmailValid}>
+                      <button className = "cloudinary-button" onClick={handleOnClick} disabled = {!isEmailValid}>
                         Upload an Employee Image
                      </button>
-
+ 
                      <div id = "spaceImage" className = "col-12 mt-2">   
                         <Image
                            cloudName     = {REACT_APP_CLOUDINARY_CLOUD_NAME}

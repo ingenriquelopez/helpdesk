@@ -21,9 +21,9 @@ function AttendanceEmployee() {
   const [show, setShow]     = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
-  const [currentRecord, setcurrentRecord]     = useState('');
-  const [employeeFounded, setEmployeeFounded] = useState('');
-  const [listPersonal, setListPersonal]       = useState( [ {} ])
+  const [currentRecord, setcurrentRecord]       = useState('');
+  const [employeeFounded, setEmployeeFounded]   = useState('');
+  const [listPersonal, setListPersonal]         = useState([])
   const [numEmployeeState, setNumEmployeeState] = useState('');
   const [ currentPicture, updateCurrentPicture] = useState(defaultFile);
 
@@ -124,8 +124,6 @@ const getEmployee = async()=> {
 }
 
 
-
-
   
 /*---------------------------------------*/
   const getTraining = async() => {
@@ -161,9 +159,6 @@ const getEmployee = async()=> {
     setNumEmployeeState(e.target.value);
   }
 //---------------------------------------------------------
-
-
-
 
 
 const handleLgClose =()=> {
@@ -215,14 +210,73 @@ const handleGetEmployee = async(e)=> {
       
       <section className = "titleTraining mt-2">
         <p id = "titleT"> {currentTraining.training}</p>
-      </section>   
-      <section className = "titleRegistro">
         <h5>REGISTRO DE ASISTENCIA</h5>
         <hr/>
-      </section>
+      </section>   
 
       <div id="containerRecord">
-        <aside className = "List">
+
+          <div className = "personalSource mr-2">
+              <div className = "row" id = "employeeWanted">
+                <label htmlFor = "numEmployee" className = "col-3 mt-4" >Number:</label>
+                
+                <div className="row col-3">
+                  <input type = "text" 
+                        className = "form-control" 
+                        id        = "numEmployee"
+                        value     = {numEmployeeState}
+                        onChange  = { (e)=>handleNumEmployeeState(e)}
+                  />
+                </div>
+
+                <div className="row col-3 mt-2">
+                  <button type="button" className="btn btn-primary" onClick = { (e) => handleGetEmployee(e)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                  </button>
+
+                </div>
+                
+
+              </div>
+              <div className="dataEmployee">
+                <div className="row mt-4 text-center" id = "name">
+                    {employeeFounded.name ?employeeFounded.name: '?'}
+                </div>
+                <div className="row mt-0 mb-4 text-center" id = "department">
+                    {employeeFounded.department ? employeeFounded.department: '?'}
+                </div>
+              </div>
+
+              
+
+                <div className = "col-12" id = "picture">    
+                    <img src = {currentPicture}/>
+                </div>
+                <div className="times mt-2">
+                  <label htmlFor = "CheckIn" className = "fw-bold fst-italic">Check In</label>
+                  <input type="time" name="CheckIn" min="05:00" max="22:00" id = "checkIn"/>
+
+                  <label htmlFor = "CheckOut" className = "fw-bold fst-italic">Check Out</label>
+                  <input type="time" name="CheckOut" min="05:00" max="22:00"/>
+                </div>
+              <div className="spaceButton col-12">
+                <button 
+                      type      = "button" 
+                      className = "btn btn-success btn-lg col-3 mt-2"
+                      onClick = {e=>handleRecord(e)}>
+                        Add
+                </button>  
+              </div>
+              
+
+          </div>
+           
+         
+          
+          <aside className = "List col-9">
+            
             <DataTable    columns       = { columns }  
                           data          = { listPersonal ? listPersonal:'' }  
                           customStyles  = {customStyles} 
@@ -234,66 +288,10 @@ const handleGetEmployee = async(e)=> {
                 /> 
           </aside>
 
-          <div className="personalSource">
-
-            <div className="form-group numeroEmpleado">
-              <div className="row ml-1">
-                <label htmlFor="numEmployee">Number</label>
-
-                <div className="col col-2 pr-0">
-                  <input type = "text" 
-                         className = "form-control" 
-                         id   ="numEmployee"
-                         value = {numEmployeeState}
-                         onChange = { (e)=>handleNumEmployeeState(e)}
-
-                  />
-                </div>
-
-                <div className="col">
-                  <button type="button" className="btn btn-primary" onClick = { (e) => handleGetEmployee(e)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                    </svg>
-                  </button>
-                </div>
-
-              </div>
-
-            </div>
-
-            <div className="employee mt-3 col-12">
-              
-              <div className=" row ml-1 mb-2 text-center" id = "name">
-                {employeeFounded.name}
-              </div>
-
-
-              <div className="row ml-1 mb-4 text-center" id = "department">
-                    {employeeFounded.department}
-              </div>
-
-
-              <div className="row" id = "spacePicture">
-                <div className = "col col-3 mr-2" id = "picture">    
-                      <img src = {currentPicture}/>
-                </div>
-              </div>
-                
-          </div>
-
-            <div className = "text-right">
-              <button 
-                  type      = "button" 
-                  className = "btn btn-success btn-lg col-12 mt-2"
-                  onClick = {e=>handleRecord(e)}>
-                    Record
-              </button>
-            </div>
-          </div>
+      </div>
       </div>
       
-    </div>
+    
   )
 }
 
