@@ -10,7 +10,7 @@ const modelInventory          = require('./models/Inventory.js');
 const modelConfigServiceOrder = require('./models/ConfigServiceOrder');
 const modelTraning            = require('./models/Training.js');
 const modelEmployees          = require('./models/Employees.js');
-const modelTrainingsEmployees = require('./models/ManyToMany/TraningsEmployees.js');
+const modelTrainings_Employees = require('./models/ManyToMany/Trainings_Employees.js');
 
 
 const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, 
@@ -39,13 +39,44 @@ modelInventory(sequelize);
 modelConfigServiceOrder(sequelize);
 modelTraning(sequelize);
 modelEmployees(sequelize);
-modelTrainingsEmployees(sequelize);
-const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder , Training, Employees, TrainingsEmployees} = sequelize.models;
+modelTrainings_Employees(sequelize);
+const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder , Training, Employees, Trainings_Employees} = sequelize.models;
 //-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*----*
-Training.belongsToMany( (Employee),{ through:{TrainingsEmployees}});
-Employees.belongsToMany( Training),{ through:{TrainingsEmployees}});
+Training.belongsToMany( Employees,{ through:Trainings_Employees,
+  indexes: [
+    {
+      unique: false,
+      fields: ['id']
+    },
+    {
+      unique: false,
+      fields: ['email']
+    }
+  ]
+} ); 
+Employees.belongsToMany( Training,{ through:Trainings_Employees,
+  indexes: [
+    {
+      unique: false,
+      fields: ['email']
+      
+    },
+    {
+      unique: false,
+      fields: ['id']
+    }
+  ]
+ } );  
 
 module.exports = {
-  Task,User,ClassRoom,Service, Inventory, ConfigServiceOrder,Training,Employees,
+    Task,
+    User,
+    ClassRoom,
+    Service, 
+    Inventory, 
+    ConfigServiceOrder,
+    Training,
+    Employees,
+    Trainings_Employees,
   db: sequelize,
 }
