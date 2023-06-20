@@ -177,8 +177,28 @@ const clearEmployee = ()=> {
 
 
 const handleRecord = ()=> {
-  setListPersonal([...listPersonal,employeeFounded]);
-    clearEmployee(); 
+  /* setListPersonal([...listPersonal,employeeFounded]); */
+  findEmployee_In_Trainings();
+   /*  clearEmployee();  */
+}
+
+const findEmployee_In_Trainings = async()=> {
+  const buscado = {
+                  employee_email : employeeFounded.email,
+                  training_id :IDT,
+  };
+  console.log(buscado)
+  
+  try {
+    const response = await axios.get(`${REACT_APP_API}/trainingEmployee`, {
+      params: {
+        jsonData: JSON.stringify(buscado), // Convertir el objeto JSON a una cadena
+      },
+    });
+    console.log(response)
+  } catch (error) {
+    console.log(error.message)  ;
+  }
 }
 
 const handleGetEmployee = async(e)=> {
@@ -261,11 +281,11 @@ const handleGetEmployee = async(e)=> {
                   <label htmlFor = "CheckOut" className = "fw-bold fst-italic">Check Out</label>
                   <input type="time" name="CheckOut" min="05:00" max="22:00"/>
                 </div>
-              <div className="spaceButton col-12">
+              <div className = "spaceButton col-12">
                 <button 
                       type      = "button" 
                       className = "btn btn-success btn-lg col-3 mt-2"
-                      onClick = {e=>handleRecord(e)}>
+                      onClick   = {e=>handleRecord(e)}>
                         Add
                 </button>  
               </div>
