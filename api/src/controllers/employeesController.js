@@ -110,7 +110,6 @@ const getEmployeeByNumber = async(req,res)=> {
         }
 }
 
-
 const getEmployeeByEmail = async(req,res)=> {
     const email_employee = req.params.email;
     try {

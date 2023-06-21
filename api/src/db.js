@@ -40,33 +40,12 @@ modelConfigServiceOrder(sequelize);
 modelTraning(sequelize);
 modelEmployees(sequelize);
 modelTrainings_Employees(sequelize);
+
 const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder , Training, Employees, Trainings_Employees} = sequelize.models;
+
 //-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*----*
-Training.belongsToMany( Employees,{ through:Trainings_Employees,
-  indexes: [
-    {
-      unique: false,
-      fields: ['id']
-    },
-    {
-      unique: false,
-      fields: ['email']
-    }
-  ]
-} ); 
-Employees.belongsToMany( Training,{ through:Trainings_Employees,
-  indexes: [
-    {
-      unique: false,
-      fields: ['email']
-      
-    },
-    {
-      unique: false,
-      fields: ['id']
-    }
-  ]
- } );  
+Training.belongsToMany( Employees,{ through:Trainings_Employees } ); 
+Employees.belongsToMany( Training,{ through:Trainings_Employees } );  
 
 module.exports = {
     Task,
