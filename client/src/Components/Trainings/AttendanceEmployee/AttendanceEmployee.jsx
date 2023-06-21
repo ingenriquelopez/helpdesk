@@ -14,8 +14,6 @@ const {REACT_APP_API} = process.env;
 const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
 
 function AttendanceEmployee() {
-
-
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
   const [currentTraining, setCurrentTraining] = useState( {} );
   const [show, setShow]     = useState(false);
@@ -25,7 +23,11 @@ function AttendanceEmployee() {
   const [employeeFounded, setEmployeeFounded]   = useState('');
   const [listPersonal, setListPersonal]         = useState([])
   const [numEmployeeState, setNumEmployeeState] = useState('');
-  const [ currentPicture, updateCurrentPicture] = useState(defaultFile);
+  const [currentPicture, updateCurrentPicture] = useState(defaultFile);
+  const [checkIn, setCheckIn] = useState();
+  const [checkOut, setCheckOut] = useState();
+  const [employeesOfTraining, setEmployeesOfTraining] = useState([]);
+
 
   const navigate = useNavigate();
   const IDT = useParams('idt').idt;
@@ -136,15 +138,53 @@ const getEmployee = async()=> {
       });
 
         if (response) {
-          setCurrentTraining(
-            response.data
-          )
+          setCurrentTraining(response.data)
         } 
+        
     } catch (error) {
       console.log(error.message);
     }
   }
   
+
+
+  const addToListPersonal = async(responseData)=> {
+    let listTmp = [];
+    console.log(responseData)
+
+     responseData.map(async (e)=> {
+      console.log(e)
+        /* response = await axios.get(`${REACT_APP_API}/employees/${e.EmployeeEmail}`) */
+      /*   if (response) {
+          
+          let registro = {
+            id         : IDT,
+            num        : response.data.numEmployee,
+            name       : response.data.name,
+            department : response.data.department,
+            email      : e.EmployeeEmail,
+            checkIn    : e.CheckIn,
+            checkOut   : e.CheckOut,
+          }
+          listTmp.push(registro)
+        } */
+      
+      }) 
+    
+  }
+
+  const getEmployeesOfTraining = async()=> {
+    try {
+      const response = await axios.get(`${REACT_APP_API}/trainingEmployee/${IDT}`);
+      if (response) {
+        setEmployeesOfTraining(response.data)
+        addToListPersonal(response.data);
+        }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   const handleShowPreview  = (row) =>  {
     setcurrentRecord(row);
     setShow(true);  
@@ -182,25 +222,58 @@ const handleRecord = ()=> {
    /*  clearEmployee();  */
 }
 
+
+//buscar el empleado en la tabla de trainings si ya registrado
 const findEmployee_In_Trainings = async()=> {
+
   const buscado = {
                   employee_email : employeeFounded.email,
                   training_id :IDT,
   };
-  console.log(buscado)
-  
+    
   try {
     const response = await axios.get(`${REACT_APP_API}/trainingEmployee`, {
       params: {
         jsonData: JSON.stringify(buscado), // Convertir el objeto JSON a una cadena
       },
     });
-    console.log(response)
+
+    console.log(response.data)
+    if (response.data.length) {
+      alert('modificar la hora?')
+    } else {
+      addEmployeeToTraining(response.data);
+    }
   } catch (error) {
     console.log(error.message)  ;
   }
 }
 
+//Registrar empleado en tabla de asistencia trainings_employees
+const addEmployeeToTraining =async(r)=> {
+  console.log(currentRecord);
+  console.log(employeeFounded.email);
+
+  const data = {
+    TrainingId    : IDT,
+    EmployeeEmail : employeeFounded.email,
+    CheckIn       : checkIn,
+    CheckOut      : checkOut,
+  }
+
+  try {
+    const response = await axios.post(`${REACT_APP_API}/trainingEmployee`,data);
+    if (response.status === 200) {
+      console.log('exito')
+    } else {
+      console.log('error');
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//buscar empleado en la tabla empleados si existe podemos ingresarlo al training
 const handleGetEmployee = async(e)=> {
   try {
         const response = await axios.get(`${REACT_APP_API}/employees/number/${numEmployeeState}`, {
@@ -222,7 +295,12 @@ const handleGetEmployee = async(e)=> {
 
     useEffect( ()=> {
     getTraining();
+    getEmployeesOfTraining();
   },[])
+
+  useEffect( ()=> {
+
+  },[employeesOfTraining])
 
   
   return (  
@@ -276,10 +354,10 @@ const handleGetEmployee = async(e)=> {
                 </div>
                 <div className="times mt-2">
                   <label htmlFor = "CheckIn" className = "fw-bold fst-italic">Check In</label>
-                  <input type="time" name="CheckIn" min="05:00" max="22:00" id = "checkIn"/>
+                  <input type="time" name="CheckIn" min="05:00" max="22:00" id = "checkIn" onChange = { (e)=> setCheckIn(e.target.value)}/>
 
                   <label htmlFor = "CheckOut" className = "fw-bold fst-italic">Check Out</label>
-                  <input type="time" name="CheckOut" min="05:00" max="22:00"/>
+                  <input type="time" name="CheckOut" min="05:00" max="22:00" onChange = { (e)=> setCheckOut(e.target.value)}/>
                 </div>
               <div className = "spaceButton col-12">
                 <button 
