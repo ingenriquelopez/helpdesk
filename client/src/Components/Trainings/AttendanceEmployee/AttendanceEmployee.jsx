@@ -7,6 +7,7 @@ import DataTable, { createTheme }     from 'react-data-table-component';
 import moment                         from 'moment';
 import Button                         from 'react-bootstrap/Button';
 import { FcCancel }                   from "react-icons/fc";
+import AvisoModal                 from '../../Alerts/AvisoModal/AvisoModal';
 
 import './AttendanceEmployee.css';
 
@@ -14,6 +15,9 @@ const {REACT_APP_API} = process.env;
 const defaultFile = 'https://stonegatesl.com/wp-content/uploads/2021/01/avatar-300x300.jpg'; 
 
 function AttendanceEmployee() {
+
+  const [mostrarModal, setMostrarModal] = useState(false);
+
   const [userLogged, setUserLogged] = useLocalStorage('userLogged');
   const [currentTraining, setCurrentTraining] = useState( {} );
   const [show, setShow]     = useState(false);
@@ -94,13 +98,13 @@ createTheme('solarized', {
       name: 'CHECK-IN',
       selector : row => row.checkIn,
       sortable : true,
-      width    : "15rem",
+      width    : "7rem",
     },
     {
       name: 'CHECK-OUT',
       selector : row => row.checkOut,
       sortable : true,
-      width    : "15rem",
+      width    : "7rem",
     },
      {
       name  : 'QUITAR',
@@ -118,6 +122,16 @@ createTheme('solarized', {
                    )
     }, 
 ];
+
+
+const mostrarAviso = () => {
+  setMostrarModal(true);
+};
+
+const cerrarModal = () => {
+  setMostrarModal(false);
+};
+
 
 const getEmployee = async()=> {
   try {
@@ -163,20 +177,21 @@ const getEmployee = async()=> {
   const addToListPersonal = async(responseData)=> {
     let listTmp = [];
     let registro;
-    
+
     
     responseData.map( (e)=> {
-      e.Employees.map( emp=> {
+      e.Employees.map( (emp) => {
         registro = {
-          id: IDT,
-          num: emp.numEmployee,
-          name: emp.name,
-          department: emp.department,
-          email: emp.email,
-          checkIn: emp.Trainings_Employees.CheckIn,
-          checkOut: emp.Trainings_Employees.CheckOut,  
+          idt         : IDT,
+          key        : emp.numEmployee,
+          num        : emp.numEmployee,
+          name       : emp.name,
+          department : emp.department,
+          email      : emp.email,
+          checkIn    : emp.Trainings_Employees.CheckIn,
+          checkOut   : emp.Trainings_Employees.CheckOut,  
       }
-      console.log(registro)
+
       listTmp.push(registro);
       })
       
@@ -184,47 +199,6 @@ const getEmployee = async()=> {
     })
     setListPersonal(listTmp);
 
-
-
-   /*  if (responseData.Employees) {
-      let registro = {
-        id         : IDT,
-        num        : employeeFounded.numEmployee,
-        name       : employeeFounded.name,
-        department : employeeFounded.department,
-        email      : employeeFounded.email,
-        checkIn    : checkIn,
-        checkOut   : checkOut,
-      }
-      try {
-        const response = await axios.post(`${REACT_APP_API}/trainingEmployee`,registro)
-        console.log(response);
-      } catch (error) {
-        console.log(error.message);
-      }
-    } */
-      
-      
-    
-
-     responseData.map(async (e)=> {
-      console.log(e)
-        /* response = await axios.get(`${REACT_APP_API}/employees/${e.EmployeeEmail}`) */
-      /*   if (response) {
-          
-          let registro = {
-            id         : IDT,
-            num        : response.data.numEmployee,
-            name       : response.data.name,
-            department : response.data.department,
-            email      : e.EmployeeEmail,
-            checkIn    : e.CheckIn,
-            checkOut   : e.CheckOut,
-          }
-          listTmp.push(registro)
-        } */
-      
-      }) 
     
   }
 
@@ -232,6 +206,7 @@ const getEmployee = async()=> {
     try {
       const response = await axios.get(`${REACT_APP_API}/trainingEmployee/${IDT}`);
       if (response) {
+
         setEmployeesOfTraining(response.data)
         addToListPersonal(response.data);
         }
@@ -267,23 +242,56 @@ const handleLgUpdateTraining = ()=> {
 }
 
 const clearEmployee = ()=> {
-  setEmployeeFounded('');
+  setEmployeeFounded(...employeeFounded,'');
+  updateCurrentPicture(...currentPicture, defaultFile);
 }
 
 
-const handleRecord = ()=> {
-  /* setListPersonal([...listPersonal,employeeFounded]); */
-  findEmployee_In_Trainings();
-   /*  clearEmployee();  */
-}
+
 
 
 //buscar el empleado en la tabla de trainings si ya registrado
-const findEmployee_In_Trainings = async()=> {
 
+//Registrar empleado en tabla de asistencia trainings_employees
+const addEmployeeToTraining =async(r)=> {
+  
+  const data = {
+    TrainingId    : IDT,
+    EmployeeEmail : employeeFounded.email,
+    CheckIn       : checkIn,
+    CheckOut      : checkOut,
+  }
+console.log(employeeFounded)
+
+  let  registro = {
+    idt         : IDT,
+    key        : employeeFounded.numEmployee,
+    num        : employeeFounded.numEmployee,
+    name       : employeeFounded.name,
+    department : employeeFounded.department,
+    email      : employeeFounded.email,
+    checkIn    : checkIn,
+    checkOut   : checkOut,  
+} 
+
+  try {
+    const response = await axios.post(`${REACT_APP_API}/trainingEmployee`,data);
+    if (response.status === 200) {
+      console.log('exito')
+      setListPersonal([...listPersonal,registro]);
+    } else {
+      console.log('error');
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const findEmployee_In_Trainings = async()=> {
   const buscado = {
                   employee_email : employeeFounded.email,
                   training_id :IDT,
+                  
   };
     
   try {
@@ -294,8 +302,21 @@ const findEmployee_In_Trainings = async()=> {
     });
 
     console.log(response.data)
-    if (response.data.length) {
-      alert('modificar la hora?')
+    if (response.data) {
+      buscado.newCheckIn = checkIn;
+      buscado.newCheckOut = checkOut;
+      // Como si se encontro, se procede a modificar la hora en el listPersonal y hacer un put en el back
+      try {
+        const response = await axios.put(`${REACT_APP_API}/trainingEmployee`,buscado);
+        if (response) {
+          console.log(response)
+        
+          }
+
+      } catch (error) {
+        console.log(error.message);
+      }
+
     } else {
       addEmployeeToTraining(response.data);
     }
@@ -304,29 +325,13 @@ const findEmployee_In_Trainings = async()=> {
   }
 }
 
-//Registrar empleado en tabla de asistencia trainings_employees
-const addEmployeeToTraining =async(r)=> {
-  console.log(currentRecord);
-  console.log(employeeFounded.email);
 
-  const data = {
-    TrainingId    : IDT,
-    EmployeeEmail : employeeFounded.email,
-    CheckIn       : checkIn,
-    CheckOut      : checkOut,
-  }
 
-  try {
-    const response = await axios.post(`${REACT_APP_API}/trainingEmployee`,data);
-    if (response.status === 200) {
-      console.log('exito')
-    } else {
-      console.log('error');
-    }
-  } catch (error) {
-    console.log(error)
-  }
+const handleRecord = ()=> {
+ findEmployee_In_Trainings();
+ clearEmployee();  
 }
+
 
 //buscar empleado en la tabla empleados si existe podemos ingresarlo al training
 const handleGetEmployee = async(e)=> {
@@ -336,27 +341,37 @@ const handleGetEmployee = async(e)=> {
               "authorization": `Bearer ${userLogged.userToken}`,
           }
         });
-
-          if (response) {
-            setEmployeeFounded(response.data)
-            updateCurrentPicture(response.data.picture);
-          } 
+        
+        if (response.data) {
+          setEmployeeFounded(response.data)
+          updateCurrentPicture(response.data.picture);
+        } else {
+          mostrarAviso();
+          clearEmployee();  
+        }
       } catch (error) {
         console.log(error.message);
       } 
   }
 
   /*-------------------------*/
-
     useEffect( ()=> {
     getTraining();
     getEmployeesOfTraining();
   },[])
 
-  
 
+  useEffect( ()=> {
+  },[listPersonal]);
+
+useEffect ( ()=> {
+  getEmployeesOfTraining();
+}, [checkIn, checkOut]);
   
   return (  
+
+    
+    
     <div className = "container-fluid mt-5">
       
       <section className = "titleTraining mt-2">
@@ -368,25 +383,20 @@ const handleGetEmployee = async(e)=> {
       <div id="containerRecord">
 
           <div className = "personalSource mr-2">
-              <div className = "row" id = "employeeWanted">
-                <label htmlFor = "numEmployee" className = "col-3 mt-4" >Number:</label>
-                
-                <div className="row col-3">
+              <div className = "row mb-2" id = "employeeWanted">
+                <div className ="container-fluid col-12 findWhat">
+                  <label htmlFor = "numEmployee" className = "col-3" >Number:</label>
                   <input type = "text" 
-                        className = "form-control" 
-                        id        = "numEmployee"
-                        value     = {numEmployeeState}
-                        onChange  = { (e)=>handleNumEmployeeState(e)}
-                  />
-                </div>
-
-                <div className="row col-3 mt-2">
-                  <button type="button" className="btn btn-primary" onClick = { (e) => handleGetEmployee(e)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                          className = "form-control col-6" 
+                          id        = "numEmployee"
+                          value     = {numEmployeeState}
+                          onChange  = { (e)=>handleNumEmployeeState(e)}
+                    />
+                    <button type = "button" className="btn btn-primary" onClick = { (e) => handleGetEmployee(e)}>
+                    <svg xmlns = "http://www.w3.org/2000/svg" width = "16" height = "16" fill = "currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                      <path d = "M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                     </svg>
                   </button>
-
                 </div>
                 
 
@@ -398,29 +408,30 @@ const handleGetEmployee = async(e)=> {
                 <div className="row mt-0 mb-4 text-center" id = "department">
                     {employeeFounded.department ? employeeFounded.department: '?'}
                 </div>
-              </div>
-
-              
-
                 <div className = "col-12" id = "picture">    
-                    <img src = {currentPicture}/>
+                    <img src = {currentPicture} id = "employeePicture"/>
                 </div>
                 <div className="times mt-2">
-                  <label htmlFor = "CheckIn" className = "fw-bold fst-italic">Check In</label>
-                  <input type="time" name="CheckIn" min="05:00" max="22:00" id = "checkIn" onChange = { (e)=> setCheckIn(e.target.value)}/>
-
-                  <label htmlFor = "CheckOut" className = "fw-bold fst-italic">Check Out</label>
-                  <input type="time" name="CheckOut" min="05:00" max="22:00" onChange = { (e)=> setCheckOut(e.target.value)}/>
+                    <div className="spaceCheckIn col-6">
+                      <label htmlFor = "CheckIn" className = "fw-bold fst-italic">Check In</label>
+                      <input type="time" name="CheckIn" min="05:00" max="22:00" id = "checkIn" className = "col-12"  onChange = { (e)=> setCheckIn(e.target.value)}/>
+                    </div>
+                  
+                  <div className="spaceCheckOut col-6">
+                    <label htmlFor = "CheckOut" className = "fw-bold fst-italic">Check Out</label>
+                    <input type="time" name="CheckOut" min="05:00" max="22:00" className = "col-12" onChange = { (e)=> setCheckOut(e.target.value)}/>
+                  </div>
+                  
                 </div>
-              <div className = "spaceButton col-12">
+                <div className = "spaceButton col-12">
                 <button 
                       type      = "button" 
-                      className = "btn btn-success btn-lg col-3 mt-2"
+                      className = "btn btn-success btn-sm col-12 mt-2"
                       onClick   = {e=>handleRecord(e)}>
                         Add
                 </button>  
               </div>
-              
+              </div>
 
           </div>
            
@@ -431,7 +442,7 @@ const handleGetEmployee = async(e)=> {
             <DataTable    columns       = { columns }  
                           data          = { listPersonal ? listPersonal:'' }  
                           customStyles  = {customStyles} 
-                            /*  selecttableRows  */
+                        
                             fixedHeader 
                             pagination 
                             striped
@@ -440,7 +451,14 @@ const handleGetEmployee = async(e)=> {
           </aside>
 
       </div>
-      </div>
+      {mostrarModal && (
+        <AvisoModal 
+                  aviso       = "Employee not Found in Database. Check Employee Number" 
+                  cerrarModal = {cerrarModal} />
+      )}
+      </div> 
+
+      
       
     
   )

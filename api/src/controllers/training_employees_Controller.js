@@ -60,71 +60,46 @@ const getEmployees_Of_Training = async(req,res)=> {
                 },
             ],
         })
-        console.log(response)
       return res.send(response);
     } catch (error) {
         console.log(error.message);
         return res.send(error);
     }
 
-   
-
 };
 
 
+const putEmployees_Of_Training = async(req,res)=> {
+    const {
+            newCheckIn, 
+            newCheckOut, 
+            employee_email, 
+            training_id,
+        } = req.body;
     
-        /* const response = await Training.findAll(
-            { where: {id:idt},
-            
-                include: [
-                    {
-                        model    : Employees,
-                        throught : Trainings_Employees,
+        try {
+            const response = await Trainings_Employees.update(
+                {
+                    CheckIn  : newCheckIn,
+                    CheckOut : newCheckOut,
+                },{
+                    where: {
+                        EmployeeEmail : employee_email,
+                        TrainingId    : training_id,
                     }
-                ]
-            } */
-            
-            
-        /* ) */
-
-
-      /*   const response2 = await Trainings_Employees.findAll(
-            {
-                attributes: ['TrainingId', 'EmployeeEmail','CheckIn','CheckOut'],
-                include: [
-                    {
-                    Employees,
-                    Training,
-                    }
-                ]
-            }
-        )
-        console.log(response2)
-        return res.send(response2)
-    } catch (error) {
-        console.log(error)
-    } */
-
-     /* try {
-        const response = await Trainings_Employees.findAll(
-             { 
-                where: { 
-                    [Op.and]: [
-                        { TrainingId   : idt}
-                    ]
                 }
-            } , {include: Employees}
-         ); 
-         
-        return res.send(response);
-    } catch (error) {
-        console.log(error.message);
-        res.send(error)
-    }  */
+            );
+            res.send(response);
+        } catch (error) {
+            console.log(error.message);
+            res.send(error);
+        }
+}
 
 
 module.exports = {
     postTraining_Employee,
     getTraining_Employee,
     getEmployees_Of_Training,
+    putEmployees_Of_Training,
 }
