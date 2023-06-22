@@ -47,6 +47,32 @@ const getEmployees_Of_Training = async(req,res)=> {
     const idt = req.params.idt;
 
     try {
+         // Realiza la consulta *falta  el filtro de idt
+        const response = await Training.findAll({
+            where: {id: idt},
+            include: [
+                {
+                     model: Employees,
+                    through: { 
+                        model: Trainings_Employees,
+                        attributes: ['CheckIn', 'CheckOut'],
+                     }, 
+                },
+            ],
+        })
+        console.log(response)
+      return res.send(response);
+    } catch (error) {
+        console.log(error.message);
+        return res.send(error);
+    }
+
+   
+
+};
+
+
+    
         /* const response = await Training.findAll(
             { where: {id:idt},
             
@@ -60,7 +86,9 @@ const getEmployees_Of_Training = async(req,res)=> {
             
             
         /* ) */
-        const response2 = await Trainings_Employees.findAll(
+
+
+      /*   const response2 = await Trainings_Employees.findAll(
             {
                 attributes: ['TrainingId', 'EmployeeEmail','CheckIn','CheckOut'],
                 include: [
@@ -75,7 +103,7 @@ const getEmployees_Of_Training = async(req,res)=> {
         return res.send(response2)
     } catch (error) {
         console.log(error)
-    }
+    } */
 
      /* try {
         const response = await Trainings_Employees.findAll(
@@ -93,7 +121,7 @@ const getEmployees_Of_Training = async(req,res)=> {
         console.log(error.message);
         res.send(error)
     }  */
-};
+
 
 module.exports = {
     postTraining_Employee,

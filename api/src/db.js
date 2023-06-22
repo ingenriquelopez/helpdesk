@@ -45,7 +45,9 @@ const { Task, User, ClassRoom, Service , Inventory, ConfigServiceOrder , Trainin
 
 //-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*----*
 Training.belongsToMany( Employees,{ through:Trainings_Employees } ); 
-Employees.belongsToMany( Training,{ through:Trainings_Employees } );  
+Employees.belongsToMany( Training,{ through:Trainings_Employees } ); 
+Training.hasOne(Trainings_Employees) ;
+Trainings_Employees.belongsTo(Training);
 
 module.exports = {
     Task,
