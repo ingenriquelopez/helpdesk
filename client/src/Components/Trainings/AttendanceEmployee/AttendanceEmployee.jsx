@@ -74,7 +74,7 @@ createTheme('solarized', {
   const columns = [
     {
         name     : 'NUM',
-        selector : row => row.numEmployee,
+        selector : row => row.num,
         width    : "4rem",
         sortable : true,
     },
@@ -87,6 +87,18 @@ createTheme('solarized', {
     {
       name: 'DEPARTMENT',
       selector : row => row.department,
+      sortable : true,
+      width    : "15rem",
+    },
+    {
+      name: 'CHECK-IN',
+      selector : row => row.checkIn,
+      sortable : true,
+      width    : "15rem",
+    },
+    {
+      name: 'CHECK-OUT',
+      selector : row => row.checkOut,
       sortable : true,
       width    : "15rem",
     },
@@ -150,7 +162,50 @@ const getEmployee = async()=> {
 
   const addToListPersonal = async(responseData)=> {
     let listTmp = [];
-    console.log(responseData)
+    let registro;
+    
+    
+    responseData.map( (e)=> {
+      e.Employees.map( emp=> {
+        registro = {
+          id: IDT,
+          num: emp.numEmployee,
+          name: emp.name,
+          department: emp.department,
+          email: emp.email,
+          checkIn: emp.Trainings_Employees.CheckIn,
+          checkOut: emp.Trainings_Employees.CheckOut,  
+      }
+      console.log(registro)
+      listTmp.push(registro);
+      })
+      
+      
+    })
+    setListPersonal(listTmp);
+
+
+
+   /*  if (responseData.Employees) {
+      let registro = {
+        id         : IDT,
+        num        : employeeFounded.numEmployee,
+        name       : employeeFounded.name,
+        department : employeeFounded.department,
+        email      : employeeFounded.email,
+        checkIn    : checkIn,
+        checkOut   : checkOut,
+      }
+      try {
+        const response = await axios.post(`${REACT_APP_API}/trainingEmployee`,registro)
+        console.log(response);
+      } catch (error) {
+        console.log(error.message);
+      }
+    } */
+      
+      
+    
 
      responseData.map(async (e)=> {
       console.log(e)
@@ -298,9 +353,7 @@ const handleGetEmployee = async(e)=> {
     getEmployeesOfTraining();
   },[])
 
-  useEffect( ()=> {
-
-  },[employeesOfTraining])
+  
 
   
   return (  
