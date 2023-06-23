@@ -178,7 +178,7 @@ const getEmployee = async()=> {
     let listTmp = [];
     let registro;
 
-    
+    console.log(responseData)
     responseData.map( (e)=> {
       e.Employees.map( (emp) => {
         registro = {
@@ -230,7 +230,6 @@ const getEmployee = async()=> {
   }
 //---------------------------------------------------------
 
-
 const handleLgClose =()=> {
   setLgShow(false);
 }
@@ -242,10 +241,9 @@ const handleLgUpdateTraining = ()=> {
 }
 
 const clearEmployee = ()=> {
-  setEmployeeFounded(...employeeFounded,'');
-  updateCurrentPicture(...currentPicture, defaultFile);
+  setEmployeeFounded('');
+  updateCurrentPicture(defaultFile);
 }
-
 
 
 
