@@ -19,9 +19,9 @@ export default function NavBarTrainings() {
   const dispatch = useDispatch();
      
   return (    
-    <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial'}} >
+    
       <nav className="navbar fixed-top navbar-light gradientNavBar">
-        <div className="container-fluid justify-content-center">
+        
           {
                   <NavDropdown
                     id          = "styleLinks"
@@ -54,10 +54,8 @@ export default function NavBarTrainings() {
               
         }
 
-        
-        </div>   
     </nav>    
-    </div>
+    
     
   )
 }

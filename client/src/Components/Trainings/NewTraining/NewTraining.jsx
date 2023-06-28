@@ -8,15 +8,16 @@ import moment from 'moment';
 import DatePicker               from "react-datepicker";
 
 import NavBarTrainings from '../../NavBarTrainings/NavBarTraInings'
- import './NewTraining.css'; 
+import './NewTraining.css'; 
 
 
-import Form      from 'react-bootstrap/Form';
-import Button    from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Row       from 'react-bootstrap/Row';
-import Col       from 'react-bootstrap/Col';
-import Footer from '../../Footer/Footer';
+import {FloatingLabel}  from 'react-bootstrap';
+import Form           from 'react-bootstrap/Form';
+import Button         from 'react-bootstrap/Button';
+import Container      from 'react-bootstrap/Container';
+import Row            from 'react-bootstrap/Row';
+import Col            from 'react-bootstrap/Col';
+import Footer         from '../../Footer/Footer';
 
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,7 +28,6 @@ moment.locale('us');
 
 
 const LEVELS = ['PreSchool','Elementary','HighSchool','College', 'Global'];
-
 
 function NewTraining() {
     const [userLogged, setUserLogged]   = useLocalStorage('userLogged');
@@ -128,7 +128,9 @@ function NewTraining() {
                         && txtmode !=='Choose...' ) ? setdisabledAdd(false): setdisabledAdd(true) ;
     } 
 
-    function handleSubmitForm(e) {
+
+
+      function handleSubmitForm(e) {
         e.preventDefault();
         if (!disabledAdd) {
             if (txtlevel !== 'Choose...' && txtmode !='Choose...') {
@@ -136,40 +138,39 @@ function NewTraining() {
             }
         }
     }
+
+
   return (
-        <div className="d-flex mt-1 d-md-flex justify-content-center"  id = "containerTraining">
-         <Form className="mx-auto "  onSubmit={(e) => handleSubmitForm(e)} id = "formTraining" >   
-            <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
-                <Col xl = {12} lg = {12} md = {12} sm = {12} xs = {12}  className = "text-center"> 
-                    <Form.Group className="mb-3 mx-auto" > 
-                        <Form.Label className="text-center">TRAINING</Form.Label>
+    <div className='form-wrapper'>
+        <Form className="mx-auto"  onSubmit={(e) => handleSubmitForm(e)} id = "formTraining" >   
+            <Container fluid>
+                <Form.Group className='mb-3' controlId='formBasicTraining'>
+                    <FloatingLabel controlId='trainingLabel' label='Enter Training'>
                         <Form.Control
-                            type="text" 
-                            name="training" 
-                            value = {txttraining} 
-                            onChange = { (e) => handleTraining(e)}
+                            type='training'
+                            placeholder='Enter training'
+                            required
+                            pattern='^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
                         />
-                       
-                    </Form.Group> 
-                </Col>
-            </Row>
-            <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
-                <Col xl = {11} lg = {11} md = {11} sm = {12} xs = {12}  className = "text-center"> 
-                    <Form.Group className="mb-3 mx-auto">
-                        <Form.Label>SPEAKER</Form.Label>
+                    </FloatingLabel>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId ="formBasicSpeaker">
+                    <FloatingLabel controlId='speakerLabel' label='Enter Speaker'>
                         <Form.Control
-                            type="text" 
+                            type="speaker" 
+                            placeholder='Enter training'
                             name="speaker" 
+                            required
                             value = {txtspeaker} 
                             onChange = { (e) => handleSpeaker(e)}
                         />
-                    </Form.Group> 
-                </Col>
-            </Row>
-            <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
-               <Col xl = {6} lg = {6} md= {6} sm ={12} xs = {12} className = "text-center"> 
-                    <Form.Group className="mb-3 mx-auto">
-                        <Form.Label>LEVEL</Form.Label>
+                    </FloatingLabel>
+                </Form.Group> 
+
+
+                <Form.Group className="mb-3" controlId = "formBasicLevel">
+                    <FloatingLabel controlId='levelLabel' label='Level'>
                         <Form.Select defaultValue="Choose Level..." onChange ={ (e)=> handleLevel(e)}>
                             <option>Choose...</option>
                             <option>{LEVELS[0]}</option>
@@ -178,51 +179,56 @@ function NewTraining() {
                             <option>{LEVELS[3]}</option>
                             <option>{LEVELS[4]}</option>
                         </Form.Select>
-                    </Form.Group> 
-                </Col>
-            </Row>
-            <Row className = "justify-content-center py-2">
-                 <Col xl = {8} lg = {8} md = {8} sm = {12} xs = {12} className = "text-center">
-                    <Form.Label>TRAINING DATE</Form.Label>
-                    <Row className = "justify-content-center py-2">
-                        <Col xl = {8} lg = {8} md = {8} sm = {12} xs = {12}  className = "text-center">
-                            <button className = {txtdateTraining ? "btn-info" : "btn-light"}
-                                     onClick = { (e) => handleClickDateTraining(e) } 
-                            > 
-                                {txtdateTraining ? moment(txtdateTraining).format("dddd DD/MMMM/YYYY"): 'Training Date...' }
-                            </button> 
-                            {isOpenDR && (<DatePicker selected={txtdateTraining} onChange={ (date) => handleChangeDateTraining(date)} inline />  )}  
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xl = {5} lg = {5} md = {5} sm = {6} xs = {5}  className = "text-center">
-                    <Form.Group className="mb-3 mx-auto px-1">
-                        <Form.Label>MODE</Form.Label>
+                    </FloatingLabel>
+                </Form.Group> 
+
+                
+
+                <Form.Group className="mb-3" controlId = "formBasicMode">
+                   <FloatingLabel controlId='modeLabel' label='mode'>
                         <Form.Select as ="select" id = "mode" defaultValue="Choose device..." onChange ={ (e)=> handleMode(e)}>
                             <option>Choose...</option>
                             <option>FaceToFace</option>
                             <option>OnLine</option>
                         </Form.Select>
-                    </Form.Group>
-                </Col>
-            </Row>
-            
-            <Row className = "d-md-flex justify-content-center py-2 mb-4">
-                 <Col className = "text-center d-md-flex justify-content-around">
-                    <Button className  = "mx-2 customButton" variant = "danger" onClick = {handleCloseNewTraining}>Cancel</Button>
-                    <Button className  = {"mx-2 customButton " } 
-                            type       = "submit" 
-                            variant    = "success"
-                            disabled   = {disabledAdd} 
-                    >
-                        Add
-                    </Button>
+                    </FloatingLabel>
+                </Form.Group>
 
-                  </Col>
-            </Row>    
-        </Form>
-        </div>
-    
+                
+                <Form.Label className = "d-md-flex justify-content-center"> Date Training</Form.Label>
+            
+                <Form.Group className = "mb-3 d-md-flex justify-content-center" controlId = "formBasicDate">
+                    <button className = {txtdateTraining ? "btn-info" : "btn-light"}
+                        onClick = { (e) => handleClickDateTraining(e) } 
+                    > 
+                        {txtdateTraining ? moment(txtdateTraining).format("dddd DD/MMMM/YYYY"): 'Training Date...' }
+                    </button> 
+                    {isOpenDR && (<DatePicker selected={txtdateTraining} onChange={ (date) => handleChangeDateTraining(date)} inline />  )}   
+                </Form.Group>
+
+                <div className = "text-center d-md-flex justify-content-around">
+                        <Button className  = "mx-2 customButton" variant = "danger" onClick = {handleCloseNewTraining}>Cancel</Button>
+                        <Button className  = {"mx-2 customButton " } 
+                                id = "buttonSubmit"
+                                type       = "submit" 
+                                variant    = "success"
+                                disabled   = {disabledAdd} 
+                        >
+                            Add
+                        </Button>
+                </div>
+                
+                
+                
+
+              
+
+
+
+
+      </Container>
+    </Form>
+  </div>
   )
 }
 

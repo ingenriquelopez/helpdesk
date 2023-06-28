@@ -21,12 +21,12 @@
   
   #containerUser {
     
-    display:flex;
-    flex-direction: row;
-    justify-content: center;
-    position: relative;
-    height: 70%;
-    min-height: 80vh;
+    display         : flex;
+    flex-direction  : row;
+    justify-content : center;
+    position        : relative;
+    height          : 70%;
+    min-height      : 80vh;
     
     margin-top: 1rem;
     padding-bottom: 3rem;

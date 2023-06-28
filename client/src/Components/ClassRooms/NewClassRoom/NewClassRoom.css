@@ -1,22 +1,35 @@
-.d-flex {
-    display: flex!important;
-    height: 100vh;
+ 
+  #formNewClassRoom {
+    width           : 60%;
+    height          : 70vh;
+    display         : flex;
+    flex-direction  : column;
+    justify-content : space-evenly;
+    align-items     : center;
+    
+    padding-bottom: 5rem;
+    overflow-y: auto;
   }
-  
+
+  .customRow {
+    width:100%;
+    justify-content: center;
+    
+  }
   .center {
-    margin: 0 auto;
-    align-self: center;
+    margin     : 0 auto;
+    align-self : center;
   }
   
   .customButton{ width: 100px !important; }
 
   #imagenCR {
-    background-image: url(https://i.pinimg.com/564x/fb/fc/8f/fbfc8fcbd8cbb513fe10f8c07c1f6d0b.jpg);
-    width: 70px;
-    height: 70px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    margin: auto;
+    background-image  : url(https://i.pinimg.com/564x/fb/fc/8f/fbfc8fcbd8cbb513fe10f8c07c1f6d0b.jpg);
+    width             : 70px;
+    height            : 70px;
+    background-repeat : no-repeat;
+    background-size   : contain;
+    margin            : auto;
   }
 
  

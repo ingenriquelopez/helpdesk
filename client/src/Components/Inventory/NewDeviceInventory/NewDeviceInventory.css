@@ -1,54 +1,21 @@
-
-#containerInventory {
-  background-color: rgba(231, 223, 100, 0.1);
-}
-
-.d-flex {
-    display: flex!important;
-    height: 100vh;
-  }
   
-  .center {
-    margin: 0 auto;
-    align-self: center;
+  #containerInventory {
+    height   : 90vh;
   }
 
-.titleUser {
-    display: block;
-    width: 100%;
-    height:10%;
-    display: flex;
-    justify-content:flex-start;
-    padding: 0.5rem;
-}
-  
-  
   #containerForm {
-    
-    display:flex;
-    flex-direction: row;
-    justify-content: center;
-    position: relative;
-    height: 90%;
-    min-height: 90vh;
-    
-    
+    display         : flex;
+    flex-direction  : row;
+    justify-content : center;
+    /* position        : relative; */
+    height          : 85vh;
+    min-height      : 85vh;
+    font-size: 0.80rem;
     
     padding-bottom: 1rem;
-    overflow:"auto";
     
   }
 
-
-
-
-#form {
-    box-shadow:
-    inset 
-          0 0  0 2px rgb(255,255,255),
-          0.3em 0.3em 1em rgba(0,0,0,0.3);
-}
-
-#lolo {
-  background-color: aqua;
+.inputs {
+  font-size: 0.75rem;
 }

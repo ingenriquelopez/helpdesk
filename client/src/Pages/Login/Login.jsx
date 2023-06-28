@@ -41,6 +41,21 @@ function Login() {
 
   const [mostrarPass   , setmostrarPass]   = useState(false);
 
+  function togglePasswordVisibility() {
+    
+    let passwordInput = document.getElementById("inputPassword");
+    let passwordToggle = document.querySelector(".passwordToggle");
+  
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      passwordToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
+    } else {
+      passwordInput.type = "password";
+      passwordToggle.innerHTML = '<i class="fas fa-eye"></i>';
+    }
+  }
+  
+
 const validUser = async()=> 
 {
   //valida primero si es admin
@@ -128,21 +143,6 @@ const validUser = async()=>
 
 
 
-    const handleOjito = ()=> {
-      let OJO = document.getElementById('ojito');
-
-      setmostrarPass(!mostrarPass);
-      if (mostrarPass) {
-        OJO.classList.remove('fa-eye');
-        OJO.classList.add('fa-eye-slash');
-      } else {
-        OJO.classList.remove('fa-eye-slash');
-        OJO.classList.add('fa-eye');
-        
-      }
-      
-      
-    }
 
   const loginSubmit = (e) => {
     e.preventDefault();
@@ -155,74 +155,62 @@ const validUser = async()=>
   };
 
 return (  
-    <div className= "Login position-relative">
-       <Container className = "container-fluid py-5">
-        <div> 
-            <Form className = "position-absolute top-50 start-50 translate-middle mx-auto" id = "loginform" onSubmit = {(e)=>loginSubmit(e)}>
+       <Container fluid className = "Login">
+          <Form  id = "loginform" onSubmit = {(e)=>loginSubmit(e)}>
             <img id = "idface"
-          src= {face}
-          alt = {'cybersecurity'}
-        />
-                <Row>
-                    <Col>
-                        <Form.Group className = "mx-auto">
-                            <Row> <Form.Label className="text-center">Email address</Form.Label>  </Row>
-                            <Form.Control 
-                                type = "email" 
-                                id   = "EmailInput"
-                                name = "EmailInput"
-                                onChange={(event) => setEmail(event.target.value)}
-                            />
-                        </Form.Group>
-                        <small id="emailHelp" className="text-danger form-text">
-                            {emailError}
-                        </small>
-                    </Col>
-                </Row>
+                  src= {face}
+                  alt = {'cybersecurity'}
+            />
+            <Row>
+              <Col>
+                <Form.Group className = "mx-auto">
+                  <Form.Label className="text-center">Email address</Form.Label>
+                  <Form.Control 
+                      type = "email" 
+                      id   = "EmailInput"
+                      name = "EmailInput"
+                      onChange={(event) => setEmail(event.target.value)}
+                  />
+                </Form.Group>
+                  <small id="emailHelp" className="text-danger form-text">
+                      {emailError}
+                  </small>
+              </Col>
+          </Row>
               
                 <Row>
                     <Col>
                         <Form.Group className="mx-auto">
-                            <Row> <Form.Label className="text-center">Password</Form.Label>  </Row>
-                            <Row > 
-                              <div  className = "rowPassword" >
-                                <Form.Control 
-                                  type={mostrarPass ? 'text' : 'password'}
-                                  className   = "password"
-                                  id          = "inputPassword"
-                                  placeholder = "Password"
-                                  onChange    = {(event) => setPassword(event.target.value)}
-                                  value       = {password}
-                                />
-                              </div>
-                              <div className = "colOjito">
-                                 <i id = "ojito" className = "fa fa-eye-slash" aria-hidden="true" onClick = { (e)=> handleOjito(e) }></i>
-                              </div>
-                              
-                       
-                            </Row>
-                            
+                          < Row className = "rowPassword" > 
+                              <Form.Label className="text-center">Password</Form.Label>
+                                  <Form.Control 
+                                    type={mostrarPass ? 'text' : 'password'}
+                                    className   = "password"
+                                    id          = "inputPassword"
+                                    placeholder = "Password"
+                                    onChange    = {(event) => setPassword(event.target.value)}
+                                    value       = {password}
+                                  />
 
+                                  <span class="passwordToggle" onClick ={()=> togglePasswordVisibility()}>
+                                      <i class="fas fa-eye"></i>
+                                  </span>
+                          </Row>
                         </Form.Group>
                         <small id="passworderror" className="text-danger form-text">
                           {passwordError}
                         </small>
                     </Col>
                 </Row>
-                <Form.Group className = "mx-auto">
-                    <Row>
-                        <Col>
-                          <Button className = "customButton" variant = "danger">Cancel</Button> 
-                        </Col>
-                        <Col>
-                            <Button className = "customButton" type ="submit" variant = "success">Login</Button>
-                        </Col>
-                    </Row>
-                 </Form.Group>      
+                <Row>
+                  <Form.Group className = "mx-auto">
+                    <Button className = "customButton mr-1" variant = "danger">Cancel</Button>
+                    <Button className = "customButton ml-1" type ="submit" variant = "success">Login</Button>    
+                  </Form.Group>      
+                </Row>
+                 
             </Form>
-            </div>
         </Container>
-    </div>
   );
 }
 

@@ -10,6 +10,8 @@ import Form      from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Row       from 'react-bootstrap/Row';
 import Col       from 'react-bootstrap/Col';
+import {FloatingLabel} from 'react-bootstrap';
+
 
 import "./NewDeviceInventory.css";
 import axios from 'axios';
@@ -44,7 +46,7 @@ function NewDeviceInventory() {
     const statusDefault = "Operating";
 
     
-  
+
     const yaExisteInternalCode = async()=> {
       try {
          /* buscamos el code en db */
@@ -211,52 +213,55 @@ function NewDeviceInventory() {
    }
 
   return (
-      <Container className = "container  justify-content-center" id = "containerInventory">
-        
-          <div className="titleUser">
-            <div className = "text-center">
-               <h5> ADD NEW DEVICE TO INVENTORY</h5>
-            </div>           
-         </div> 
-         
-          
-         <div className="d-flex" id = "containerForm">        
-            <Col>
-               <Form className="mx-auto"  id ="form"  autoComplete= 'off' onSubmit={(e) => handleSubmitForm(e)} >   
+      <Container className = "d-flex flex-column justify-content-center" id = "containerInventory">
+         <div className = "text-center">
+            <h5> ADD NEW DEVICE TO INVENTORY</h5>
+         </div>           
+         <Row id = "containerForm" className="overflow-auto" style={{ maxHeight: '400px' }}>
+               <Form className="container-fluid mx-auto"  id ="form"  autoComplete= 'off' onSubmit={(e) => handleSubmitForm(e)} >   
                      <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
                         <Col xxl = {3} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                            <Form.Group className = "mb-3 mx-auto" >
-                              <Form.Label>Internal Code</Form.Label>
+                           <FloatingLabel controlId="inputInternalCode" label="Internal Code">
+                              
                               <Form.Control 
                                  type        = "text" 
+                                 className = "inputs"
                                  placeholder = "Enter internal code" 
                                  value       = {txtinternalCode}
                                  onChange    = {(e)=> handleInternalCode(e)}      
                               />
+                           </FloatingLabel>
+
                             </Form.Group>
                         </Col>
                         
                         <Col xxl = {3} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
-                            <Form.Group className = "mb-3 mx-auto" >
-                              <Form.Label>Serial</Form.Label>
-                              <Form.Control 
-                                 type        = "text" 
-                                 placeholder = "Enter serial number" 
-                                 value       = {txtserial}
-                                 onChange    = {(e)=> handleSerial(e)}      
-                              />
+                            <Form.Group className = "mb-3 mx-auto" >          
+                              <FloatingLabel controlId = "inputSerialNumber" label = "Serial Number">
+                                 <Form.Control 
+                                    type        = "text" 
+                                    className = "inputs"
+                                    placeholder = "Enter serial number" 
+                                    value       = {txtserial}
+                                    onChange    = {(e)=> handleSerial(e)}      
+                                 />
+                              </FloatingLabel>
+                              
                             </Form.Group>
                         </Col>
 
                         <Col xxl = {3} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                             <Form.Group className = "mb-3 mx-auto" >
-                              <Form.Label>Device</Form.Label>
-                              <Form.Control 
-                                 type        = "text" 
-                                 placeholder = "Enter type of device" 
-                                 value       = {txtdevice}
-                                 onChange    = {(e)=> handleDevice(e)}      
-                              />
+                              <FloatingLabel controlId ="inputDevice" label = "Device">
+                                 <Form.Control 
+                                    type        = "text"
+                                    className = "inputs" 
+                                    placeholder = "Enter type of device" 
+                                    value       = {txtdevice}
+                                    onChange    = {(e)=> handleDevice(e)}      
+                                 />
+                              </FloatingLabel>
                            </Form.Group>
                         </Col>
                     </Row>
@@ -268,7 +273,7 @@ function NewDeviceInventory() {
                                     <Form.Label>Trade</Form.Label>
                                     <Form.Control 
                                        type        = "text" 
-                                       
+                                       className = "inputs"
                                        value       = {txttrade}
                                        onChange    = {(e)=> handleTrade(e)}      
                                     />
@@ -279,6 +284,7 @@ function NewDeviceInventory() {
                                     <Form.Label>Model</Form.Label>
                                     <Form.Control 
                                        type        = "text" 
+                                       className = "inputs"
                                        value       = {txtmodel}
                                        onChange    = {(e)=> handleModel(e)}      
                                     />
@@ -290,6 +296,7 @@ function NewDeviceInventory() {
                                     <Form.Label>Color</Form.Label>
                                     <Form.Control 
                                        type        = "text" 
+                                       className = "inputs"
                                        value       = {txtcolor}
                                        onChange    = {(e)=> handleColor(e)}      
                                     />
@@ -321,6 +328,7 @@ function NewDeviceInventory() {
                                     <Form.Label>level</Form.Label>
                                     <Form.Control 
                                        type        = "text" 
+                                       className = "inputs"
                                        value       = {txtlevel}
                                        disabled
                                     />
@@ -332,6 +340,7 @@ function NewDeviceInventory() {
                                     <Form.Label>campus</Form.Label>
                                     <Form.Control 
                                        type        = "campus" 
+                                       className = "inputs"
                                        value       = {txtcampus}
                                        disabled
                                     />
@@ -346,6 +355,7 @@ function NewDeviceInventory() {
                                     <Form.Label>User Assigned</Form.Label>
                                     <Form.Control 
                                        type        = "text" 
+                                       className = "inputs"
                                        value       = {txtuserDevice}
                                        onChange    = {(e)=> handleuserDevice(e)}      
                                     />
@@ -356,6 +366,7 @@ function NewDeviceInventory() {
                                     <Form.Label>Document Responsability</Form.Label>
                                     <Form.Control 
                                        type        = "docRes" 
+                                       className = "inputs"
                                        value       = {txtdocRes}
                                        onChange    = {(e)=> handleDocRes(e)}      
                                     />
@@ -367,6 +378,7 @@ function NewDeviceInventory() {
                                     <Form.Label>Document Purchase</Form.Label>
                                     <Form.Control 
                                        type        = "docCom" 
+                                       className = "inputs"
                                        value       = {txtdocPur}
                                        onChange    = {(e)=> handleDocPur(e)}      
                                     />
@@ -378,11 +390,12 @@ function NewDeviceInventory() {
                 <Row className = "d-grid d-md-flex justify-content-center py-2 mx-1">
                   <Col xxl = {3} xl = {4} lg = {4} md = {6} sm = {12} className = "text-center"> 
                      <Form.Group className = "mb-3 mx-auto" >                  
-                        <button className = "btn btn-light" onClick = { (e) => handleClickDateReview(e) } > 
+                        <button className = "btn btn-light inputs" onClick = { (e) => handleClickDateReview(e) } > 
                            Date Last Revision ...
                         </button> 
                         <Form.Control 
                            type        = "text" 
+                           className = "inputs"
                            value       = {moment(txtlastRevision).format("dddd DD/MMMM/YYYY")}
                            onChange    = {(e)=> handleChangeDateReview(e)}      
                         />                     
@@ -395,9 +408,10 @@ function NewDeviceInventory() {
                         <Form.Label>Notes</Form.Label>
                         <Form.Control 
                            as             = "textarea"
-                           placeholder = "Enter note" 
-                           value       = {txtnote}
-                           onChange    = {(e)=> handleNote(e)}      
+                           className      = "inputs"
+                           placeholder    = "Enter note" 
+                           value          = {txtnote}
+                           onChange       = {(e)=> handleNote(e)}      
                         />
                       </Form.Group>
                   </Col>
@@ -407,6 +421,7 @@ function NewDeviceInventory() {
                         <Form.Label>Checked By</Form.Label>
                         <Form.Control 
                            type        = "checkedBy" 
+                           className = "inputs"
                            placeholder = "Enter name " 
                            value       = {txtcheckedBy}
                            onChange    = {(e)=> handleCheckedBy(e)}      
@@ -425,8 +440,7 @@ function NewDeviceInventory() {
                      </Form.Group>    
                   </Row> 
                </Form> 
-            </Col>
-         </div> 
+         </Row>
    </Container>
   );
 }

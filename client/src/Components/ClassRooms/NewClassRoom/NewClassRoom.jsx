@@ -155,114 +155,120 @@ useEffect(() => {
 },[])
 
   return (   
-    <Container className = "container-fluid py-2">      
-        <div>
-    
-         <Row  className = "text-center">
-         
+    <Container className = "d-flex flex-column  justify-content-center align-content-center mt-5">
+        <Row  className = "text-center">
             <h5> ADD NEW CLASSROOM</h5>
-         
         </Row>
         <Row className = "mb-4">
             <div id = "imagenCR"> </div>
         </Row>
-            <Form onSubmit={(e) => handleSubmitForm(e)}>
-                <Row className = "mx-auto">
-                    <Col>
+        <Row id ="containerForm">
+            <Form onSubmit={(e) => handleSubmitForm(e)} id = "formNewClassRoom">
+                <Row className = "customRow">
+                    <Col xl = {3} lg = {4} md = {6} sm={6} xs = {7}>
                         <Form.Group className="mb-3 mx-auto">
-                            <Row> <Form.Label className="text-center">ClassRoom</Form.Label>  </Row>
+                            <Form.Label className="text-center">ClassRoom</Form.Label>
                             <Form.Control options = {listOfClassRooms} 
                                 type     = 'text'
                                 name     = 'classroom'
                                 value    = {txtclassRoom}
-                                className = "col-2 mx-auto"                          
                                 onChange = { (e)=> handleClassRoom(e) }
                                 onKeyUp  = { validateForm }
-                                >   
+                            >   
 
                             </Form.Control>
                         </Form.Group>
                     </Col>
                 </Row>
-                <div className  = "row d-grid ">
-				    <div className = "col d-md-flex justify-content-md-center gap-3">
-                        <Form.Group className = "col-2">
-                        <Row> <Form.Label className="text-center">GYG</Form.Label>  </Row>
-                            <Form.Control
-                                type      = "text" 
-                                name      = "gyg" 
-                                value     = { txtgyg }
-                                onChange  =  { (e)=> handlegyg(e) }
-                            /> 
-                        </Form.Group> 
-                        <Form.Group className ="col-2">
-                                <Row> <Form.Label className="text-center">Level</Form.Label>  </Row>
-                            <Form.Select 
-                                onChange ={ (e)=> handlelevel(e)}
-                            >
-                                <option>Choose...</option>
-                                <option>PreSchool</option>
-                                <option>Elementary</option>
-                                <option>HighSchool</option>
-                                <option>College</option>
-                                <option>Global</option>
-                            </Form.Select>
-                        </Form.Group> 
-				</div>
-			</div>
-                <Row className = "d-grid gap-2 mx-0">
-                    <Col>
-                    <Form.Group className="mb-3">
-                            <Row> <Form.Label className="text-center">Campus</Form.Label> </Row>
-                            <Form.Select 
-                                onChange ={ (e)=> handlecampus(e)}
-                                className = "w-25 mx-auto"
-                            >
-                                <option>Choose...</option>
-                                <option>Francita</option>
-                                <option>Poza Rica</option>
-                            </Form.Select>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group className="mb-2 mt-0 mx-auto">
-                            <Row> <Form.Label className="text-center">Floor</Form.Label> </Row>
-                            <Form.Select 
-                                onChange ={ (e)=> handlefloor(e)}
-                                className = "w-25 mx-auto"
-                            >
-                                <option>Choose...</option>
-                                <option>Parking lot</option>
-                                <option>Floor 1</option>
-                                <option>Floor 2</option>
-                                <option>Floor 3</option>
-                                <option>Floor 4</option>
-                                <option>Floor 5</option>
-                            </Form.Select>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                
-               
-                <Row className = "d-grid">
-                    <Form.Group className = "mt-3 mx-auto">
-                        <Col className = "col d-md-flex justify-content-center gap-3" >
-                            <Button className = "customButton" variant = "danger" onClick={handleCloseNewClassRoom}>Cancel</Button>
-                            <Button className = "customButton" 
-                                    type      = "submit" 
-                                    variant   = "success"
-                                    disabled  = {disabledAdd}
-                            >
-                                Add
-                            </Button>
+
+                    <Row className = "customRow">
+                        <Col xl = {3} md = {4} sm = {6} xs = {7}>
+                            <Form.Group>
+                                    <Form.Label className="text-center">GYG</Form.Label>
+                                    <Form.Control
+                                        type      = "text" 
+                                        name      = "gyg" 
+                                        value     = { txtgyg }
+                                        onChange  =  { (e)=> handlegyg(e) }
+                                    /> 
+                                </Form.Group> 
                         </Col>
-                        </Form.Group>            
-                </Row>
+                    </Row>
+
+                    <Row className = "customRow">
+                        <Col xl = {7} lg = {7} md = {10} sm = {12} xs = {12}>
+                            <Form.Group>
+                                <Form.Label className="text-center">Level</Form.Label>
+                                <Form.Select 
+                                    onChange ={ (e)=> handlelevel(e)}
+                                >
+                                    <option>Choose...</option>
+                                    <option>PreSchool</option>
+                                    <option>Elementary</option>
+                                    <option>HighSchool</option>
+                                    <option>College</option>
+                                    <option>Global</option>
+                                </Form.Select>
+                            </Form.Group> 
+                        </Col>
+                    </Row>
+
+                     <Row className = "customRow"> 
+                        
+                        <Col xl = {7} lg = {7} md = {10} sm = {12} xs = {12}>
+                            <Form.Group>
+                                <Form.Label className="text-center">Campus</Form.Label>
+                                <Form.Select 
+                                    onChange ={ (e)=> handlecampus(e)}        
+                                >
+                                    <option>Choose...</option>
+                                    <option>Francita</option>
+                                    <option>Poza Rica</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                     </Row> 
+                    <Row className ="customRow">
+                        <Col xl = {7} lg = {7} md = {10} sm = {12} xs = {12}>
+                            <Form.Group>
+                                <Form.Label className="text-center">Floor</Form.Label>
+                                <Form.Select 
+                                    onChange ={ (e)=> handlefloor(e)}
+                                >
+                                    <option>Choose...</option>
+                                    <option>Parking lot</option>
+                                    <option>Floor 1</option>
+                                    <option>Floor 2</option>
+                                    <option>Floor 3</option>
+                                    <option>Floor 4</option>
+                                    <option>Floor 5</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                    </Row>
                     
                 
+                    <Row className = "d-grid">
+                        <Form.Group className = "mt-3 mx-auto">
+                            <Col className = "col d-md-flex justify-content-center gap-3" >
+                                <Button className = "customButton" variant = "danger" onClick={handleCloseNewClassRoom}>Cancel</Button>
+                                <Button className = "customButton" 
+                                        type      = "submit" 
+                                        variant   = "success"
+                                        disabled  = {disabledAdd}
+                                >
+                                    Add
+                                </Button>
+                            </Col>
+                            </Form.Group>            
+                    </Row>
+                        
+                    
 
-            </Form>
-        </div>
+                </Form>
+            </Row>
+            
+
     </Container>
   
   )

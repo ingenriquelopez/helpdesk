@@ -1,14 +1,27 @@
 /*FOOTER*/
 
 #containFooter {    
-    background: linear-gradient(59deg, #1622FF, #138df8); 
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    bottom:0px; 
-    height:80px;
-    width:100%;
-    position:absolute;    
+    background      : linear-gradient(59deg, #1622FF, #138df8); 
+    color           : white;
+    bottom          : 0px; 
+    height          : 40px;
+    width           : 100%;
+    position        : absolute;    
+    display         : flex;
+    flex-direction  : column;
+    align-items     : center;
+    position: fixed;
+  }
+  
+  .footer {
+    width           : 100%;
+    display         : flex;
+    flex-direction  : row;
+    justify-content : center;
+  }
+
+  li {
+    line-height   : 2rem;
+    display       : flex;
+    align-items   : center;
   }
