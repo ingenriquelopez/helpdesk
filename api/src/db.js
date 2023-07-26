@@ -13,6 +13,7 @@ const modelEmployees          = require('./models/Employees.js');
 const modelTrainings_Employees = require('./models/ManyToMany/Trainings_Employees.js');
 
 
+console.log(DB_DIALECT)
 const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, 
   { 
     logging: false,
