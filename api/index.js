@@ -10,6 +10,6 @@ db.sync({ force: true })
     console.log("DataBase sync");
   });
 
-server.listen(PORT,()=> {
-    console.log(`Listening on port. ${PORT} `);
+server.listen(3001,()=> {
+    console.log(`Listening on port. ${3001} `);
 });
