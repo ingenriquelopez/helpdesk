@@ -14,7 +14,8 @@ const modelTrainings_Employees = require('./models/ManyToMany/Trainings_Employee
 
 
 console.log(DB_DIALECT)
-const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, 
+/* const sequelize = new Sequelize(`${DB_DIALECT}://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,  */
+const sequelize = new Sequelize(`postgres://postgres:AWS-admin@$rds-helpdesk.c5772bzr3ccq.us-east-1.rds.amazonaws.com:5432/helpdesk`, 
   { 
     logging: false,
     native:false
